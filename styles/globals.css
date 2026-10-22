@@ -1,0 +1,21 @@
+@import "tailwindcss";
+/* The blueprint page's own class names (.container, .hidden…) shouldn't become utilities */
+@source not "../index.html";
+
+/* PDC theme, mirrored from the :root tokens in index.html */
+@theme {
+  --color-canvas: #090a0d;
+  --color-surface: #111319;
+  --color-pdc-green: #8DC63F;
+  --color-pdc-green-bright: #9ee63e;
+  --color-cfi-red: #e85038;
+  --color-ink: #f8fafc;
+  --color-ink-muted: #94a3b8;
+
+  --font-display: "Syne", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "JetBrains Mono", "Consolas", monospace;
+  --font-brutal: "Archivo", "Arial Narrow", sans-serif;
+  --font-brutal-mono: "Space Mono", ui-monospace, monospace;
+  --font-body: "Oswald", "Arial Narrow", sans-serif;
+}

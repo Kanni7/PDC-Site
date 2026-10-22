@@ -1,0 +1,3638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Design Club — CFI IIT Madras</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Archivo:wdth,wght@62..125,400..900&family=Space+Mono:wght@400;700&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           PRODUCT DESIGN CLUB (PDC) — CFI IIT MADRAS
+           Inspired by modern vibe-coding & UI design reels (@buildwaleesh & reactbits.dev):
+           - Full Transparent Dragon Backdrop with Ambient Fire Glow
+           - Shiny Text Sheen Animation (reactbits.dev)
+           - 3D Perspective Card Tilt with Dynamic Specular Glare (TiltedCard)
+           - Blur-to-Clear Staggered Entrance (BlurText)
+           - Magnetic Button Attraction (MagneticButton)
+           - Ambient Grid Spotlight tracking
+           - Dedicated Prestigious Product Competitions Section
+           - Pure Native Cursor: Zero annoying crosshairs
+           ============================================================ */
+
+        :root {
+            --bg-canvas: #090a0d;
+            --bg-surface: #111319;
+            --bg-surface-elevated: #161922;
+            --bg-surface-hover: #1c202c;
+            --border-subtle: rgba(255, 255, 255, 0.07);
+            --border-strong: rgba(255, 255, 255, 0.16);
+
+            --pdc-green: #8DC63F;
+            --pdc-green-bright: #9ee63e;
+            --pdc-green-glow: rgba(141, 198, 63, 0.28);
+            --pdc-green-tint: rgba(141, 198, 63, 0.10);
+            --pdc-green-border: rgba(141, 198, 63, 0.30);
+            
+            --cfi-red: #e85038;
+            --cfi-red-bright: #ff6045;
+            --cfi-red-tint: rgba(232, 80, 56, 0.10);
+
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-tertiary: #64748b;
+
+            --font-display: 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+            --font-brutal: 'Archivo', 'Arial Narrow', sans-serif;
+            --font-brutal-mono: 'Space Mono', monospace;
+            --font-body: 'Oswald', 'Arial Narrow', sans-serif;
+
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --section-padding: clamp(76px, 9vw, 128px);
+        }
+
+        /* Layered so Tailwind utilities in the React islands can override it */
+        @layer reset {
+            *, *::before, *::after {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                cursor: auto !important;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg-canvas);
+        }
+
+        /* Headings keep their own faces; anything that used to inherit the body font stays on it */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-sans);
+        }
+
+        .hwf-root .hwf-col h3 {
+            font-family: var(--font-mono);
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-canvas);
+            color: var(--text-primary);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Top Window Scroll Progress Bar */
+        #scrollProgressBar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--pdc-green), var(--cfi-red));
+            z-index: 9999;
+            transition: width 0.08s ease-out;
+            box-shadow: 0 0 10px rgba(141, 198, 63, 0.5);
+        }
+
+        /* Ambient Dynamic Canvas Glow (tracks mouse smoothly) */
+        .canvas-spotlight {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(141, 198, 63, 0.06) 0%, transparent 65%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 0;
+            transition: opacity 0.3s;
+            will-change: left, top;
+        }
+
+        /* Technical Blueprint Grid */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.024) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.024) 1px, transparent 1px);
+            background-size: 52px 52px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* FULL TRANSPARENT DRAGON BACKGROUND WATERMARK */
+        .dragon-full-backdrop {
+            position: absolute;
+            top: 50%;
+            right: 0%;
+            transform: translateY(-50%);
+            width: clamp(420px, 52vw, 840px);
+            height: auto;
+            opacity: 0.22;
+            pointer-events: none;
+            z-index: 0;
+            filter: drop-shadow(0 0 70px rgba(141, 198, 63, 0.35));
+            animation: dragonBreath 10s ease-in-out infinite alternate;
+            will-change: transform, opacity;
+        }
+
+        @keyframes dragonBreath {
+            0% { transform: translateY(-50%) rotate(0deg) scale(1); opacity: 0.20; }
+            50% { transform: translateY(-53%) rotate(1.2deg) scale(1.03); opacity: 0.28; filter: drop-shadow(0 0 90px rgba(141, 198, 63, 0.45)); }
+            100% { transform: translateY(-47%) rotate(-1deg) scale(0.98); opacity: 0.20; }
+        }
+
+        /* Radial Fire Aura behind the Dragon */
+        .dragon-fire-glow {
+            position: absolute;
+            top: 48%;
+            right: 18%;
+            transform: translateY(-50%);
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(232, 80, 56, 0.16) 0%, rgba(141, 198, 63, 0.08) 45%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: fireFlicker 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes fireFlicker {
+            0% { transform: translateY(-50%) scale(0.95); opacity: 0.6; }
+            50% { transform: translateY(-52%) scale(1.1); opacity: 0.9; }
+            100% { transform: translateY(-48%) scale(1.0); opacity: 0.7; }
+        }
+
+        /* SHINY TEXT SHEEN (REACTBITS.DEV STYLE) */
+        .shiny-text {
+            background: linear-gradient(110deg, #f8fafc 30%, var(--pdc-green-bright) 50%, #f8fafc 70%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shinyTextSweep 7s linear infinite;
+        }
+
+        @keyframes shinyTextSweep {
+            0% { background-position: 150% 0; }
+            100% { background-position: -50% 0; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ------------------------------------------------------------
+           NAVIGATION
+           ------------------------------------------------------------ */
+        body > nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            background: rgba(9, 10, 13, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-dragon-mark {
+            width: 34px;
+            height: 34px;
+            object-fit: contain;
+            border-radius: var(--radius-sm);
+            filter: drop-shadow(0 0 10px rgba(141, 198, 63, 0.4));
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+        }
+
+        .brand-title span {
+            color: var(--pdc-green);
+        }
+
+        .brand-sub {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--text-tertiary);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 22px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--pdc-green);
+        }
+
+        .nav-cta {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            background: var(--bg-surface);
+            color: var(--text-primary) !important;
+            transition: all 0.2s;
+        }
+
+        .nav-cta:hover {
+            border-color: var(--pdc-green);
+            background: var(--pdc-green-tint);
+            color: var(--pdc-green) !important;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            padding: 6px;
+        }
+
+        .nav-toggle span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--text-primary);
+            margin: 5px 0;
+        }
+
+        /* ------------------------------------------------------------
+           STATUS BAR
+           ------------------------------------------------------------ */
+        .status-strip {
+            background: #0c0e12;
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 8px 0;
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            color: var(--text-tertiary);
+            margin-top: 64px;
+        }
+
+        .status-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .live-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--pdc-green);
+            box-shadow: 0 0 10px var(--pdc-green);
+        }
+
+        /* ------------------------------------------------------------
+           HERO SECTION
+           ------------------------------------------------------------ */
+        .hero {
+            padding: 104px 0 112px;
+            position: relative;
+            border-bottom: 1px solid var(--border-subtle);
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 680px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--pdc-green);
+            background: var(--pdc-green-tint);
+            border: 1px solid var(--pdc-green-border);
+            border-radius: var(--radius-sm);
+            padding: 5px 12px;
+            margin-bottom: 24px;
+        }
+
+        /* BLUR-TO-CLEAR TEXT REVEAL (REACTBITS.DEV) */
+        .blur-reveal {
+            animation: blurToClear 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes blurToClear {
+            0% { opacity: 0; filter: blur(12px); transform: translateY(20px); }
+            100% { opacity: 1; filter: blur(0); transform: translateY(0); }
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(3.2rem, 7.5vw, 6rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 0.98;
+            margin-bottom: 22px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 span.green {
+            color: var(--pdc-green);
+            text-shadow: 0 0 35px rgba(141, 198, 63, 0.4);
+        }
+
+        .hero-motto-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 26px;
+            flex-wrap: wrap;
+        }
+
+        .motto-tag {
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: #ffffff;
+            background: var(--cfi-red);
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(232, 80, 56, 0.35);
+        }
+
+        .motto-sub {
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            color: var(--text-tertiary);
+        }
+
+        .hero-lead {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.75;
+            margin-bottom: 36px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 48px;
+        }
+
+        /* MAGNETIC BUTTON WITH SPRING (REACTBITS.DEV) */
+        .btn-magnetic {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 26px;
+            background: var(--pdc-green);
+            color: #090a0d;
+            font-weight: 700;
+            font-size: 0.88rem;
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(141, 198, 63, 0.25);
+            position: relative;
+        }
+
+        .btn-magnetic:hover {
+            background: var(--pdc-green-bright);
+            box-shadow: 0 6px 30px rgba(141, 198, 63, 0.45);
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 24px;
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.88rem;
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--border-strong);
+            background: var(--bg-surface-elevated);
+        }
+
+        /* Hero Stats Row */
+        .hero-stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            background: var(--bg-surface);
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-cell {
+            padding: 22px 24px;
+            border-right: 1px solid var(--border-subtle);
+        }
+
+        .stat-cell:last-child {
+            border-right: none;
+        }
+
+        .stat-num {
+            font-family: var(--font-display);
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-num span {
+            color: var(--pdc-green);
+        }
+
+        .stat-desc {
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        /* ------------------------------------------------------------
+           SECTIONS GENERAL
+           ------------------------------------------------------------ */
+        section {
+            padding: var(--section-padding) 0;
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+        }
+
+        .section-header {
+            margin-bottom: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        /* Brutalist section label: [001][OVERVIEW] */
+        .section-meta {
+            display: inline-flex;
+            align-items: stretch;
+            margin-bottom: 18px;
+            border: 2px solid var(--text-primary);
+            font-family: var(--font-brutal-mono);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            line-height: 1.4;
+            color: var(--text-primary);
+        }
+
+        .section-meta b {
+            padding: 4px 8px;
+            background: var(--pdc-green);
+            color: var(--bg-canvas);
+            font-weight: 700;
+        }
+
+        .section-meta span {
+            padding: 4px 8px;
+        }
+
+        .section-title {
+            font-family: var(--font-brutal);
+            font-size: clamp(2.4rem, 5.2vw, 4.2rem);
+            font-weight: 900;
+            font-stretch: 112%;
+            text-transform: uppercase;
+            letter-spacing: -0.035em;
+            line-height: 0.9;
+        }
+
+        .section-lead {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            max-width: 580px;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+        /* ------------------------------------------------------------
+           3D TILT CARDS WITH DYNAMIC SPECULAR GLARE (REACTBITS.DEV)
+           ------------------------------------------------------------ */
+        .tilt-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.15s ease-out, border-color 0.25s, box-shadow 0.25s;
+            box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), 0 10px 30px rgba(0, 0, 0, 0.3);
+            will-change: transform;
+        }
+
+        .tilt-card:hover {
+            border-color: var(--border-strong);
+            box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 20px 45px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Dynamic Specular Glare overlay */
+        .card-glare {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255, 255, 255, 0.06) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 2;
+        }
+
+        .tilt-card:hover .card-glare {
+            opacity: 1;
+        }
+
+        /* ------------------------------------------------------------
+           001 — ABOUT SECTION
+           ------------------------------------------------------------ */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1.25fr 0.75fr;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            background: var(--bg-surface);
+            overflow: hidden;
+        }
+
+        .about-main-pane {
+            padding: 40px;
+            border-right: 1px solid var(--border-subtle);
+        }
+
+        .about-main-pane p {
+            font-size: 0.98rem;
+            color: var(--text-secondary);
+            line-height: 1.75;
+            margin-bottom: 18px;
+        }
+
+        .about-main-pane p:last-child {
+            margin-bottom: 0;
+        }
+
+        .about-side-pane {
+            padding: 36px;
+            background: var(--bg-surface-elevated);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .spec-list-title {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-tertiary);
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-subtle);
+            margin-bottom: 16px;
+        }
+
+        .spec-list {
+            list-style: none;
+        }
+
+        .spec-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.86rem;
+            color: var(--text-secondary);
+        }
+
+        .spec-list li span.val {
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            color: var(--pdc-green);
+        }
+
+        .wireframe-box {
+            margin-top: 24px;
+            padding: 16px;
+            border: 1px dashed var(--border-strong);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            text-align: center;
+        }
+
+        /* ------------------------------------------------------------
+           002 — HARDWARE PROJECTS (BENTO GRID)
+           ------------------------------------------------------------ */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .project-card {
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .project-card.featured {
+            grid-column: span 2;
+            border-top: 3px solid var(--pdc-green);
+        }
+
+        .project-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .badge-pill {
+            font-family: var(--font-body);
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--pdc-green);
+            background: var(--pdc-green-tint);
+            border: 1px solid var(--pdc-green-border);
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
+        }
+
+        .badge-pill.red {
+            color: var(--cfi-red);
+            background: var(--cfi-red-tint);
+            border-color: rgba(232, 80, 56, 0.3);
+        }
+
+        .card-meta-text {
+            font-family: var(--font-body);
+            font-size: 0.68rem;
+            color: var(--text-tertiary);
+        }
+
+        .project-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.015em;
+            margin-bottom: 10px;
+        }
+
+        .project-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin-bottom: 20px;
+        }
+
+        .img-wireframe-slot {
+            width: 100%;
+            height: 110px;
+            border: 1px dashed var(--border-strong);
+            border-radius: var(--radius-sm);
+            background: rgba(0, 0, 0, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            color: var(--text-tertiary);
+            margin-bottom: 20px;
+        }
+
+        .tag-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding-top: 14px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .tag-item {
+            font-family: var(--font-body);
+            font-size: 0.68rem;
+            color: var(--text-tertiary);
+            padding: 2px 8px;
+            background: var(--bg-canvas);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+        }
+
+        /* ------------------------------------------------------------
+           003 — DESIGN THINKING PROTOCOL (pinned horizontal timeline)
+           ------------------------------------------------------------ */
+        #process {
+            padding: 0;
+            --dt-step-w: clamp(240px, 22vw, 300px);
+            --dt-stem-h: clamp(110px, 19vh, 170px);
+            --dt-tail: max(48px, calc(40vw - var(--dt-step-w) - 200px));
+            --dt-gutter: max(24px, calc((100vw - 1200px) / 2 + 24px));
+        }
+
+        .dt-pin {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            height: 100svh;
+            overflow: hidden;
+            padding-top: 64px; /* clears the fixed nav */
+        }
+
+        .dt-track {
+            position: relative;
+            display: flex;
+            align-items: stretch;
+            width: max-content;
+            height: 100%;
+            will-change: transform;
+        }
+
+        /* Intro panel */
+        .dt-intro {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: clamp(28px, 4vw, 60px);
+            padding: 0 clamp(40px, 6vw, 96px) 0 var(--dt-gutter);
+        }
+
+        .dt-visual {
+            position: relative;
+            width: clamp(240px, 26vw, 340px);
+            aspect-ratio: 6 / 7;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--pdc-green-border);
+            overflow: hidden;
+            background:
+                radial-gradient(120% 80% at 30% 100%, rgba(141, 198, 63, 0.22), transparent 60%),
+                radial-gradient(90% 60% at 90% 0%, rgba(232, 80, 56, 0.14), transparent 60%),
+                var(--bg-surface);
+        }
+
+        .dt-visual::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(141, 198, 63, 0.09) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(141, 198, 63, 0.09) 1px, transparent 1px);
+            background-size: 24px 24px;
+            mask-image: radial-gradient(circle at 50% 55%, #000 30%, transparent 80%);
+            -webkit-mask-image: radial-gradient(circle at 50% 55%, #000 30%, transparent 80%);
+        }
+
+        .dt-visual img {
+            position: absolute;
+            inset: 10% 8% 14%;
+            width: 84%;
+            height: 76%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 28px rgba(141, 198, 63, 0.35));
+        }
+
+        .dt-visual-tag {
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-body);
+            font-size: 0.62rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+        }
+
+        .dt-intro-text .section-title {
+            font-size: clamp(2.2rem, 4.4vw, 3.4rem);
+        }
+
+        .dt-meter {
+            position: relative;
+            width: clamp(180px, 18vw, 240px);
+            height: 1px;
+            margin: 34px 0 14px;
+            background: var(--border-strong);
+        }
+
+        .dt-meter::before,
+        .dt-meter::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--pdc-green);
+        }
+
+        .dt-meter::before { left: -4px; }
+        .dt-meter::after { right: -4px; background: var(--bg-surface-hover); border: 1px solid var(--border-strong); }
+
+        .dt-meter-fill {
+            position: absolute;
+            inset: 0;
+            background: var(--pdc-green);
+            transform-origin: left;
+            transform: scaleX(0);
+        }
+
+        .dt-intro-sub {
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+        }
+
+        .dt-hint {
+            margin-top: 28px;
+            font-family: var(--font-body);
+            font-size: 0.68rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+        }
+
+        .dt-hint span {
+            display: inline-block;
+            color: var(--pdc-green);
+            animation: dtNudge 1.6s ease-in-out infinite;
+        }
+
+        @keyframes dtNudge {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(6px); }
+        }
+
+        /* Timeline */
+        .dt-timeline {
+            position: relative;
+            flex: 0 0 auto;
+            display: flex;
+            height: 100%;
+            padding-right: var(--dt-tail); /* lets the last phase reach the playhead */
+        }
+
+        .dt-axis {
+            position: absolute;
+            left: 0;
+            right: var(--dt-tail);
+            top: 50%;
+            height: 1px;
+            background: var(--border-strong);
+        }
+
+        .dt-axis-fill {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(141, 198, 63, 0.2), var(--pdc-green));
+            transform-origin: left;
+            transform: scaleX(0);
+        }
+
+        .dt-axis-head {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 11px;
+            height: 11px;
+            margin: -5px 0 0 -5px;
+            border-radius: 50%;
+            background: var(--pdc-green-bright);
+            box-shadow: 0 0 0 5px var(--pdc-green-tint), 0 0 22px var(--pdc-green-glow);
+            z-index: 2;
+        }
+
+        .dt-step {
+            position: relative;
+            flex: 0 0 var(--dt-step-w);
+            height: 100%;
+        }
+
+        .dt-stem {
+            position: absolute;
+            left: 0;
+            width: 1px;
+            height: var(--dt-stem-h);
+            background: var(--border-strong);
+            transition: background 0.4s ease;
+        }
+
+        .dt-step.up .dt-stem { bottom: 50%; }
+        .dt-step.down .dt-stem { top: 50%; }
+
+        .dt-stem::after {
+            content: '';
+            position: absolute;
+            left: -5px;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: var(--bg-canvas);
+            border: 1px solid var(--border-strong);
+            transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .dt-step.up .dt-stem::after { top: -5px; }
+        .dt-step.down .dt-stem::after { bottom: -5px; }
+
+        .dt-body {
+            position: absolute;
+            left: 28px;
+            width: calc(var(--dt-step-w) - 20px);
+            opacity: 0.32;
+            transform: translateY(8px);
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .dt-step.up .dt-body { top: calc(50% - var(--dt-stem-h) - 14px); }
+        .dt-step.down .dt-body { bottom: calc(50% - var(--dt-stem-h) - 8px); }
+
+        .dt-body h4 {
+            font-family: var(--font-display);
+            font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .dt-phase {
+            display: block;
+            margin: 6px 0 10px;
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--pdc-green);
+        }
+
+        .dt-body p {
+            font-size: 0.86rem;
+            line-height: 1.55;
+            color: var(--text-secondary);
+        }
+
+        .dt-num {
+            position: absolute;
+            left: 26px;
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 8vw, 6.5rem);
+            font-weight: 800;
+            line-height: 1;
+            color: transparent;
+            -webkit-text-stroke: 1px var(--border-strong);
+            pointer-events: none;
+            transition: -webkit-text-stroke-color 0.5s ease, color 0.5s ease;
+        }
+
+        .dt-step.up .dt-num { top: calc(50% + 22px); }
+        .dt-step.down .dt-num { bottom: calc(50% + 22px); }
+
+        /* Active: the playhead has passed this phase */
+        .dt-step.active .dt-stem { background: var(--pdc-green); }
+        .dt-step.active .dt-stem::after {
+            background: var(--pdc-green);
+            border-color: var(--pdc-green);
+            box-shadow: 0 0 0 4px var(--pdc-green-tint), 0 0 16px var(--pdc-green-glow);
+        }
+        .dt-step.active .dt-body { opacity: 1; transform: none; }
+        .dt-step.active .dt-num {
+            color: var(--pdc-green-tint);
+            -webkit-text-stroke-color: var(--pdc-green-border);
+        }
+
+        .dt-end {
+            position: relative;
+            flex: 0 0 auto;
+            align-self: center;
+            margin-left: 12px;
+            padding: 10px 14px;
+            border: 1px dashed var(--pdc-green-border);
+            border-radius: var(--radius-sm);
+            background: var(--bg-canvas);
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            z-index: 1;
+        }
+
+        .dt-end b { color: var(--pdc-green); font-weight: 600; }
+
+        .dt-counter {
+            position: absolute;
+            left: var(--dt-gutter);
+            bottom: 28px;
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            color: var(--text-tertiary);
+        }
+
+        .dt-counter b { color: var(--text-primary); font-weight: 600; }
+
+        @media (max-width: 768px) {
+            #process { --dt-step-w: 230px; --dt-stem-h: clamp(140px, 22vh, 180px); --dt-tail: 20vw; }
+            .dt-end { display: none; }
+            .dt-intro { flex-direction: column; align-items: flex-start; justify-content: center; gap: 22px; width: 100vw; padding-right: 24px; }
+            .dt-visual { width: min(200px, 52vw); }
+            .dt-meter { margin: 22px 0 10px; }
+            .dt-hint { margin-top: 18px; }
+        }
+
+        /* No pinning for reduced motion: the track becomes a normal swipeable row */
+        @media (prefers-reduced-motion: reduce) {
+            #process { --dt-tail: 48px; }
+            .dt-pin { position: relative; height: auto; min-height: 640px; overflow-x: auto; padding-top: 0; }
+            .dt-track { height: 640px; }
+            .dt-hint span { animation: none; }
+            .dt-body, .dt-stem, .dt-stem::after, .dt-num { transition: none; }
+        }
+
+        /* ------------------------------------------------------------
+           005 — PRESTIGIOUS PRODUCT DESIGN & HARDWARE COMPETITIONS
+           ------------------------------------------------------------ */
+        .comp-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .comp-card {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-decoration: none;
+            color: inherit;
+            border-top: 2px solid var(--border-subtle);
+        }
+
+        .comp-card:hover {
+            border-top-color: var(--pdc-green);
+        }
+
+        .comp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .comp-tier {
+            font-family: var(--font-body);
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--pdc-green);
+            background: var(--pdc-green-tint);
+            border: 1px solid var(--pdc-green-border);
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
+        }
+
+        .comp-tier.dyson {
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .comp-tier.reddot {
+            color: var(--cfi-red);
+            background: var(--cfi-red-tint);
+            border-color: rgba(232, 80, 56, 0.3);
+        }
+
+        .comp-deadline {
+            font-family: var(--font-body);
+            font-size: 0.68rem;
+            color: var(--text-tertiary);
+        }
+
+        .comp-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .comp-card p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .comp-metrics {
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+        }
+
+        .comp-prize {
+            color: var(--pdc-green);
+            font-weight: 600;
+        }
+
+        .comp-link-btn {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s;
+        }
+
+        .comp-card:hover .comp-link-btn {
+            color: var(--pdc-green);
+        }
+
+        /* ------------------------------------------------------------
+           006 — COORDINATOR & DC KNOWLEDGE ARCHIVE
+           ------------------------------------------------------------ */
+        .archive-container {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 28px;
+        }
+
+        .archive-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .tab-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: var(--bg-canvas);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            padding: 7px 14px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--border-strong);
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--pdc-green);
+            color: #0c0d10;
+            font-weight: 700;
+            border-color: var(--pdc-green);
+        }
+
+        .archive-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .search-bar {
+            background: var(--bg-canvas);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            width: 220px;
+            outline: none;
+        }
+
+        .search-bar:focus {
+            border-color: var(--pdc-green);
+        }
+
+        .btn-upload {
+            background: var(--cfi-red);
+            color: #ffffff;
+            border: 1px solid var(--cfi-red);
+            font-family: var(--font-body);
+            font-size: 0.74rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-upload:hover {
+            background: #d4432c;
+        }
+
+        .archive-table {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .archive-row {
+            display: grid;
+            grid-template-columns: 90px 1.3fr 1.6fr 120px;
+            align-items: center;
+            gap: 20px;
+            padding: 16px 20px;
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+
+        .archive-row:hover {
+            border-color: var(--border-strong);
+            background: var(--bg-surface-hover);
+        }
+
+        .file-badge {
+            font-family: var(--font-body);
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 3px 6px;
+            text-align: center;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+            color: var(--pdc-green);
+            background: var(--pdc-green-tint);
+        }
+
+        .file-badge.pdf { color: var(--cfi-red); background: var(--cfi-red-tint); border-color: rgba(232, 80, 56, 0.3); }
+        .file-badge.cad { color: #38bdf8; background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); }
+
+        .row-title h4 {
+            font-size: 0.92rem;
+            font-weight: 700;
+        }
+
+        .row-title span {
+            font-family: var(--font-body);
+            font-size: 0.68rem;
+            color: var(--text-tertiary);
+        }
+
+        .row-desc {
+            font-size: 0.84rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .row-action {
+            text-align: right;
+        }
+
+        .btn-dl {
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--pdc-green);
+            text-decoration: none;
+            cursor: pointer;
+            border: 1px solid var(--pdc-green-border);
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+        .btn-dl:hover {
+            background: var(--pdc-green);
+            color: #0c0d10;
+        }
+
+        /* ------------------------------------------------------------
+           007 — PEOPLE & LEADERSHIP (HIERARCHY & ALUMNI)
+           ------------------------------------------------------------ */
+        .people-filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 36px;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 16px;
+        }
+
+        .tier-chip {
+            padding: 8px 18px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tier-chip:hover, .tier-chip.active {
+            color: var(--pdc-green);
+            border-color: var(--pdc-green-border);
+            background: var(--pdc-green-tint);
+        }
+
+        .tier-group {
+            margin-bottom: 48px;
+            transition: opacity 0.3s ease;
+        }
+
+        .tier-heading {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 0 0 22px 0;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--pdc-green);
+        }
+
+        .tier-heading::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-subtle);
+        }
+
+        /* Head Card (Tier 1) - Featured Hero Card */
+        .head-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-left: 4px solid var(--pdc-green);
+            border-radius: 12px;
+            padding: 36px 32px;
+            display: grid;
+            grid-template-columns: 120px 1fr auto;
+            gap: 32px;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .head-card:hover {
+            border-color: var(--pdc-green-border);
+            border-left-color: var(--pdc-green-bright);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 24px var(--pdc-green-tint);
+        }
+
+        .member-avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 10px;
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-strong);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            color: var(--text-tertiary);
+        }
+
+        .member-avatar svg {
+            width: 44px;
+            height: 44px;
+            opacity: 0.8;
+        }
+
+        .member-avatar .avatar-wire-badge {
+            position: absolute;
+            bottom: 4px;
+            font-family: var(--font-body);
+            font-size: 0.55rem;
+            background: rgba(0, 0, 0, 0.85);
+            color: var(--pdc-green);
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .member-info h3 {
+            font-family: var(--font-display);
+            font-size: 1.55rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .member-role-tag {
+            display: inline-block;
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            color: var(--pdc-green);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 4px;
+        }
+
+        .member-dept {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .member-bio {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 650px;
+        }
+
+        .member-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .link-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .link-pill:hover {
+            color: var(--text-primary);
+            border-color: var(--pdc-green);
+            background: var(--pdc-green-tint);
+        }
+
+        .link-pill.linkedin {
+            color: #38bdf8;
+            border-color: rgba(56, 189, 248, 0.25);
+            background: rgba(56, 189, 248, 0.06);
+        }
+
+        .link-pill.linkedin:hover {
+            border-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.18);
+            color: #ffffff;
+        }
+
+        /* Tier Grids (Coordinators, DCs, Leads, Members) */
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .tier-grid.cols-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .tier-grid.cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .person-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 26px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: all 0.25s ease;
+        }
+
+        .person-card:hover {
+            border-color: var(--pdc-green-border);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .person-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 12px;
+        }
+
+        .person-role {
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            color: var(--pdc-green);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .person-tenure {
+            font-family: var(--font-body);
+            font-size: 0.68rem;
+            color: var(--text-tertiary);
+        }
+
+        .person-card h4 {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .person-sub {
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            color: var(--text-tertiary);
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .person-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .person-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 14px;
+            margin-top: auto;
+        }
+
+        .focus-tag {
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            color: var(--pdc-green);
+            background: var(--pdc-green-tint);
+            border: 1px solid var(--pdc-green-border);
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .person-link {
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            color: var(--cfi-red);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .person-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Notable Alumni & Founder Spotlight */
+        .alumni-spotlight-section {
+            background: linear-gradient(180deg, rgba(17, 19, 25, 0.85) 0%, rgba(9, 10, 13, 0.98) 100%);
+            border: 1px solid rgba(141, 198, 63, 0.22);
+            border-radius: 14px;
+            padding: 40px 36px;
+            margin-top: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .alumni-spotlight-section::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 360px; height: 360px;
+            background: radial-gradient(circle, rgba(141, 198, 63, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .alumni-spotlight-header {
+            margin-bottom: 30px;
+        }
+
+        .spotlight-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 14px;
+            background: rgba(141, 198, 63, 0.12);
+            border: 1px solid var(--pdc-green-border);
+            border-radius: 999px;
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            color: var(--pdc-green);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .alumni-spotlight-header h3 {
+            font-family: var(--font-display);
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .alumni-spotlight-header p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            max-width: 760px;
+            line-height: 1.6;
+        }
+
+        .alumni-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .alumni-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 28px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .alumni-card:hover {
+            border-color: rgba(56, 189, 248, 0.45);
+            transform: translateY(-4px);
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45), 0 0 24px rgba(56, 189, 248, 0.12);
+        }
+
+        .alumni-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .alumni-badge {
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(251, 146, 60, 0.14);
+            color: #fb923c;
+            border: 1px solid rgba(251, 146, 60, 0.35);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 600;
+        }
+
+        .alumni-card h4 {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .alumni-venture {
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            color: #38bdf8;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .alumni-pdc-role {
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .alumni-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 24px;
+            flex-grow: 1;
+        }
+
+        .alumni-btn-linkedin {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 11px 16px;
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.28);
+            color: #38bdf8;
+            border-radius: 6px;
+            font-family: var(--font-body);
+            font-size: 0.76rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .alumni-btn-linkedin:hover {
+            background: #38bdf8;
+            color: #0c0d10;
+            border-color: #38bdf8;
+            transform: translateY(-2px);
+        }
+
+        /* ------------------------------------------------------------
+           008 — PUBLICATIONS (PRODUCT HANDBOOK & PDC BROCHURE)
+           ------------------------------------------------------------ */
+        .pub-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+            margin-bottom: 48px;
+        }
+
+        .pub-card {
+            padding: 38px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s ease, transform 0.25s ease, box-shadow 0.3s ease;
+        }
+
+        .pub-card:hover {
+            border-color: var(--pdc-green-border);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), 0 0 24px var(--pdc-green-tint);
+        }
+
+        .pub-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            width: fit-content;
+            margin-bottom: 20px;
+        }
+
+        .pub-status-badge.in-prod {
+            background: rgba(232, 80, 56, 0.12);
+            color: var(--cfi-red);
+            border: 1px solid rgba(232, 80, 56, 0.32);
+        }
+
+        .pub-status-badge.official {
+            background: var(--pdc-green-tint);
+            color: var(--pdc-green);
+            border: 1px solid var(--pdc-green-border);
+        }
+
+        .pub-status-badge .dot-pulse {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+            box-shadow: 0 0 8px currentColor;
+            animation: pulseDot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        .pub-card-header h3 {
+            font-family: var(--font-display);
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            letter-spacing: -0.02em;
+        }
+
+        .pub-subtitle {
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .pub-card p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin-bottom: 24px;
+        }
+
+        .pub-outline {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 28px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+        }
+
+        .pub-outline li {
+            font-family: var(--font-body);
+            font-size: 0.76rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .pub-outline li span.mod-num {
+            color: var(--pdc-green);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .pub-meta-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding-top: 18px;
+            margin-bottom: 26px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .pub-meta-item span.meta-k {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 3px;
+        }
+
+        .pub-meta-item span.meta-v {
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .pub-actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: auto;
+        }
+
+        .btn-pub-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 22px;
+            background: var(--pdc-green);
+            color: #0c0d10;
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background 0.2s ease, transform 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-pub-primary:hover {
+            background: var(--pdc-green-bright);
+            transform: translateY(-2px);
+        }
+
+        .btn-pub-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: transparent;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid var(--border-strong);
+            border-radius: 6px;
+            transition: border-color 0.2s ease, background 0.2s ease;
+            cursor: pointer;
+        }
+
+        .btn-pub-secondary:hover {
+            border-color: var(--pdc-green);
+            background: var(--pdc-green-tint);
+        }
+
+        /* ------------------------------------------------------------
+           CTA BANNER
+           ------------------------------------------------------------ */
+        .cta-banner {
+            margin-top: 56px;
+            background: linear-gradient(135deg, #161922 0%, #0d0e12 100%);
+            border: 1px solid var(--border-subtle);
+            border-left: 4px solid var(--pdc-green);
+            border-radius: var(--radius-md);
+            padding: 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .cta-text h2 {
+            font-family: var(--font-brutal);
+            font-size: clamp(1.6rem, 3vw, 2.3rem);
+            font-weight: 900;
+            font-stretch: 112%;
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            line-height: 0.95;
+            margin-bottom: 6px;
+        }
+
+        .cta-text p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            max-width: 580px;
+        }
+
+        /* ------------------------------------------------------------
+           UPLOAD MODAL
+           ------------------------------------------------------------ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 9, 12, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-md);
+            width: 90%;
+            max-width: 540px;
+            padding: 36px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-box h3 {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            margin-bottom: 6px;
+        }
+
+        .modal-box p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--bg-canvas);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--pdc-green);
+        }
+
+        .dropzone-box {
+            border: 2px dashed var(--border-strong);
+            background: var(--bg-canvas);
+            border-radius: var(--radius-sm);
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.2s;
+        }
+
+        .dropzone-box:hover {
+            border-color: var(--pdc-green);
+            background: var(--pdc-green-tint);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-cancel {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .btn-submit {
+            padding: 8px 20px;
+            background: var(--pdc-green);
+            border: 1px solid var(--pdc-green);
+            border-radius: var(--radius-sm);
+            color: #0c0d10;
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Toast Notice */
+        .toast-banner {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: #14171e;
+            color: #ffffff;
+            border-left: 4px solid var(--pdc-green);
+            border-radius: var(--radius-sm);
+            padding: 12px 20px;
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            z-index: 2000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .toast-banner.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* ------------------------------------------------------------
+           RESPONSIVE
+           ------------------------------------------------------------ */
+        @media (max-width: 1024px) {
+            .about-grid { grid-template-columns: 1fr; }
+            .about-main-pane { border-right: none; border-bottom: 1px solid var(--border-subtle); }
+            .project-grid { grid-template-columns: 1fr 1fr; }
+            .project-card.featured { grid-column: span 2; }
+            .comp-grid { grid-template-columns: 1fr 1fr; }
+            .team-grid { grid-template-columns: 1fr 1fr; }
+            .pub-grid { grid-template-columns: 1fr; }
+            .tier-grid { grid-template-columns: 1fr 1fr; }
+            .tier-grid.cols-4 { grid-template-columns: 1fr 1fr; }
+            .alumni-grid { grid-template-columns: 1fr 1fr; }
+            .head-card { grid-template-columns: 100px 1fr; }
+            .archive-row { grid-template-columns: 80px 1.2fr 1fr auto; }
+            .dragon-full-backdrop { opacity: 0.16; width: 500px; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-toggle { display: block; }
+            .nav-links.open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 64px; left: 0; width: 100%;
+                background: var(--bg-canvas);
+                border-bottom: 1px solid var(--border-subtle);
+                padding: 20px 24px;
+                gap: 14px;
+            }
+            .hero-stats-row { grid-template-columns: 1fr 1fr; }
+            .stat-cell:nth-child(2) { border-right: none; }
+            .stat-cell:nth-child(1), .stat-cell:nth-child(2) { border-bottom: 1px solid var(--border-subtle); }
+            .project-grid { grid-template-columns: 1fr; }
+            .project-card.featured { grid-column: span 1; }
+            .comp-grid { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: 1fr; }
+            .archive-row { grid-template-columns: 1fr; gap: 8px; }
+            .archive-controls { flex-direction: column; align-items: stretch; }
+            .search-bar { width: 100%; }
+            .cta-banner { padding: 32px 24px; }
+            .dragon-full-backdrop { opacity: 0.12; width: 360px; right: -50px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP WINDOW SCROLL PROGRESS BAR -->
+    <div id="scrollProgressBar" aria-hidden="true"></div>
+
+    <!-- CANVAS SPOTLIGHT GLOW (FOLLOWS CURSOR SMOOTHLY) -->
+    <div class="canvas-spotlight" id="canvasSpotlight" aria-hidden="true"></div>
+
+    <!-- TECHNICAL BLUEPRINT GRID BACKGROUND -->
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <!-- NAVIGATION -->
+    <nav>
+        <div class="nav-inner">
+            <a href="#" class="nav-brand">
+                <img src="assets/pdc_dragon_watermark.png" alt="PDC Dragon" class="nav-dragon-mark" onerror="this.style.display='none'">
+                <div class="brand-text">
+                    <span class="brand-title">PDC <span>· CFI</span></span>
+                    <span class="brand-sub">IIT Madras</span>
+                </div>
+            </a>
+            <button class="nav-toggle" aria-label="Toggle Navigation" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Hardware</a></li>
+                <li><a href="#process">Methodology</a></li>
+                <li><a href="#vault">DT Vault</a></li>
+                <li><a href="#competitions">Competitions</a></li>
+                <li><a href="#archive" class="nav-cta">Coord Archive</a></li>
+                <li><a href="#team">People</a></li>
+                <li><a href="#publications">Handbook & Brochure</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- STATUS TELEMETRY -->
+    <div class="status-strip" aria-hidden="true">
+        <div class="container status-inner">
+            <div class="status-item">
+                <span class="live-dot"></span>
+                <span>CENTRE FOR INNOVATION · SUDHA & SHANKAR HUB · LAB 204</span>
+            </div>
+            <div class="status-item">
+                <span>ACTIVE MEMBERS: 65+</span>
+                <span>·</span>
+                <span>ANNUAL FOCUS: NOVEL HARDWARE</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- HERO SECTION (WITH FULL TRANSPARENT DRAGON WATERMARK & SHINY TEXT SHEEN) -->
+    <section class="hero">
+        <!-- Full Transparent Dragon Background Watermark (Directly from User Asset) -->
+        <img src="assets/pdc_dragon_watermark.png" alt="PDC Dragon Watermark" class="dragon-full-backdrop" id="heroDragonBackdrop">
+        <div class="dragon-fire-glow" aria-hidden="true"></div>
+
+        <div class="container">
+            <div class="hero-content blur-reveal">
+                <div class="hero-badge">
+                    Centre For Innovation · IIT Madras
+                </div>
+
+                <h1>
+                    Product<br>
+                    <span class="shiny-text">Design</span> <span class="green">Club</span>
+                </h1>
+
+                <div class="hero-motto-row">
+                    <span class="motto-tag">DISRUPTION.STARTS.HERE</span>
+                    <span class="motto-sub">Walk in with an idea, walk out with a product.</span>
+                </div>
+
+
+                <div class="hero-actions">
+                    <a href="#projects" class="btn-magnetic" id="heroPrimaryBtn">
+                        Explore Hardware Projects →
+                    </a>
+                    <a href="#competitions" class="btn-outline">
+                        Global Competitions
+                    </a>
+                </div>
+            </div>
+
+            <!-- Wireframe Stats Row -->
+            <div class="hero-stats-row">
+                <div class="stat-cell">
+                    <div class="stat-num">2020<span>.</span></div>
+                    <div class="stat-desc">Chartered at CFI</div>
+                </div>
+                <div class="stat-cell">
+                    <div class="stat-num">65<span>+</span></div>
+                    <div class="stat-desc">Active Members</div>
+                </div>
+                <div class="stat-cell">
+                    <div class="stat-num">16<span>+</span></div>
+                    <div class="stat-desc">Hardware Projects</div>
+                </div>
+                <div class="stat-cell">
+                    <div class="stat-num">100<span>%</span></div>
+                    <div class="stat-desc">Student Led</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 001 — ABOUT THE CLUB -->
+    <section id="about">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <span class="section-meta"><b>001</b><span>Overview</span></span>
+                    <h2 class="section-title">About the Club</h2>
+                </div>
+            </div>
+
+            <div class="about-grid tilt-card">
+                <div class="card-glare"></div>
+                <div class="about-main-pane">
+                </div>
+
+                <div class="about-side-pane">
+                    <div>
+                        <div class="spec-list-title">Quick Specifications</div>
+                        <ul class="spec-list">
+                            <li><span>Parent Body</span> <span class="val">CFI, IIT Madras</span></li>
+                            <li><span>Location</span> <span class="val">SSH Room 204</span></li>
+                            <li><span>Primary Tools</span> <span class="val">Fusion 360, SolidWorks</span></li>
+                            <li><span>Annual Sprint</span> <span class="val">Freshie Design Challenge</span></li>
+                            <li><span>Contact</span> <span class="val">pdc_cfi@smail.iitm.ac.in</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="wireframe-box">
+                        [ Quick Facts Sidebar Slot ]
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 002 — HARDWARE & PROJECTS -->
+    <section id="projects">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <span class="section-meta"><b>002</b><span>Engineering Portfolio</span></span>
+                    <h2 class="section-title">Projects under PDC</h2>
+                </div>
+            </div>
+
+            <div class="project-grid">
+
+                <!-- Project 1 (Featured 2-Columns) -->
+                <div class="project-card featured tilt-card">
+                    <div class="card-glare"></div>
+                    <div>
+                        <div class="project-card-header">
+                            <span class="badge-pill">Featured Project</span>
+                            <span class="card-meta-text">Phase: Prototyping</span>
+                        </div>
+                        <h3>Quantum Dots Diagnostic Tooling</h3>
+                        <div class="img-wireframe-slot">
+                            [ CAD Assembly Model Render Placeholder ]
+                        </div>
+                    </div>
+                    <div class="tag-row">
+                        <span class="tag-item">Fusion 360</span>
+                        <span class="tag-item">Microfluidics</span>
+                        <span class="tag-item">Optomechanics</span>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card tilt-card">
+                    <div class="card-glare"></div>
+                    <div>
+                        <div class="project-card-header">
+                            <span class="badge-pill red">Assistive Engineering</span>
+                            <span class="card-meta-text">Status: Active</span>
+                        </div>
+                        <h3>Accessible Mobility Solutions</h3>
+                        <div class="img-wireframe-slot">
+                            [ FEA Stress Simulation Placeholder ]
+                        </div>
+                    </div>
+                    <div class="tag-row">
+                        <span class="tag-item">Ansys FEA</span>
+                        <span class="tag-item">6061-T6 Aluminum</span>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card tilt-card">
+                    <div class="card-glare"></div>
+                    <div>
+                        <div class="project-card-header">
+                            <span class="badge-pill">AgroTech Enclosure</span>
+                            <span class="card-meta-text">Status: Completed</span>
+                        </div>
+                        <h3>Smart Agri-Spraying Payload Housing</h3>
+                        <div class="img-wireframe-slot">
+                            [ IP67 Weatherproof Enclosure Render ]
+                        </div>
+                    </div>
+                    <div class="tag-row">
+                        <span class="tag-item">SolidWorks</span>
+                        <span class="tag-item">IP67 Enclosure</span>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="project-card tilt-card">
+                    <div class="card-glare"></div>
+                    <div>
+                        <div class="project-card-header">
+                            <span class="badge-pill red">Alumni Venture</span>
+                            <span class="card-meta-text">Seed Funded</span>
+                        </div>
+                        <h3>Desklamp.io Hardware Ergonomics</h3>
+                        <div class="img-wireframe-slot">
+                            [ Consumer Hardware Prototype Slot ]
+                        </div>
+                    </div>
+                    <div class="tag-row">
+                        <span class="tag-item">Thermal Heatsinks</span>
+                        <span class="tag-item">DFM</span>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="project-card tilt-card">
+                    <div class="card-glare"></div>
+                    <div>
+                        <div class="project-card-header">
+                            <span class="badge-pill">Safety Systems</span>
+                            <span class="card-meta-text">Testing</span>
+                        </div>
+                        <h3>Navigation-Assisted Helmet</h3>
+                        <div class="img-wireframe-slot">
+                            [ Impact Structure & Optics Slot ]
+                        </div>
+                    </div>
+                    <div class="tag-row">
+                        <span class="tag-item">Ergonomics</span>
+                        <span class="tag-item">Drop Testing</span>
+                    </div>
+                </div>
+
+                <!-- Project 6 -->
+                <div class="project-card tilt-card">
+                    <div class="card-glare"></div>
+                    <div>
+                        <div class="project-card-header">
+                            <span class="badge-pill">Annual Event</span>
+                            <span class="card-meta-text">Flagship Sprint</span>
+                        </div>
+                        <h3>Freshie Design Challenge Output</h3>
+                        <div class="img-wireframe-slot">
+                            [ Freshman CAD Sprint Showcase ]
+                        </div>
+                    </div>
+                    <div class="tag-row">
+                        <span class="tag-item">Fusion 360</span>
+                        <span class="tag-item">Rapid Prototyping</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 003 — DESIGN THINKING PROTOCOL -->
+    <section id="process">
+        <div class="dt-pin">
+            <div class="dt-track">
+                <div class="dt-intro">
+                    <div class="dt-visual">
+                        <img src="assets/pdc_dragon_watermark.png" alt="" onerror="this.style.display='none'">
+                        <div class="dt-visual-tag"><span>PDC · DT</span><span>v2026</span></div>
+                    </div>
+                    <div class="dt-intro-text">
+                        <span class="section-meta"><b>003</b><span>Framework</span></span>
+                        <h2 class="section-title">Design Thinking<br>Methodology</h2>
+                        <div class="dt-meter"><div class="dt-meter-fill"></div></div>
+                        <div class="dt-intro-sub">05 Phases · Empathize → Test</div>
+                        <div class="dt-hint">Scroll to explore <span>→</span></div>
+                    </div>
+                </div>
+
+                <div class="dt-timeline">
+                    <div class="dt-axis"><div class="dt-axis-fill"></div></div>
+                    <div class="dt-axis-head"></div>
+
+                    <div class="dt-step up">
+                        <div class="dt-stem"></div>
+                        <div class="dt-num">01</div>
+                        <div class="dt-body">
+                            <h4>Empathize</h4>
+                            <span class="dt-phase">Phase: User Research</span>
+                            <p>Talk to the people who will use it. Shadow them, interview them, and note what frustrates them.</p>
+                        </div>
+                    </div>
+
+                    <div class="dt-step down">
+                        <div class="dt-stem"></div>
+                        <div class="dt-num">02</div>
+                        <div class="dt-body">
+                            <h4>Define</h4>
+                            <span class="dt-phase">Phase: Constraint Mapping</span>
+                            <p>Turn those notes into one problem statement, along with the constraints that bound it.</p>
+                        </div>
+                    </div>
+
+                    <div class="dt-step up">
+                        <div class="dt-stem"></div>
+                        <div class="dt-num">03</div>
+                        <div class="dt-body">
+                            <h4>Ideate</h4>
+                            <span class="dt-phase">Phase: Concept Generation</span>
+                            <p>Sketch widely before judging. Many rough concepts first, then the few worth building.</p>
+                        </div>
+                    </div>
+
+                    <div class="dt-step down">
+                        <div class="dt-stem"></div>
+                        <div class="dt-num">04</div>
+                        <div class="dt-body">
+                            <h4>Prototype</h4>
+                            <span class="dt-phase">Phase: Rapid Making</span>
+                            <p>Build fast and cheap with cardboard, foam and 3D prints. Just enough to put in someone's hands.</p>
+                        </div>
+                    </div>
+
+                    <div class="dt-step up">
+                        <div class="dt-stem"></div>
+                        <div class="dt-num">05</div>
+                        <div class="dt-body">
+                            <h4>Test</h4>
+                            <span class="dt-phase">Phase: User Validation</span>
+                            <p>Put it in front of users, watch what breaks, and loop back to whichever phase needs it.</p>
+                        </div>
+                    </div>
+
+                    <div class="dt-end"><b>↺ Iterate</b> · back to 01</div>
+                </div>
+            </div>
+
+            <div class="dt-counter" aria-hidden="true"><b>00</b> / 05</div>
+        </div>
+    </section>
+
+    <!-- 004 — DT VAULT -->
+    <section id="vault">
+        <!-- Tilted grid hero (React: components/vault-hero.tsx); the header below is the no-JS fallback -->
+        <div id="vault-hero">
+            <div class="container">
+                <div class="section-header">
+                    <div>
+                        <span class="section-meta"><b>004</b><span>Resource Vault</span></span>
+                        <h2 class="section-title">Curated Design Resources</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- 005 — PRESTIGIOUS PRODUCT DESIGN & HARDWARE COMPETITIONS -->
+    <section id="competitions">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <span class="section-meta"><b>005</b><span>Global Stages</span></span>
+                    <h2 class="section-title">Prestigious Product Competitions</h2>
+                    <p class="section-lead">
+                        International hardware and industrial design stages to aim for throughout the academic year.
+                    </p>
+                </div>
+            </div>
+
+            <div class="comp-grid">
+                <!-- James Dyson Award -->
+                <a href="https://www.jamesdysonaward.org/" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card">
+                    <div class="card-glare"></div>
+                    <div>
+                        <div class="comp-header">
+                            <span class="comp-tier dyson">Global Gold Standard</span>
+                            <span class="comp-deadline">Annual: March – July</span>
+                        </div>
+                        <h3>The James Dyson Award</h3>
+                    </div>
+                    <div class="comp-metrics">
+                        <span class="comp-prize">£30,000 Global Winner</span>
+                        <span class="comp-link-btn">Official Portal ↗</span>
+                    </div>
+                </a>
+
+                <!-- iF Design Student Award -->
+                <a href="https://ifdesign.com/en/if-design-student-award" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card">
+                    <div class="card-glare"></div>
+                    <div>
+                        <div class="comp-header">
+                            <span class="comp-tier">Free to Enter · Germany</span>
+                            <span class="comp-deadline">Annual: Oct – Feb</span>
+                        </div>
+                        <h3>iF Design Student Award</h3>
+                    </div>
+                    <div class="comp-metrics">
+                        <span class="comp-prize">€50,000 Prize Fund</span>
+                        <span class="comp-link-btn">Official Portal ↗</span>
+                    </div>
+                </a>
+
+                <!-- Red Dot Award: Design Concept -->
+                <a href="https://www.red-dot.org/design-concept" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card">
+                    <div class="card-glare"></div>
+                    <div>
+                        <div class="comp-header">
+                            <span class="comp-tier reddot">Industry Benchmark</span>
+                            <span class="comp-deadline">Annual: Jan – April</span>
+                        </div>
+                        <h3>Red Dot Award: Design Concept</h3>
+                    </div>
+                    <div class="comp-metrics">
+                        <span class="comp-prize">Red Dot Label & Museum</span>
+                        <span class="comp-link-btn">Official Portal ↗</span>
+                    </div>
+                </a>
+
+                <!-- Core77 Design Awards -->
+                <a href="https://designawards.core77.com/" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card">
+                    <div class="card-glare"></div>
+                    <div>
+                        <div class="comp-header">
+                            <span class="comp-tier">Student Category</span>
+                            <span class="comp-deadline">Annual: Jan – April</span>
+                        </div>
+                        <h3>Core77 Design Awards</h3>
+                    </div>
+                    <div class="comp-metrics">
+                        <span class="comp-prize">Core77 Trophy & Press</span>
+                        <span class="comp-link-btn">Official Portal ↗</span>
+                    </div>
+                </a>
+
+                <!-- BraunPrize International -->
+                <a href="https://www.braunprize.org/" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card">
+                    <div class="card-glare"></div>
+                    <div>
+                        <div class="comp-header">
+                            <span class="comp-tier">Canonical Industrial Design</span>
+                            <span class="comp-deadline">Biennial Cycle</span>
+                        </div>
+                        <h3>BraunPrize International</h3>
+                    </div>
+                    <div class="comp-metrics">
+                        <span class="comp-prize">€75,000 Total Fund</span>
+                        <span class="comp-link-btn">Official Portal ↗</span>
+                    </div>
+                </a>
+
+                <!-- IDEA Awards -->
+                <a href="https://www.idsa.org/awards-recognitions/idea/" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card">
+                    <div class="card-glare"></div>
+                    <div>
+                        <div class="comp-header">
+                            <span class="comp-tier">IDSA North America</span>
+                            <span class="comp-deadline">Annual: Dec – March</span>
+                        </div>
+                        <h3>IDEA (International Design Excellence)</h3>
+                    </div>
+                    <div class="comp-metrics">
+                        <span class="comp-prize">IDEA Trophy & Showcase</span>
+                        <span class="comp-link-btn">Official Portal ↗</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 006 — COORDINATOR & DC KNOWLEDGE ARCHIVE -->
+    <section id="archive">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <span class="section-meta"><b>006</b><span>Knowledge Handover</span></span>
+                    <h2 class="section-title">PDC Coordinator & DC Archive</h2>
+                </div>
+            </div>
+
+            <div class="archive-container">
+                <div class="archive-controls">
+                    <div class="tab-group">
+                        <button class="tab-btn active" onclick="filterArchive('all', this)">All Documents (6)</button>
+                        <button class="tab-btn" onclick="filterArchive('handover', this)">Coord Handovers</button>
+                        <button class="tab-btn" onclick="filterArchive('dc', this)">DC Kits</button>
+                        <button class="tab-btn" onclick="filterArchive('cad', this)">CAD Tolerances</button>
+                        <button class="tab-btn" onclick="filterArchive('procurement', this)">Vendors</button>
+                    </div>
+
+                    <div class="archive-actions">
+                        <input type="text" id="archiveSearch" class="search-bar" placeholder="Search archive..." onkeyup="searchArchiveDocs()">
+                        <button class="btn-upload" onclick="openUploadModal()">
+                            <span>+</span> Upload Resource
+                        </button>
+                    </div>
+                </div>
+
+                <div class="archive-table" id="archiveRows">
+
+                    <div class="archive-row" data-category="handover" data-title="PDC Coordinator Handover Bible">
+                        <span class="file-badge pdf">SOP · PDF</span>
+                        <div class="row-title">
+                            <h4>PDC Coordinator Handover Bible</h4>
+                            <span>REVISION 2025 · COORDINATOR DESK</span>
+                        </div>
+                        <div class="row-desc"></div>
+                        <div class="row-action">
+                            <a class="btn-dl" onclick="notifyDownload('PDC_Coordinator_Handover_Bible.pdf')">Download ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="archive-row" data-category="dc" data-title="Freshie Design Challenge Problem Bank">
+                        <span class="file-badge">DC KIT · ZIP</span>
+                        <div class="row-title">
+                            <h4>Freshie Design Challenge Problem Bank</h4>
+                            <span>FALL 2025 · DC SPRINT TEAM</span>
+                        </div>
+                        <div class="row-desc"></div>
+                        <div class="row-action">
+                            <a class="btn-dl" onclick="notifyDownload('FDC_2025_DC_Problem_Bank.zip')">Download ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="archive-row" data-category="cad" data-title="CFI 3D Printing Tolerance Presets">
+                        <span class="file-badge cad">CONFIG · 3MF</span>
+                        <div class="row-title">
+                            <h4>CFI Rapid Prototyping Slicer Presets</h4>
+                            <span>UPDATED 2026 · FAB LAB</span>
+                        </div>
+                        <div class="row-desc"></div>
+                        <div class="row-action">
+                            <a class="btn-dl" onclick="notifyDownload('CFI_3DPrint_Tolerances.3mf')">Download ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="archive-row" data-category="cad" data-title="Standard Metric Fastener CAD Library">
+                        <span class="file-badge cad">CAD · .STEP</span>
+                        <div class="row-title">
+                            <h4>Standard Metric Fastener Library</h4>
+                            <span>REV 3.2 · LAB ASSETS</span>
+                        </div>
+                        <div class="row-desc"></div>
+                        <div class="row-action">
+                            <a class="btn-dl" onclick="notifyDownload('Standard_Fasteners_Library.step')">Download ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="archive-row" data-category="procurement" data-title="Chennai Guindy Machining Vendor Directory">
+                        <span class="file-badge pdf">SHEET · XLS</span>
+                        <div class="row-title">
+                            <h4>Chennai Machining Vendor Directory</h4>
+                            <span>VERIFIED 2026 · LOGISTICS</span>
+                        </div>
+                        <div class="row-desc"></div>
+                        <div class="row-action">
+                            <a class="btn-dl" onclick="notifyDownload('Guindy_Machining_Directory.xlsx')">Download ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="archive-row" data-category="handover" data-title="CFI Milestone Pitch Deck Master">
+                        <span class="file-badge">DECK · PPTX</span>
+                        <div class="row-title">
+                            <h4>CFI Milestone Pitch Deck Master</h4>
+                            <span>2025-26 · REVIEW TEMPLATE</span>
+                        </div>
+                        <div class="row-desc"></div>
+                        <div class="row-action">
+                            <a class="btn-dl" onclick="notifyDownload('PDC_CFI_Pitch_Master.pptx')">Download ↗</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 007 — PEOPLE & LEADERSHIP -->
+    <section id="team">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <span class="section-meta"><b>007</b><span>Core Leadership & Community</span></span>
+                    <h2 class="section-title">The People Running PDC</h2>
+                </div>
+            </div>
+
+            <!-- Role Filter Chips -->
+            <div class="people-filter-bar">
+                <button class="tier-chip active" onclick="filterPeople('all')">All Roles</button>
+                <button class="tier-chip" onclick="filterPeople('head')">Club Head</button>
+                <button class="tier-chip" onclick="filterPeople('coordinators')">Coordinators</button>
+                <button class="tier-chip" onclick="filterPeople('deputy')">Deputy Coordinators</button>
+                <button class="tier-chip" onclick="filterPeople('leads')">Project Leads</button>
+                <button class="tier-chip" onclick="filterPeople('members')">Project Members</button>
+                <button class="tier-chip" onclick="filterPeople('alumni')">Notable Alumni</button>
+            </div>
+
+            <!-- TIER 1: CLUB HEAD -->
+            <div class="tier-group" data-tier="head">
+                <div class="tier-heading">01 · Club Head</div>
+                <div class="head-card tilt-card">
+                    <div class="card-glare"></div>
+                    <div class="member-avatar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span class="avatar-wire-badge">HEAD · WIRE</span>
+                    </div>
+                    <div class="member-info">
+                        <span class="member-role-tag">PDC Head · Executive Lead</span>
+                        <h3>[ Club Head Name ]</h3>
+                        <span class="member-dept">4th Year B.Tech / Dual Degree · IIT Madras</span>
+                    </div>
+                    <div class="member-links">
+                        <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="link-pill">Contact Head ↗</a>
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="link-pill linkedin">LinkedIn Profile ↗</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TIER 2: COORDINATORS -->
+            <div class="tier-group" data-tier="coordinators">
+                <div class="tier-heading">02 · Coordinators</div>
+                <div class="tier-grid cols-2">
+                    <div class="person-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div class="person-header">
+                            <span class="person-role">Coordinator · Core Operations</span>
+                            <span class="person-tenure">3rd Year</span>
+                        </div>
+                        <h4>[ Coordinator Name ]</h4>
+                        <span class="person-sub">Mechanical Engineering · CFI IIT Madras</span>
+                        <div class="person-footer">
+                            <span class="focus-tag">Design Thinking & Operations</span>
+                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="person-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div class="person-header">
+                            <span class="person-role">Coordinator · Technical & Hardware</span>
+                            <span class="person-tenure">3rd Year</span>
+                        </div>
+                        <h4>[ Coordinator Name ]</h4>
+                        <span class="person-sub">Engineering Design · CFI IIT Madras</span>
+                        <div class="person-footer">
+                            <span class="focus-tag">CAD / CAE & DFMA</span>
+                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TIER 3: DEPUTY COORDINATORS -->
+            <div class="tier-group" data-tier="deputy">
+                <div class="tier-heading">03 · Deputy Coordinators</div>
+                <div class="tier-grid">
+                    <div class="person-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div class="person-header">
+                            <span class="person-role">Deputy Coordinator (DC)</span>
+                            <span class="person-tenure">2nd Year</span>
+                        </div>
+                        <h4>[ Deputy Coordinator Name ]</h4>
+                        <span class="person-sub">Workshops & Bootcamps Track</span>
+                        <div class="person-footer">
+                            <span class="focus-tag">Freshie Design Sprint</span>
+                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="person-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div class="person-header">
+                            <span class="person-role">Deputy Coordinator (DC)</span>
+                            <span class="person-tenure">2nd Year</span>
+                        </div>
+                        <h4>[ Deputy Coordinator Name ]</h4>
+                        <span class="person-sub">Hardware & Lab Initiatives</span>
+                        <div class="person-footer">
+                            <span class="focus-tag">Rapid Prototyping</span>
+                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="person-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div class="person-header">
+                            <span class="person-role">Deputy Coordinator (DC)</span>
+                            <span class="person-tenure">2nd Year</span>
+                        </div>
+                        <h4>[ Deputy Coordinator Name ]</h4>
+                        <span class="person-sub">Media, Archive & Design Systems</span>
+                        <div class="person-footer">
+                            <span class="focus-tag">Archive & Outreach</span>
+                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TIER 4: PROJECT LEADS -->
+            <div class="tier-group" data-tier="leads">
+                <div class="tier-heading">04 · Project Leads</div>
+                <div class="tier-grid cols-4">
+                    <div class="person-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div class="person-header">
+                            <span class="person-role">Project Lead</span>
+                            <span class="person-tenure">Lead</span>
+                        </div>
+                        <h4>[ Project Lead Name ]</h4>
+                        <span class="person-sub">CAD & Parametric Systems</span>
+                        <div class="person-footer">
+                            <span class="focus-tag">Fusion 360 / NX</span>
+                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="person-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div class="person-header">
+                            <span class="person-role">Project Lead</span>
+                            <span class="person-tenure">Lead</span>
+                        </div>
+                        <h4>[ Project Lead Name ]</h4>
+                        <span class="person-sub">DFMA & Fabrication</span>
+                        <div class="person-footer">
+                            <span class="focus-tag">CNC & 3D Print</span>
+                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="person-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div class="person-header">
+                            <span class="person-role">Project Lead</span>
+                            <span class="person-tenure">Lead</span>
+                        </div>
+                        <h4>[ Project Lead Name ]</h4>
+                        <span class="person-sub">Embedded & Smart Devices</span>
+                        <div class="person-footer">
+                            <span class="focus-tag">IoT Hardware</span>
+                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="person-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div class="person-header">
+                            <span class="person-role">Project Lead</span>
+                            <span class="person-tenure">Lead</span>
+                        </div>
+                        <h4>[ Project Lead Name ]</h4>
+                        <span class="person-sub">Simulation & FEA Stress</span>
+                        <div class="person-footer">
+                            <span class="focus-tag">Ansys FEA</span>
+                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TIER 5: PROJECT MEMBERS -->
+            <div class="tier-group" data-tier="members">
+                <div class="tier-heading">05 · Project Members</div>
+                <div class="tier-grid cols-4">
+                    <div class="person-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div class="person-header">
+                            <span class="person-role">Project Member</span>
+                            <span class="person-tenure">Member</span>
+                        </div>
+                        <h4>[ Member Name ]</h4>
+                        <span class="person-sub">Chassis & Mechanism R&D</span>
+                        <div class="person-footer">
+                            <span class="focus-tag">Mechanical</span>
+                            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="person-link">Profile ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="person-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div class="person-header">
+                            <span class="person-role">Project Member</span>
+                            <span class="person-tenure">Member</span>
+                        </div>
+                        <h4>[ Member Name ]</h4>
+                        <span class="person-sub">Surfacing & Ergonomics</span>
+                        <div class="person-footer">
+                            <span class="focus-tag">Industrial Design</span>
+                            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="person-link">Profile ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="person-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div class="person-header">
+                            <span class="person-role">Project Member</span>
+                            <span class="person-tenure">Member</span>
+                        </div>
+                        <h4>[ Member Name ]</h4>
+                        <span class="person-sub">Sensors & Actuation</span>
+                        <div class="person-footer">
+                            <span class="focus-tag">Mechatronics</span>
+                            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="person-link">Profile ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="person-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div class="person-header">
+                            <span class="person-role">Project Member</span>
+                            <span class="person-tenure">Member</span>
+                        </div>
+                        <h4>[ Member Name ]</h4>
+                        <span class="person-sub">Rapid Assembly & Testing</span>
+                        <div class="person-footer">
+                            <span class="focus-tag">Lab Testing</span>
+                            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="person-link">Profile ↗</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NOTABLE ALUMNI & FOUNDER SPOTLIGHT -->
+            <div class="alumni-spotlight-section tier-group" data-tier="alumni">
+                <div class="alumni-spotlight-header">
+                    <span class="spotlight-pill">PDC Alumni Network · Startups & Ventures</span>
+                    <h3>Notable Alumni in Industry & Entrepreneurship</h3>
+                    <p>
+                        Alumni from the Product Design Club at CFI IIT Madras have built venture-backed startups, participated in elite accelerators like Y Combinator, and led hardware engineering globally.
+                    </p>
+                </div>
+
+                <div class="alumni-grid">
+                    <!-- Akash Anand -->
+                    <div class="alumni-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div>
+                            <div class="alumni-card-top">
+                                <span class="alumni-badge yc">Y Combinator W23</span>
+                                <span class="file-badge">FOUNDING HEAD</span>
+                            </div>
+                            <h4>Akash Anand</h4>
+                            <span class="alumni-venture">Co-Founder & CEO · Clueso (YC W23)</span>
+                            <span class="alumni-pdc-role">Former Head, Product Design Club (PDC) · CFI IITM</span>
+                            <p>
+                                Engineering Design graduate from IIT Madras. Inaugural Head of PDC at CFI who led the club's formative projects, subsequently founding Desklamp and scaling it into Clueso, an AI-powered documentation platform backed by Y Combinator.
+                            </p>
+                        </div>
+                        <a href="https://www.linkedin.com/in/akash-anand-iitm/" target="_blank" rel="noopener noreferrer" class="alumni-btn-linkedin">
+                            View Akash Anand on LinkedIn ↗
+                        </a>
+                    </div>
+
+                    <!-- Neel Balar -->
+                    <div class="alumni-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div>
+                            <div class="alumni-card-top">
+                                <span class="alumni-badge yc">Y Combinator W23</span>
+                                <span class="file-badge">CO-FOUNDER</span>
+                            </div>
+                            <h4>Neel Balar</h4>
+                            <span class="alumni-venture">Co-Founder & CBO · Clueso (YC W23)</span>
+                            <span class="alumni-pdc-role">Engineering Design & Data Science · IIT Madras</span>
+                            <p>
+                                IIT Madras alumnus with roots in CFI's product innovation community. Co-founded Desklamp during college and scaled business operations into Clueso, raising venture capital and joining Y Combinator's Winter 2023 cohort.
+                            </p>
+                        </div>
+                        <a href="https://www.linkedin.com/in/neelbalar7/" target="_blank" rel="noopener noreferrer" class="alumni-btn-linkedin">
+                            View Neel Balar on LinkedIn ↗
+                        </a>
+                    </div>
+
+                    <!-- Prajwal Prakash -->
+                    <div class="alumni-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div>
+                            <div class="alumni-card-top">
+                                <span class="alumni-badge yc">Y Combinator W23</span>
+                                <span class="file-badge">CTO & TECH CO-FOUNDER</span>
+                            </div>
+                            <h4>Prajwal Prakash</h4>
+                            <span class="alumni-venture">Co-Founder & CTO · Clueso (YC W23)</span>
+                            <span class="alumni-pdc-role">Computer Science & Engg · IIT Madras</span>
+                            <p>
+                                IIT Madras alumnus who engineered the core intelligent document processing and video creation technology powering Desklamp and Clueso, bridging student-led lab R&D into a global enterprise SaaS platform.
+                            </p>
+                        </div>
+                        <a href="https://www.linkedin.com/in/prajwal-prakash/" target="_blank" rel="noopener noreferrer" class="alumni-btn-linkedin">
+                            View Prajwal Prakash on LinkedIn ↗
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 008 — PUBLICATIONS: PRODUCT HANDBOOK & PDC BROCHURE -->
+    <section id="publications">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <span class="section-meta"><b>008</b><span>Publications & Documentation</span></span>
+                    <h2 class="section-title">Product Handbook & Club Brochure</h2>
+                    <p class="section-lead">
+                        Essential resources created and maintained by the Product Design Club for students, coordinators, and collaborators at IIT Madras.
+                    </p>
+                </div>
+            </div>
+
+            <div class="pub-grid">
+                <!-- CARD 1: PRODUCT DESIGN HANDBOOK -->
+                <div class="pub-card tilt-card">
+                    <div class="card-glare"></div>
+                    <div>
+                        <div class="pub-status-badge in-prod">
+                            <span class="dot-pulse"></span>
+                            In Active Production · 2025-26 Edition
+                        </div>
+                        <div class="pub-card-header">
+                            <h3>The Product Handbook</h3>
+                            <span class="pub-subtitle">The Definitive Engineering & Product Development Field Manual by PDC</span>
+                        </div>
+
+                        <!-- Chapters Outline -->
+                        <ul class="pub-outline">
+                            <li><span class="mod-num">CH.01</span> Problem Formulation, Needfinding & User Research Frameworks</li>
+                            <li><span class="mod-num">CH.02</span> CAD Modeling Protocols: SolidWorks & Fusion 360 Parametric Hygiene</li>
+                            <li><span class="mod-num">CH.03</span> DFM / DFA: Design for CNC Machining, Injection Molding & Sheet Metal</li>
+                            <li><span class="mod-num">CH.04</span> Rapid Prototyping: 3D Printing Tolerances & Material Selection</li>
+                            <li><span class="mod-num">CH.05</span> Physical Validation, Testing Matrix & Milestone Pitch Decks</li>
+                        </ul>
+
+                        <!-- Meta Specifications -->
+                        <div class="pub-meta-row">
+                            <div class="pub-meta-item">
+                                <span class="meta-k">Estimated Extent</span>
+                                <span class="meta-v">120+ Pages</span>
+                            </div>
+                            <div class="pub-meta-item">
+                                <span class="meta-k">Target Release</span>
+                                <span class="meta-v">CFI Open House '25</span>
+                            </div>
+                            <div class="pub-meta-item">
+                                <span class="meta-k">Format</span>
+                                <span class="meta-v">Interactive PDF & Print</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pub-actions">
+                        <button class="btn-pub-primary" onclick="notifyDownload('PDC_Product_Handbook_Sample_Chapter.pdf')">
+                            Download Sample Chapter ↗
+                        </button>
+                        <button class="btn-pub-secondary" onclick="showToastNotice('✓ You will be notified when the Product Handbook launches')">
+                            Notify on Release →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CARD 2: PDC CLUB BROCHURE -->
+                <div class="pub-card tilt-card">
+                    <div class="card-glare"></div>
+                    <div>
+                        <div class="pub-status-badge official">
+                            <span class="dot-pulse"></span>
+                            Official Release · CFI IIT Madras
+                        </div>
+                        <div class="pub-card-header">
+                            <h3>PDC Official Brochure</h3>
+                            <span class="pub-subtitle">Comprehensive Overview of Club Capabilities, Labs, & Initiatives</span>
+                        </div>
+
+                        <!-- Highlights Outline -->
+                        <ul class="pub-outline">
+                            <li><span class="mod-num">SEC.01</span> Club Mandate, 5-Year Vision & Sudha & Shankar Hub Lab Infrastructure</li>
+                            <li><span class="mod-num">SEC.02</span> Machine Catalog: 3D Print Farm, Laser Cutters, CNC & Test Benches</li>
+                            <li><span class="mod-num">SEC.03</span> Portfolio Showcase: Award-Winning Hardware & Global Competitions</li>
+                            <li><span class="mod-num">SEC.04</span> Student Roadmap: Freshie Design Challenge, DC Roles & Recruits</li>
+                            <li><span class="mod-num">SEC.05</span> Industry Collaboration, Sponsorship & Grant Support Channels</li>
+                        </ul>
+
+                        <!-- Meta Specifications -->
+                        <div class="pub-meta-row">
+                            <div class="pub-meta-item">
+                                <span class="meta-k">Publication Size</span>
+                                <span class="meta-v">16 Pages (Full Color)</span>
+                            </div>
+                            <div class="pub-meta-item">
+                                <span class="meta-k">File Format</span>
+                                <span class="meta-v">Vector PDF (8.4 MB)</span>
+                            </div>
+                            <div class="pub-meta-item">
+                                <span class="meta-k">Cycle</span>
+                                <span class="meta-v">Annual 2025-26</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pub-actions">
+                        <button class="btn-pub-primary" onclick="notifyDownload('PDC_Official_Brochure_2025-26.pdf')">
+                            Download Brochure (PDF) ↗
+                        </button>
+                        <button class="btn-pub-secondary" onclick="showToastNotice('Opening PDC Official Brochure online preview...')">
+                            Preview in Browser ↗
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-banner">
+                <div class="cta-text">
+                    <h2>Interested in joining PDC?</h2>
+                </div>
+                <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="btn-magnetic">
+                    Get in Touch →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER (React: main.tsx) -->
+    <div id="pdc-footer"></div>
+
+    <!-- WIREFRAME UPLOAD MODAL -->
+    <div class="modal-overlay" id="uploadModal" onclick="closeModalBackdrop(event)">
+        <div class="modal-box">
+            <h3>Upload Resource to Archive</h3>
+
+            <form id="uploadForm" onsubmit="handleArchiveUpload(event)">
+                <div class="form-group">
+                    <label>Resource Title</label>
+                    <input type="text" id="upTitle" placeholder="e.g. FDC 2026 Round 2 Rubrics" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="upCategory">
+                        <option value="handover">Coordinator Handover</option>
+                        <option value="dc">DC Challenge Kit</option>
+                        <option value="cad">CAD & Prototyping Presets</option>
+                        <option value="procurement">Vendor Directory</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Author / Tag</label>
+                    <input type="text" id="upAuthor" placeholder="e.g. PDC Core Team" required>
+                </div>
+
+                <div class="dropzone-box" onclick="simulateAttachment()">
+                    <span id="dropzoneText" style="font-family:var(--font-body); font-size:0.75rem; color:var(--text-secondary);">
+                        📁 Click or drag file to attach (.STEP, .PDF, .ZIP)
+                    </span>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeUploadModal()">Cancel</button>
+                    <button type="submit" class="btn-submit">Publish to Archive</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast-banner" id="toastNotice">Action simulated successfully</div>
+
+    <!-- JAVASCRIPT LOGIC (ANIMATIONS & INTERACTIONS) -->
+    <script>
+        // 1. Top Window Scroll Progress Bar & Dragon Parallax
+        const progressBar = document.getElementById('scrollProgressBar');
+        const heroDragon = document.getElementById('heroDragonBackdrop');
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            if (progressBar) progressBar.style.width = scrolled + '%';
+
+            // Parallax on transparent dragon backdrop
+            if (heroDragon) {
+                heroDragon.style.transform = `translateY(calc(-50% + ${winScroll * 0.16}px))`;
+            }
+        }, { passive: true });
+
+        // 2. Smooth Ambient Canvas Spotlight (tracks cursor softly)
+        const spotlight = document.getElementById('canvasSpotlight');
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        let spotX = mouseX, spotY = mouseY;
+
+        window.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateSpotlight() {
+            spotX += (mouseX - spotX) * 0.08;
+            spotY += (mouseY - spotY) * 0.08;
+            if (spotlight) {
+                spotlight.style.left = spotX + 'px';
+                spotlight.style.top = spotY + 'px';
+            }
+            requestAnimationFrame(animateSpotlight);
+        }
+        animateSpotlight();
+
+        // 3. 3D Perspective Card Tilt with Specular Glare (reactbits.dev TiltedCard)
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                // Max tilt angle 6 degrees for subtle, sophisticated feel
+                const rotateX = ((y - centerY) / centerY) * -6;
+                const rotateY = ((x - centerX) / centerX) * 6;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.015, 1.015, 1.015)`;
+                card.style.setProperty('--glare-x', `${(x / rect.width) * 100}%`);
+                card.style.setProperty('--glare-y', `${(y / rect.height) * 100}%`);
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            });
+        });
+
+        // 4. Magnetic Button Spring Effect (reactbits.dev Magnetic)
+        document.querySelectorAll('.btn-magnetic').forEach(btn => {
+            btn.addEventListener('mousemove', e => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - (rect.left + rect.width / 2);
+                const y = e.clientY - (rect.top + rect.height / 2);
+                btn.style.transform = `translate(${x * 0.22}px, ${y * 0.22}px)`;
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0px, 0px)';
+            });
+        });
+
+        // 5. Archive Filter Logic
+        function filterArchive(category, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const rows = document.querySelectorAll('.archive-row');
+            rows.forEach(row => {
+                if (category === 'all' || row.dataset.category === category) {
+                    row.style.display = 'grid';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // 6. Archive Search Logic
+        function searchArchiveDocs() {
+            const term = document.getElementById('archiveSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('.archive-row');
+            rows.forEach(row => {
+                const text = (row.dataset.title + ' ' + row.innerText).toLowerCase();
+                if (text.includes(term)) {
+                    row.style.display = 'grid';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // 7. Modal Logic
+        function openUploadModal() {
+            document.getElementById('uploadModal').classList.add('open');
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.remove('open');
+        }
+
+        function closeModalBackdrop(e) {
+            if (e.target.id === 'uploadModal') closeUploadModal();
+        }
+
+        function simulateAttachment() {
+            const label = document.getElementById('dropzoneText');
+            label.innerText = '✓ Attached: Wireframe_Document_Template.step (4.2 MB)';
+            label.style.color = 'var(--pdc-green)';
+            label.style.fontWeight = 'bold';
+        }
+
+        function handleArchiveUpload(e) {
+            e.preventDefault();
+            const title = document.getElementById('upTitle').value;
+            const category = document.getElementById('upCategory').value;
+            const author = document.getElementById('upAuthor').value;
+
+            const table = document.getElementById('archiveRows');
+            const newRow = document.createElement('div');
+            newRow.className = 'archive-row';
+            newRow.dataset.category = category;
+            newRow.dataset.title = title;
+
+            let badgeClass = 'file-badge';
+            let labelType = 'DOC';
+            if (category === 'cad') { badgeClass += ' cad'; labelType = 'CAD · .STEP'; }
+            else if (category === 'handover') { badgeClass += ' pdf'; labelType = 'SOP · PDF'; }
+            else { labelType = 'KIT · ZIP'; }
+
+            newRow.innerHTML = `
+                <span class="${badgeClass}">${labelType}</span>
+                <div class="row-title">
+                    <h4>${title}</h4>
+                    <span>JUST NOW · BY ${author.toUpperCase()}</span>
+                </div>
+                <div class="row-desc"></div>
+                <div class="row-action">
+                    <a class="btn-dl" onclick="notifyDownload('${title.replace(/\s+/g, '_')}.zip')">Download ↗</a>
+                </div>
+            `;
+
+            table.insertBefore(newRow, table.firstChild);
+            closeUploadModal();
+            showToastNotice(`✓ "${title}" uploaded to wireframe archive`);
+
+            document.getElementById('uploadForm').reset();
+            document.getElementById('dropzoneText').innerText = '📁 Click or drag file to attach (.STEP, .PDF, .ZIP)';
+            document.getElementById('dropzoneText').style.color = '';
+            document.getElementById('dropzoneText').style.fontWeight = '';
+        }
+
+        // 8. Toast Feedback
+        function notifyDownload(name) {
+            showToastNotice(`Preparing download: ${name}`);
+        }
+
+        function showToastNotice(msg) {
+            const toast = document.getElementById('toastNotice');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    
+        // 7. People Hierarchy Filter
+        function filterPeople(tier) {
+            const chips = document.querySelectorAll('.tier-chip');
+            chips.forEach(c => c.classList.remove('active'));
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+
+            const groups = document.querySelectorAll('.tier-group');
+            groups.forEach(group => {
+                if (tier === 'all' || group.dataset.tier === tier) {
+                    group.style.display = 'block';
+                } else {
+                    group.style.display = 'none';
+                }
+            });
+        }
+        // 9. Design Thinking Horizontal Scroll (pins #process, vertical scroll drives the track)
+        (() => {
+            const section = document.getElementById('process');
+            if (!section) return;
+            const track = section.querySelector('.dt-track');
+            const timeline = section.querySelector('.dt-timeline');
+            const axisFill = section.querySelector('.dt-axis-fill');
+            const axisHead = section.querySelector('.dt-axis-head');
+            const meterFill = section.querySelector('.dt-meter-fill');
+            const counter = section.querySelector('.dt-counter b');
+            const steps = [...section.querySelectorAll('.dt-step')];
+            const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+            let distance = 0;
+            let ticking = false;
+
+            function update() {
+                ticking = false;
+                if (reduced.matches) return;
+                const progress = distance ? Math.min(1, Math.max(0, -section.getBoundingClientRect().top / distance)) : 0;
+                const x = progress * distance;
+                track.style.transform = `translate3d(${-x}px, 0, 0)`;
+
+                // Playhead sits at 62% of the viewport; everything left of it is "done"
+                const head = x + window.innerWidth * 0.62 - timeline.offsetLeft;
+                const lastStep = steps[steps.length - 1];
+                const end = lastStep.offsetLeft + 1;
+                const axisW = axisFill.parentElement.offsetWidth;
+                const fill = Math.min(1, Math.max(0, head / end));
+                axisFill.style.transform = `scaleX(${fill * end / axisW})`;
+                axisHead.style.left = `${fill * end}px`;
+                meterFill.style.transform = `scaleX(${progress})`;
+
+                let active = 0;
+                steps.forEach(step => {
+                    const on = step.offsetLeft <= head;
+                    step.classList.toggle('active', on);
+                    if (on) active++;
+                });
+                counter.textContent = String(active).padStart(2, '0');
+            }
+
+            function measure() {
+                if (reduced.matches) {
+                    section.style.height = '';
+                    track.style.transform = '';
+                    steps.forEach(step => step.classList.add('active'));
+                    axisFill.style.transform = 'scaleX(1)';
+                    axisHead.style.display = 'none';
+                    counter.textContent = '05';
+                    return;
+                }
+                axisHead.style.display = '';
+                distance = Math.max(0, track.offsetWidth - window.innerWidth);
+                section.style.height = `${distance + window.innerHeight}px`;
+                update();
+            }
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    ticking = true;
+                    requestAnimationFrame(update);
+                }
+            }, { passive: true });
+            window.addEventListener('resize', measure);
+            reduced.addEventListener('change', measure);
+            if (document.fonts) document.fonts.ready.then(measure);
+            measure();
+        })();
+    </script>
+    <script type="module" src="/main.tsx"></script>
+</body>
+</html>

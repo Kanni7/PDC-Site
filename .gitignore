@@ -1,0 +1,5 @@
+node_modules/
+dist/
+
+# Raw Drive download; the same files live in public/assets
+assets-*/
