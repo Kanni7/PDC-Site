@@ -209,10 +209,20 @@ export default function TechText({
   React.useEffect(() => {
     const container = containerRef.current
     const canvas = canvasRef.current
-    const ctx = canvas?.getContext("2d")
+    const inline = canvas?.getContext("2d")
     const scratch = document.createElement("canvas")
     const scratchCtx = scratch.getContext("2d")
-    if (!container || !canvas || !ctx || !scratchCtx) return undefined
+    // While a letter is off its baseline the whole word draws on a fixed, viewport-sized
+    // canvas instead, so it can be dragged anywhere on the page rather than clipping at
+    // this line's box. ox/oy place the container's origin on whichever canvas is active.
+    const lift = document.createElement("canvas")
+    const liftCtx = lift.getContext("2d")
+    if (!container || !canvas || !inline || !scratchCtx || !liftCtx) return undefined
+    lift.setAttribute("aria-hidden", "true")
+    Object.assign(lift.style, { position: "fixed", left: "0", top: "0", pointerEvents: "none", zIndex: "9998" })
+    let ctx = inline
+    let ox = 0
+    let oy = 0
 
     const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches
     let width = 1
@@ -484,10 +494,10 @@ export default function TechText({
       ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2)
       ctx.globalCompositeOperation = "source-over"
 
-      const x0 = Math.max(0, Math.floor(cx - radius))
-      const y0 = Math.max(0, Math.floor(cy - radius))
-      const x1 = Math.min(canvas.width, Math.ceil(cx + radius))
-      const y1 = Math.min(canvas.height, Math.ceil(cy + radius))
+      const x0 = Math.max(-ox, Math.floor(cx - radius))
+      const y0 = Math.max(-oy, Math.floor(cy - radius))
+      const x1 = Math.min(ctx.canvas.width - ox, Math.ceil(cx + radius))
+      const y1 = Math.min(ctx.canvas.height - oy, Math.ceil(cy + radius))
       if (x1 <= x0 || y1 <= y0) return
       const w = x1 - x0
       const h = y1 - y0
@@ -578,7 +588,7 @@ export default function TechText({
       const y1 = crisp(frame.y1)
       const x2 = crisp(frame.x2)
       const y2 = crisp(frame.y2)
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      ctx.setTransform(dpr, 0, 0, dpr, ox, oy)
       ctx.fillStyle = accent
       ctx.strokeStyle = accent
       ctx.lineWidth = 1
@@ -645,7 +655,7 @@ export default function TechText({
       const x1 = Math.round(view.left - pad)
       const x2 = Math.round(view.right + pad)
       const room = width - x2 > x1
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      ctx.setTransform(dpr, 0, 0, dpr, ox, oy)
       ctx.strokeStyle = accent
       ctx.fillStyle = accent
       ctx.lineWidth = 1
@@ -671,7 +681,7 @@ export default function TechText({
         }
       })
       ctx.textAlign = "left"
-      ctx.setTransform(1, 0, 0, 1, 0, 0)
+      ctx.setTransform(1, 0, 0, 1, ox, oy)
       ctx.globalAlpha = 1
     }
 
@@ -943,10 +953,41 @@ export default function TechText({
         container.style.cursor = nextCursor
       }
 
-      ctx.setTransform(1, 0, 0, 1, 0, 0)
+      const lifted = dragging >= 0 || glyphs.some((glyph) => glyph.offset.x !== 0 || glyph.offset.y !== 0)
+      if (lifted !== lift.isConnected) {
+        ctx.setTransform(1, 0, 0, 1, 0, 0)
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+        if (lifted) {
+          lift.style.filter = getComputedStyle(container).filter
+          document.body.appendChild(lift)
+        } else {
+          lift.remove()
+          lift.width = 0
+          lift.height = 0
+        }
+        ctx = lifted ? liftCtx : inline
+      }
+      if (lifted) {
+        const w = Math.round(window.innerWidth * dpr)
+        const h = Math.round(window.innerHeight * dpr)
+        if (lift.width !== w || lift.height !== h) {
+          lift.width = w
+          lift.height = h
+          lift.style.width = `${window.innerWidth}px`
+          lift.style.height = `${window.innerHeight}px`
+        }
+        const rect = container.getBoundingClientRect()
+        ox = Math.round(rect.left * dpr)
+        oy = Math.round(rect.top * dpr)
+      } else {
+        ox = 0
+        oy = 0
+      }
+
+      ctx.setTransform(1, 0, 0, 1, ox, oy)
       ctx.globalCompositeOperation = "source-over"
       ctx.globalAlpha = 1
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.clearRect(-ox, -oy, ctx.canvas.width, ctx.canvas.height)
       for (const glyph of glyphs) {
         const moved = Math.hypot(glyph.offset.x, glyph.offset.y)
         if (moved > 1) {
@@ -1100,6 +1141,7 @@ export default function TechText({
     return () => {
       alive = false
       cancelAnimationFrame(raf)
+      lift.remove()
       wakeRef.current = () => {}
       resizeObserver.disconnect()
       intersectionObserver.disconnect()
