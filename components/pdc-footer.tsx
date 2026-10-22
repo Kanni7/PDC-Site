@@ -46,6 +46,7 @@ export default function PdcFooter() {
         label="Product Design Club"
         meta="CFI · IIT Madras · Disruption.Starts.Here"
         palette={THEME}
+        crop={0.1}
         fontFamily="Syne, -apple-system, BlinkMacSystemFont, sans-serif"
         monoFamily="Oswald, 'Arial Narrow', sans-serif"
         columns={COLUMNS}
