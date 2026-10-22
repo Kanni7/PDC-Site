@@ -122,7 +122,7 @@
         /* Technical Blueprint Grid */
         .bg-grid {
             position: fixed;
-            inset: 0;
+            inset: -52px 0; /* one spare cell each side so the scroll drift never shows an edge */
             background-image: 
                 linear-gradient(to right, rgba(255, 255, 255, 0.024) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(255, 255, 255, 0.024) 1px, transparent 1px);
@@ -1261,9 +1261,10 @@
 
         .comp-photo img {
             position: absolute;
-            inset: 0;
+            top: -10%; /* 10% bleed each side for the scroll parallax */
+            left: 0;
             width: 100%;
-            height: 100%;
+            height: 120%;
             object-fit: cover;
             filter: grayscale(0.4) brightness(0.85);
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
@@ -2401,6 +2402,36 @@
             .cta-banner { padding: 32px 24px; }
             .dragon-full-backdrop { opacity: 0.12; width: 360px; right: -50px; }
         }
+
+        /* ------------------------------------------------------------
+           SCROLL DEPTH: PARALLAX LAYERS & PROGRESSIVE REVEALS
+           Driven by sections 1 and 10 of the page script. Everything uses the
+           individual translate/scale properties so it composes with the existing
+           transform keyframes, card tilt and hover scales instead of replacing them.
+           ------------------------------------------------------------ */
+        .bg-grid { will-change: translate; }
+
+        /* Hero layers: --hero-y is px scrolled into the hero, --hero-p the same as 0..1.
+           Back layers lag the page, the copy pulls ahead and fades. */
+        .dragon-full-backdrop {
+            translate: 0 calc(var(--hero-y, 0px) * 0.32);
+            scale: calc(1 + var(--hero-p, 0) * 0.06);
+        }
+        .dragon-fire-glow { translate: 0 calc(var(--hero-y, 0px) * 0.45); }
+        .hero .container { opacity: calc(1 - var(--hero-p, 0) * 0.85); }
+        .hero-content { translate: 0 calc(var(--hero-y, 0px) * -0.12); }
+        .hero-stats-row { translate: 0 calc(var(--hero-y, 0px) * -0.05); }
+
+        /* Reveal targets only hide once the script has tagged them and motion is allowed */
+        .motion .reveal { opacity: 0; }
+        .motion .reveal.in-view {
+            animation: depthReveal 1s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i, 0) * 90ms) both;
+        }
+
+        @keyframes depthReveal {
+            from { opacity: 0; translate: 0 36px; scale: 0.985; }
+            to { opacity: 1; translate: 0 0; scale: 1; }
+        }
     </style>
 </head>
 <body>
@@ -3501,21 +3532,68 @@
 
     <!-- JAVASCRIPT LOGIC (ANIMATIONS & INTERACTIONS) -->
     <script>
-        // 1. Top Window Scroll Progress Bar & Dragon Parallax
+        // 1. Scroll Depth: progress bar, hero layers, blueprint grid drift, competition photos.
+        //    One passive rAF-throttled listener: layout is read first, then only translate/opacity
+        //    are written (the hero via --hero-y / --hero-p, see SCROLL DEPTH in the stylesheet).
+        const root = document.documentElement;
         const progressBar = document.getElementById('scrollProgressBar');
-        const heroDragon = document.getElementById('heroDragonBackdrop');
+        const hero = document.querySelector('.hero');
+        const bgGrid = document.querySelector('.bg-grid');
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const nearPhotos = new Set();
+        let heroHeight = hero ? hero.offsetHeight : 0;
+        let lastHeroY = -1;
+        let depthTicking = false;
 
-        window.addEventListener('scroll', () => {
-            const winScroll = document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            if (progressBar) progressBar.style.width = scrolled + '%';
+        function updateDepth() {
+            depthTicking = false;
+            const still = reducedMotion.matches;
+            const winScroll = root.scrollTop;
+            const height = root.scrollHeight - root.clientHeight;
+            const vh = window.innerHeight;
+            const photos = [...nearPhotos].map(frame => [frame.querySelector('img'), frame.getBoundingClientRect()]);
 
-            // Parallax on transparent dragon backdrop
-            if (heroDragon) {
-                heroDragon.style.transform = `translateY(calc(-50% + ${winScroll * 0.16}px))`;
+            if (progressBar) progressBar.style.width = (height > 0 ? winScroll / height * 100 : 0) + '%';
+
+            // Grid lags the page at 0.12x, wrapped to one 52px cell so it never runs out
+            if (bgGrid) bgGrid.style.translate = still ? '' : `0 ${-(winScroll * 0.12 % 52)}px`;
+
+            const heroY = still ? 0 : Math.min(Math.max(winScroll, 0), heroHeight);
+            if (hero && heroY !== lastHeroY) {
+                lastHeroY = heroY;
+                hero.style.setProperty('--hero-y', `${heroY}px`);
+                hero.style.setProperty('--hero-p', heroHeight ? (heroY / heroHeight).toFixed(4) : '0');
             }
-        }, { passive: true });
+
+            // Each photo has 10% bleed in its frame; drift it from -8% (entering) to +8% (leaving)
+            photos.forEach(([img, rect]) => {
+                if (!img) return;
+                const t = Math.max(-1, Math.min(1, (vh / 2 - (rect.top + rect.height / 2)) / ((vh + rect.height) / 2)));
+                img.style.translate = still ? '' : `0 ${(t * rect.height * 0.08).toFixed(2)}px`;
+            });
+        }
+
+        function requestDepth() {
+            if (!depthTicking) {
+                depthTicking = true;
+                requestAnimationFrame(updateDepth);
+            }
+        }
+
+        const photoWatch = new IntersectionObserver(entries => {
+            entries.forEach(e => e.isIntersecting ? nearPhotos.add(e.target) : nearPhotos.delete(e.target));
+            requestDepth();
+        }, { rootMargin: '15% 0px' });
+        document.querySelectorAll('.comp-photo').forEach(frame => photoWatch.observe(frame));
+
+        window.addEventListener('scroll', requestDepth, { passive: true });
+        window.addEventListener('resize', () => {
+            heroHeight = hero ? hero.offsetHeight : 0;
+            lastHeroY = -1;
+            requestDepth();
+        });
+        reducedMotion.addEventListener('change', requestDepth);
+        requestDepth();
 
         // 2. Smooth Ambient Canvas Spotlight (tracks cursor softly)
         const spotlight = document.getElementById('canvasSpotlight');
@@ -3763,6 +3841,33 @@
             reduced.addEventListener('change', measure);
             if (document.fonts) document.fonts.ready.then(measure);
             measure();
+        })();
+
+        // 10. Progressive Reveals: headers and cards rise in as they enter the viewport.
+        //     The classes are only added here, so without this script nothing is ever hidden.
+        (() => {
+            const targets = document.querySelectorAll(
+                'section:not(#vault) .section-header, .about-grid, .project-card, .comp-card, .archive-container, ' +
+                '.people-filter-bar, .head-card, .person-card, .alumni-card, .pub-card, .cta-banner'
+            );
+            // Elements arriving in the same batch (a grid row) stagger by DOM order
+            const observer = new IntersectionObserver(entries => {
+                let i = 0;
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.style.setProperty('--i', Math.min(i++, 5));
+                    entry.target.classList.add('in-view');
+                    observer.unobserve(entry.target);
+                });
+            }, { rootMargin: '0px 0px -8% 0px' });
+            const sync = () => root.classList.toggle('motion', !reducedMotion.matches);
+
+            targets.forEach(el => {
+                el.classList.add('reveal');
+                observer.observe(el);
+            });
+            reducedMotion.addEventListener('change', sync);
+            sync();
         })();
     </script>
     <script type="module" src="/main.tsx"></script>
