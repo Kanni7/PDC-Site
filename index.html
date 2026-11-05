@@ -6,7 +6,7 @@
     <title>Product Design Club | CFI IIT Madras</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Archivo:wdth,wght@62..125,400..900&family=Space+Mono:wght@400;700&family=Oswald:wght@200..700&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Archivo:wdth,wght@62..125,400..900&family=Space+Mono:wght@400;700&family=Oswald:wght@200..700&family=Silkscreen:wght@400;700&family=Redaction+35:ital,wght@0,400;0,700;1,400&family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet">
     <style>
         /* ============================================================
            PRODUCT DESIGN CLUB (PDC) — CFI IIT MADRAS
@@ -49,6 +49,7 @@
             --font-brutal: 'Archivo', 'Arial Narrow', sans-serif;
             --font-brutal-mono: 'Space Mono', monospace;
             --font-body: 'Oswald', 'Arial Narrow', sans-serif;
+            --font-small: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; /* Inter Display (opsz 32) for small text */
 
             --radius-sm: 4px;
             --radius-md: 8px;
@@ -255,7 +256,8 @@
         }
 
         .brand-sub {
-            font-family: var(--font-mono);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.65rem;
             color: var(--text-tertiary);
             letter-spacing: 0.06em;
@@ -270,6 +272,8 @@
         }
 
         .nav-links a {
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.84rem;
             font-weight: 600;
             color: var(--text-secondary);
@@ -282,7 +286,8 @@
         }
 
         .nav-cta {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.75rem;
             font-weight: 600;
             padding: 6px 14px;
@@ -321,7 +326,8 @@
             background: #0c0e12;
             border-bottom: 1px solid var(--border-subtle);
             padding: 8px 0;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.72rem;
             color: var(--text-tertiary);
             margin-top: 64px;
@@ -369,7 +375,8 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.12em;
@@ -415,7 +422,8 @@
         }
 
         .motto-tag {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.88rem;
             font-weight: 700;
             letter-spacing: 0.1em;
@@ -428,7 +436,8 @@
         }
 
         .motto-sub {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.78rem;
             color: var(--text-tertiary);
         }
@@ -457,6 +466,8 @@
             background: var(--pdc-green);
             color: #090a0d;
             font-weight: 700;
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.88rem;
             text-decoration: none;
             border-radius: var(--radius-sm);
@@ -479,6 +490,8 @@
             background: var(--bg-surface);
             color: var(--text-primary);
             font-weight: 600;
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.88rem;
             text-decoration: none;
             border-radius: var(--radius-sm);
@@ -611,7 +624,8 @@
         }
 
         .stat-desc {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.7rem;
             color: var(--text-secondary);
             text-transform: uppercase;
@@ -642,7 +656,8 @@
             align-items: stretch;
             margin-bottom: 18px;
             border: 2px solid var(--text-primary);
-            font-family: var(--font-brutal-mono);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.72rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -769,7 +784,8 @@
         }
 
         .spec-list-title {
-            font-family: var(--font-mono);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
@@ -788,12 +804,15 @@
             border-bottom: 1px solid var(--border-subtle);
             display: flex;
             justify-content: space-between;
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.86rem;
             color: var(--text-secondary);
         }
 
         .spec-list li span.val {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.8rem;
             color: var(--pdc-green);
         }
@@ -803,7 +822,7 @@
             padding: 16px;
             border: 1px dashed var(--border-strong);
             border-radius: var(--radius-sm);
-            font-family: var(--font-body);
+            font-family: 'Redaction 35', Georgia, serif;
             font-size: 0.75rem;
             color: var(--text-tertiary);
             text-align: center;
@@ -825,11 +844,6 @@
             justify-content: space-between;
         }
 
-        .project-card.featured {
-            grid-column: span 2;
-            border-top: 3px solid var(--pdc-green);
-        }
-
         .project-card-header {
             display: flex;
             justify-content: space-between;
@@ -838,7 +852,8 @@
         }
 
         .badge-pill {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.68rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
@@ -856,7 +871,8 @@
         }
 
         .card-meta-text {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.68rem;
             color: var(--text-tertiary);
         }
@@ -867,6 +883,8 @@
             font-weight: 700;
             letter-spacing: -0.015em;
             margin-bottom: 10px;
+            line-height: 1.25;
+            min-height: 2.5em; /* reserve 2 lines so image slots align */
         }
 
         .project-card p {
@@ -885,7 +903,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: var(--font-body);
+            font-family: 'Redaction 35', Georgia, serif;
             font-size: 0.72rem;
             color: var(--text-tertiary);
             margin-bottom: 20px;
@@ -900,7 +918,8 @@
         }
 
         .tag-item {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.68rem;
             color: var(--text-tertiary);
             padding: 2px 8px;
@@ -988,7 +1007,8 @@
             bottom: 12px;
             display: flex;
             justify-content: space-between;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.62rem;
             letter-spacing: 0.12em;
             text-transform: uppercase;
@@ -1030,14 +1050,16 @@
         }
 
         .dt-intro-sub {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.78rem;
             color: var(--text-secondary);
         }
 
         .dt-hint {
             margin-top: 28px;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.68rem;
             letter-spacing: 0.14em;
             text-transform: uppercase;
@@ -1150,7 +1172,8 @@
         .dt-phase {
             display: block;
             margin: 6px 0 10px;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.65rem;
             letter-spacing: 0.12em;
             text-transform: uppercase;
@@ -1158,6 +1181,8 @@
         }
 
         .dt-body p {
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.86rem;
             line-height: 1.55;
             color: var(--text-secondary);
@@ -1201,7 +1226,8 @@
             border: 1px dashed var(--pdc-green-border);
             border-radius: var(--radius-sm);
             background: var(--bg-canvas);
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.7rem;
             letter-spacing: 0.12em;
             text-transform: uppercase;
@@ -1216,7 +1242,8 @@
             position: absolute;
             left: var(--dt-gutter);
             bottom: 28px;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.72rem;
             letter-spacing: 0.12em;
             color: var(--text-tertiary);
@@ -1309,7 +1336,8 @@
         }
 
         .comp-tier {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.68rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -1334,7 +1362,8 @@
         }
 
         .comp-deadline {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.68rem;
             color: var(--text-tertiary);
         }
@@ -1347,6 +1376,8 @@
         }
 
         .comp-card p {
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.88rem;
             color: var(--text-secondary);
             line-height: 1.6;
@@ -1360,7 +1391,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.72rem;
         }
 
@@ -1412,7 +1444,8 @@
             background: var(--bg-canvas);
             border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.72rem;
             padding: 7px 14px;
             border-radius: var(--radius-sm);
@@ -1442,7 +1475,8 @@
             background: var(--bg-canvas);
             border: 1px solid var(--border-subtle);
             color: var(--text-primary);
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.75rem;
             padding: 8px 14px;
             border-radius: var(--radius-sm);
@@ -1458,7 +1492,8 @@
             background: var(--cfi-red);
             color: #ffffff;
             border: 1px solid var(--cfi-red);
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.74rem;
             font-weight: 700;
             padding: 8px 16px;
@@ -1498,7 +1533,8 @@
         }
 
         .file-badge {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.68rem;
             font-weight: 700;
             padding: 3px 6px;
@@ -1518,12 +1554,15 @@
         }
 
         .row-title span {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.68rem;
             color: var(--text-tertiary);
         }
 
         .row-desc {
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.84rem;
             color: var(--text-secondary);
             line-height: 1.5;
@@ -1534,7 +1573,8 @@
         }
 
         .btn-dl {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.72rem;
             font-weight: 600;
             color: var(--pdc-green);
@@ -1569,7 +1609,8 @@
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.72rem;
             text-transform: uppercase;
             letter-spacing: 0.08em;
@@ -1594,7 +1635,8 @@
             align-items: center;
             gap: 14px;
             margin: 0 0 22px 0;
-            font-family: var(--font-mono);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
@@ -1667,7 +1709,8 @@
             z-index: 1;
             position: absolute;
             bottom: 4px;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.55rem;
             background: rgba(0, 0, 0, 0.85);
             color: var(--pdc-green);
@@ -1687,7 +1730,8 @@
 
         .member-role-tag {
             display: inline-block;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.72rem;
             color: var(--pdc-green);
             text-transform: uppercase;
@@ -1696,7 +1740,8 @@
         }
 
         .member-dept {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.75rem;
             color: var(--text-tertiary);
             display: block;
@@ -1704,6 +1749,8 @@
         }
 
         .member-bio {
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.88rem;
             color: var(--text-secondary);
             line-height: 1.6;
@@ -1725,7 +1772,8 @@
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--border-subtle);
             border-radius: 6px;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.72rem;
             color: var(--text-secondary);
             text-decoration: none;
@@ -1792,7 +1840,8 @@
         }
 
         .person-role {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.7rem;
             color: var(--pdc-green);
             text-transform: uppercase;
@@ -1800,7 +1849,8 @@
         }
 
         .person-tenure {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.68rem;
             color: var(--text-tertiary);
         }
@@ -1814,7 +1864,8 @@
         }
 
         .person-sub {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.72rem;
             color: var(--text-tertiary);
             margin-bottom: 14px;
@@ -1822,6 +1873,8 @@
         }
 
         .person-card p {
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.85rem;
             color: var(--text-secondary);
             line-height: 1.55;
@@ -1839,7 +1892,8 @@
         }
 
         .focus-tag {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.65rem;
             color: var(--pdc-green);
             background: var(--pdc-green-tint);
@@ -1851,7 +1905,8 @@
         }
 
         .person-link {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.72rem;
             color: var(--cfi-red);
             text-decoration: none;
@@ -1894,7 +1949,8 @@
             background: rgba(141, 198, 63, 0.12);
             border: 1px solid var(--pdc-green-border);
             border-radius: 999px;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.7rem;
             color: var(--pdc-green);
             letter-spacing: 0.08em;
@@ -1950,7 +2006,8 @@
         }
 
         .alumni-badge {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.65rem;
             padding: 3px 8px;
             border-radius: 4px;
@@ -1971,7 +2028,8 @@
         }
 
         .alumni-venture {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.78rem;
             color: #38bdf8;
             font-weight: 600;
@@ -1980,7 +2038,8 @@
         }
 
         .alumni-pdc-role {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.7rem;
             color: var(--text-tertiary);
             margin-bottom: 14px;
@@ -1988,6 +2047,8 @@
         }
 
         .alumni-card p {
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.85rem;
             color: var(--text-secondary);
             line-height: 1.6;
@@ -2006,7 +2067,8 @@
             border: 1px solid rgba(56, 189, 248, 0.28);
             color: #38bdf8;
             border-radius: 6px;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.76rem;
             font-weight: 600;
             text-decoration: none;
@@ -2054,7 +2116,8 @@
             gap: 8px;
             padding: 5px 14px;
             border-radius: 999px;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.7rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -2098,7 +2161,8 @@
         }
 
         .pub-subtitle {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.78rem;
             color: var(--text-secondary);
             margin-bottom: 16px;
@@ -2125,7 +2189,8 @@
         }
 
         .pub-outline li {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.76rem;
             color: var(--text-primary);
             display: flex;
@@ -2150,7 +2215,8 @@
 
         .pub-meta-item span.meta-k {
             display: block;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.65rem;
             color: var(--text-tertiary);
             text-transform: uppercase;
@@ -2159,7 +2225,8 @@
         }
 
         .pub-meta-item span.meta-v {
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.78rem;
             color: var(--text-primary);
             font-weight: 600;
@@ -2179,7 +2246,8 @@
             padding: 12px 22px;
             background: var(--pdc-green);
             color: #0c0d10;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.78rem;
             font-weight: 700;
             text-decoration: none;
@@ -2201,7 +2269,8 @@
             padding: 12px 20px;
             background: transparent;
             color: var(--text-primary);
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.78rem;
             font-weight: 600;
             text-decoration: none;
@@ -2302,6 +2371,8 @@
         }
 
         .modal-box p {
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.88rem;
             color: var(--text-secondary);
             margin-bottom: 20px;
@@ -2313,7 +2384,8 @@
 
         .form-group label {
             display: block;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.72rem;
             text-transform: uppercase;
             color: var(--text-secondary);
@@ -2327,7 +2399,8 @@
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-sm);
             color: var(--text-primary);
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.88rem;
             outline: none;
         }
@@ -2364,7 +2437,8 @@
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-sm);
             color: var(--text-secondary);
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.75rem;
             cursor: pointer;
         }
@@ -2375,7 +2449,8 @@
             border: 1px solid var(--pdc-green);
             border-radius: var(--radius-sm);
             color: #0c0d10;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.75rem;
             font-weight: 700;
             cursor: pointer;
@@ -2391,7 +2466,8 @@
             border-left: 4px solid var(--pdc-green);
             border-radius: var(--radius-sm);
             padding: 12px 20px;
-            font-family: var(--font-body);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
             font-size: 0.75rem;
             z-index: 2000;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
@@ -2413,7 +2489,6 @@
             .about-grid { grid-template-columns: 1fr; }
             .about-main-pane { border-right: none; border-bottom: 1px solid var(--border-subtle); }
             .project-grid { grid-template-columns: 1fr 1fr; }
-            .project-card.featured { grid-column: span 2; }
             .comp-grid { grid-template-columns: 1fr 1fr; }
             .team-grid { grid-template-columns: 1fr 1fr; }
             .pub-grid { grid-template-columns: 1fr; }
@@ -2442,7 +2517,6 @@
             .stat-cell:nth-child(2) { border-right: none; }
             .stat-cell:nth-child(1), .stat-cell:nth-child(2) { border-bottom: 1px solid var(--border-subtle); }
             .project-grid { grid-template-columns: 1fr; }
-            .project-card.featured { grid-column: span 1; }
             .comp-grid { grid-template-columns: 1fr; }
             .team-grid { grid-template-columns: 1fr; }
             .archive-row { grid-template-columns: 1fr; gap: 8px; }
@@ -2639,13 +2713,13 @@
 
             <div class="project-grid">
 
-                <!-- Project 1 (Featured 2-Columns) -->
-                <div class="project-card featured tilt-card">
+                <!-- Project 1 -->
+                <div class="project-card tilt-card">
                     <div class="card-glare"></div>
                     <div>
                         <div class="project-card-header">
                             <span class="badge-pill">Featured Project</span>
-                            <span class="card-meta-text">Phase: Prototyping</span>
+                            <span class="card-meta-text">Status: Prototyping</span>
                         </div>
                         <h3>Quantum Dots Diagnostic Tooling</h3>
                         <div class="img-wireframe-slot">
@@ -2703,7 +2777,7 @@
                     <div>
                         <div class="project-card-header">
                             <span class="badge-pill red">Alumni Venture</span>
-                            <span class="card-meta-text">Seed Funded</span>
+                            <span class="card-meta-text">Status: Seed Funded</span>
                         </div>
                         <h3>Desklamp.io Hardware Ergonomics</h3>
                         <div class="img-wireframe-slot">
@@ -2722,7 +2796,7 @@
                     <div>
                         <div class="project-card-header">
                             <span class="badge-pill">Safety Systems</span>
-                            <span class="card-meta-text">Testing</span>
+                            <span class="card-meta-text">Status: Testing</span>
                         </div>
                         <h3>Navigation-Assisted Helmet</h3>
                         <div class="img-wireframe-slot">
@@ -2741,7 +2815,7 @@
                     <div>
                         <div class="project-card-header">
                             <span class="badge-pill">Annual Event</span>
-                            <span class="card-meta-text">Flagship Sprint</span>
+                            <span class="card-meta-text">Status: Annual</span>
                         </div>
                         <h3>Freshie Design Challenge Output</h3>
                         <div class="img-wireframe-slot">
@@ -3095,9 +3169,6 @@
                 <button class="tier-chip active" onclick="filterPeople('all')">All Roles</button>
                 <button class="tier-chip" onclick="filterPeople('head')">Club Heads</button>
                 <button class="tier-chip" onclick="filterPeople('coordinators')">Coordinators</button>
-                <button class="tier-chip" onclick="filterPeople('deputy')">Deputy Coordinators</button>
-                <button class="tier-chip" onclick="filterPeople('leads')">Project Leads</button>
-                <button class="tier-chip" onclick="filterPeople('members')">Project Members</button>
                 <button class="tier-chip" onclick="filterPeople('alumni')">Notable Alumni</button>
             </div>
 
@@ -3151,207 +3222,8 @@
             <!-- TIER 2: COORDINATORS -->
             <div class="tier-group" data-tier="coordinators">
                 <div class="tier-heading">02 · Coordinators</div>
-                <div class="tier-grid cols-2">
-                    <div class="person-card tilt-card">
-                        <div class="card-glare"></div>
-                        <div class="person-header">
-                            <span class="person-role">Coordinator · Core Operations</span>
-                            <span class="person-tenure">3rd Year</span>
-                        </div>
-                        <h4>[ Coordinator Name ]</h4>
-                        <span class="person-sub">Mechanical Engineering · CFI IIT Madras</span>
-                        <div class="person-footer">
-                            <span class="focus-tag">Design Thinking & Operations</span>
-                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
-                        </div>
-                    </div>
-
-                    <div class="person-card tilt-card">
-                        <div class="card-glare"></div>
-                        <div class="person-header">
-                            <span class="person-role">Coordinator · Technical & Hardware</span>
-                            <span class="person-tenure">3rd Year</span>
-                        </div>
-                        <h4>[ Coordinator Name ]</h4>
-                        <span class="person-sub">Engineering Design · CFI IIT Madras</span>
-                        <div class="person-footer">
-                            <span class="focus-tag">CAD / CAE & DFMA</span>
-                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TIER 3: DEPUTY COORDINATORS -->
-            <div class="tier-group" data-tier="deputy">
-                <div class="tier-heading">03 · Deputy Coordinators</div>
-                <div class="tier-grid">
-                    <div class="person-card tilt-card">
-                        <div class="card-glare"></div>
-                        <div class="person-header">
-                            <span class="person-role">Deputy Coordinator (DC)</span>
-                            <span class="person-tenure">2nd Year</span>
-                        </div>
-                        <h4>[ Deputy Coordinator Name ]</h4>
-                        <span class="person-sub">Workshops & Bootcamps Track</span>
-                        <div class="person-footer">
-                            <span class="focus-tag">Freshie Design Sprint</span>
-                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
-                        </div>
-                    </div>
-
-                    <div class="person-card tilt-card">
-                        <div class="card-glare"></div>
-                        <div class="person-header">
-                            <span class="person-role">Deputy Coordinator (DC)</span>
-                            <span class="person-tenure">2nd Year</span>
-                        </div>
-                        <h4>[ Deputy Coordinator Name ]</h4>
-                        <span class="person-sub">Hardware & Lab Initiatives</span>
-                        <div class="person-footer">
-                            <span class="focus-tag">Rapid Prototyping</span>
-                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
-                        </div>
-                    </div>
-
-                    <div class="person-card tilt-card">
-                        <div class="card-glare"></div>
-                        <div class="person-header">
-                            <span class="person-role">Deputy Coordinator (DC)</span>
-                            <span class="person-tenure">2nd Year</span>
-                        </div>
-                        <h4>[ Deputy Coordinator Name ]</h4>
-                        <span class="person-sub">Media, Archive & Design Systems</span>
-                        <div class="person-footer">
-                            <span class="focus-tag">Archive & Outreach</span>
-                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TIER 4: PROJECT LEADS -->
-            <div class="tier-group" data-tier="leads">
-                <div class="tier-heading">04 · Project Leads</div>
-                <div class="tier-grid cols-4">
-                    <div class="person-card tilt-card">
-                        <div class="card-glare"></div>
-                        <div class="person-header">
-                            <span class="person-role">Project Lead</span>
-                            <span class="person-tenure">Lead</span>
-                        </div>
-                        <h4>[ Project Lead Name ]</h4>
-                        <span class="person-sub">CAD & Parametric Systems</span>
-                        <div class="person-footer">
-                            <span class="focus-tag">Fusion 360 / NX</span>
-                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
-                        </div>
-                    </div>
-
-                    <div class="person-card tilt-card">
-                        <div class="card-glare"></div>
-                        <div class="person-header">
-                            <span class="person-role">Project Lead</span>
-                            <span class="person-tenure">Lead</span>
-                        </div>
-                        <h4>[ Project Lead Name ]</h4>
-                        <span class="person-sub">DFMA & Fabrication</span>
-                        <div class="person-footer">
-                            <span class="focus-tag">CNC & 3D Print</span>
-                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
-                        </div>
-                    </div>
-
-                    <div class="person-card tilt-card">
-                        <div class="card-glare"></div>
-                        <div class="person-header">
-                            <span class="person-role">Project Lead</span>
-                            <span class="person-tenure">Lead</span>
-                        </div>
-                        <h4>[ Project Lead Name ]</h4>
-                        <span class="person-sub">Embedded & Smart Devices</span>
-                        <div class="person-footer">
-                            <span class="focus-tag">IoT Hardware</span>
-                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
-                        </div>
-                    </div>
-
-                    <div class="person-card tilt-card">
-                        <div class="card-glare"></div>
-                        <div class="person-header">
-                            <span class="person-role">Project Lead</span>
-                            <span class="person-tenure">Lead</span>
-                        </div>
-                        <h4>[ Project Lead Name ]</h4>
-                        <span class="person-sub">Simulation & FEA Stress</span>
-                        <div class="person-footer">
-                            <span class="focus-tag">Ansys FEA</span>
-                            <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="person-link">Contact ↗</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TIER 5: PROJECT MEMBERS -->
-            <div class="tier-group" data-tier="members">
-                <div class="tier-heading">05 · Project Members</div>
-                <div class="tier-grid cols-4">
-                    <div class="person-card tilt-card">
-                        <div class="card-glare"></div>
-                        <div class="person-header">
-                            <span class="person-role">Project Member</span>
-                            <span class="person-tenure">Member</span>
-                        </div>
-                        <h4>[ Member Name ]</h4>
-                        <span class="person-sub">Chassis & Mechanism R&D</span>
-                        <div class="person-footer">
-                            <span class="focus-tag">Mechanical</span>
-                            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="person-link">Profile ↗</a>
-                        </div>
-                    </div>
-
-                    <div class="person-card tilt-card">
-                        <div class="card-glare"></div>
-                        <div class="person-header">
-                            <span class="person-role">Project Member</span>
-                            <span class="person-tenure">Member</span>
-                        </div>
-                        <h4>[ Member Name ]</h4>
-                        <span class="person-sub">Surfacing & Ergonomics</span>
-                        <div class="person-footer">
-                            <span class="focus-tag">Industrial Design</span>
-                            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="person-link">Profile ↗</a>
-                        </div>
-                    </div>
-
-                    <div class="person-card tilt-card">
-                        <div class="card-glare"></div>
-                        <div class="person-header">
-                            <span class="person-role">Project Member</span>
-                            <span class="person-tenure">Member</span>
-                        </div>
-                        <h4>[ Member Name ]</h4>
-                        <span class="person-sub">Sensors & Actuation</span>
-                        <div class="person-footer">
-                            <span class="focus-tag">Mechatronics</span>
-                            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="person-link">Profile ↗</a>
-                        </div>
-                    </div>
-
-                    <div class="person-card tilt-card">
-                        <div class="card-glare"></div>
-                        <div class="person-header">
-                            <span class="person-role">Project Member</span>
-                            <span class="person-tenure">Member</span>
-                        </div>
-                        <h4>[ Member Name ]</h4>
-                        <span class="person-sub">Rapid Assembly & Testing</span>
-                        <div class="person-footer">
-                            <span class="focus-tag">Lab Testing</span>
-                            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="person-link">Profile ↗</a>
-                        </div>
-                    </div>
-                </div>
+                <!-- Lanyard rail (React: components/coordinators-lanyard.tsx) -->
+                <div id="coordinators-lanyard"></div>
             </div>
 
             <!-- NOTABLE ALUMNI & FOUNDER SPOTLIGHT -->

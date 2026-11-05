@@ -5,12 +5,14 @@ import HeroWordmark from "@/components/hero-wordmark"
 import VaultHero from "@/components/vault-hero"
 import PdcRunner from "@/components/pdc-runner"
 import PdcArcade from "@/components/pdc-arcade"
+import CoordinatorsLanyard from "@/components/coordinators-lanyard"
 
 // The page itself is still the HTML blueprint; React renders a few islands into it.
 const islands: [string, () => JSX.Element][] = [
   ["hero-wordmark", HeroWordmark],
   ["vault-hero", VaultHero],
   ["pdc-arcade", PdcArcade],
+  ["coordinators-lanyard", CoordinatorsLanyard],
   ["pdc-footer", PdcFooter],
 ]
 
