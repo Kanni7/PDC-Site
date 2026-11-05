@@ -11,6 +11,8 @@ type Mode = "menu" | "playing" | "paused" | "over"
 
 const LOGO_SRC = "/assets/pdc_dragon_watermark.png"
 const BEST_KEY = "pdc-runner-best"
+const MUSIC_SRC = "/assets/runner-music.mp3"
+const MUSIC_VOLUME = 0.35
 
 const GREEN = "#91CC3F"
 const RED = "#F04B35"
@@ -883,6 +885,24 @@ export default function PdcRunner() {
   const [muted, setMuted] = React.useState(readMuted)
   const sfxRef = React.useRef<ReturnType<typeof createSfx> | null>(null)
   if (!sfxRef.current) sfxRef.current = createSfx(muted)
+  const mutedRef = React.useRef(muted)
+  mutedRef.current = muted
+  const modeRef = React.useRef<Mode>(mode)
+  modeRef.current = mode
+
+  // Background music: only downloads once the visitor presses Play, then loops forever
+  const musicRef = React.useRef<HTMLAudioElement | null>(null)
+  const playMusic = React.useCallback(() => {
+    if (mutedRef.current) return
+    if (!musicRef.current) {
+      const a = new Audio(MUSIC_SRC)
+      a.loop = true
+      a.volume = MUSIC_VOLUME
+      musicRef.current = a
+    }
+    void musicRef.current.play().catch(() => undefined)
+  }, [])
+  const pauseMusic = React.useCallback(() => musicRef.current?.pause(), [])
 
   const rootRef = React.useRef<HTMLDivElement>(null)
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
@@ -904,7 +924,10 @@ export default function PdcRunner() {
   React.useEffect(() => {
     const canvas = canvasRef.current!
     const game = createRunner(canvas, bestRef.current, {
-      onMode: setMode,
+      onMode: (m) => {
+        setMode(m)
+        if (m === "paused") musicRef.current?.pause()
+      },
       onScore: (n) => { if (scoreRef.current) scoreRef.current.textContent = pad(n) },
       onBump: () => bump(scoreRef.current),
       onGround: (px) => rootRef.current?.style.setProperty("--pr-ground", `${px}px`),
@@ -920,7 +943,14 @@ export default function PdcRunner() {
     })
     gameRef.current = game
     const onResize = () => game.resize()
-    const onVisibility = () => { if (document.hidden) game.pause() }
+    const onVisibility = () => {
+      if (document.hidden) {
+        game.pause()
+        musicRef.current?.pause()
+      } else if (modeRef.current === "over" && !mutedRef.current) {
+        void musicRef.current?.play().catch(() => undefined)
+      }
+    }
     window.addEventListener("resize", onResize)
     document.addEventListener("visibilitychange", onVisibility)
     return () => {
@@ -929,6 +959,8 @@ export default function PdcRunner() {
       game.destroy()
       gameRef.current = null
       sfxRef.current?.dispose()
+      musicRef.current?.pause()
+      musicRef.current = null
     }
   }, [])
 
@@ -937,28 +969,44 @@ export default function PdcRunner() {
   const play = React.useCallback(() => {
     blurActive()
     sfxRef.current?.unlock()
+    playMusic()
     gameRef.current?.start()
-  }, [])
+  }, [playMusic])
 
   const toggleMute = React.useCallback(() => {
-    setMuted((m) => {
-      const next = !m
-      sfxRef.current?.setMuted(next)
-      if (!next) sfxRef.current?.unlock()
-      try { localStorage.setItem(MUTE_KEY, next ? "1" : "0") } catch { /* storage unavailable */ }
-      return next
-    })
-  }, [])
+    const next = !mutedRef.current
+    mutedRef.current = next
+    setMuted(next)
+    sfxRef.current?.setMuted(next)
+    if (!next) sfxRef.current?.unlock()
+    try { localStorage.setItem(MUTE_KEY, next ? "1" : "0") } catch { /* storage unavailable */ }
+    if (next) pauseMusic()
+    else if (modeRef.current === "playing" || modeRef.current === "over") playMusic()
+  }, [playMusic, pauseMusic])
 
   const resume = React.useCallback(() => {
     blurActive()
+    playMusic()
     gameRef.current?.resume()
-  }, [])
+  }, [playMusic])
 
   const enter = React.useCallback(() => {
     if (phaseRef.current !== "open") return
     gameRef.current?.destroy()
     sfxRef.current?.dispose()
+    // fade the music out with the overlay
+    const music = musicRef.current
+    musicRef.current = null
+    if (music && !music.paused) {
+      const t0 = performance.now()
+      const fade = () => {
+        const k = Math.min(1, (performance.now() - t0) / 600)
+        music.volume = MUSIC_VOLUME * (1 - k)
+        if (k < 1) requestAnimationFrame(fade)
+        else music.pause()
+      }
+      requestAnimationFrame(fade)
+    }
     document.documentElement.style.overflow = ""
     window.scrollTo(0, 0)
     setPhase("exiting")
