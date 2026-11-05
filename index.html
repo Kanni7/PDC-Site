@@ -1632,7 +1632,21 @@
             opacity: 0.8;
         }
 
+        .member-avatar img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .head-stack {
+            display: grid;
+            gap: 20px;
+        }
+
         .member-avatar .avatar-wire-badge {
+            z-index: 1;
             position: absolute;
             bottom: 4px;
             font-family: var(--font-body);
@@ -2185,6 +2199,23 @@
         }
 
         /* ------------------------------------------------------------
+           MEET THE TEAM PHOTO
+           ------------------------------------------------------------ */
+        .team-photo {
+            margin: 0;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--bg-surface);
+        }
+
+        .team-photo img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* ------------------------------------------------------------
            CTA BANNER
            ------------------------------------------------------------ */
         .cta-banner {
@@ -2467,6 +2498,7 @@
                 <li><a href="#archive" class="nav-cta">Coord Archive</a></li>
                 <li><a href="#team">People</a></li>
                 <li><a href="#publications">Handbook & Brochure</a></li>
+                <li><a href="#meet-the-team">Meet the Team</a></li>
             </ul>
         </div>
     </nav>
@@ -3042,7 +3074,7 @@
             <!-- Role Filter Chips -->
             <div class="people-filter-bar">
                 <button class="tier-chip active" onclick="filterPeople('all')">All Roles</button>
-                <button class="tier-chip" onclick="filterPeople('head')">Club Head</button>
+                <button class="tier-chip" onclick="filterPeople('head')">Club Heads</button>
                 <button class="tier-chip" onclick="filterPeople('coordinators')">Coordinators</button>
                 <button class="tier-chip" onclick="filterPeople('deputy')">Deputy Coordinators</button>
                 <button class="tier-chip" onclick="filterPeople('leads')">Project Leads</button>
@@ -3050,9 +3082,10 @@
                 <button class="tier-chip" onclick="filterPeople('alumni')">Notable Alumni</button>
             </div>
 
-            <!-- TIER 1: CLUB HEAD -->
+            <!-- TIER 1: CLUB HEADS -->
             <div class="tier-group" data-tier="head">
-                <div class="tier-heading">01 · Club Head</div>
+                <div class="tier-heading">01 · Club Heads</div>
+                <div class="head-stack">
                 <div class="head-card tilt-card">
                     <div class="card-glare"></div>
                     <div class="member-avatar">
@@ -3060,17 +3093,39 @@
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
-                        <span class="avatar-wire-badge">HEAD · WIRE</span>
+                        <!-- Drop the photo at public/assets/heads/thanish-vardhan.jpg; the icon shows until then -->
+                        <img src="assets/heads/thanish-vardhan.jpg" alt="B Thanish Vardhan" loading="lazy" onerror="this.remove()">
                     </div>
                     <div class="member-info">
                         <span class="member-role-tag">PDC Head · Executive Lead</span>
-                        <h3>[ Club Head Name ]</h3>
-                        <span class="member-dept">4th Year B.Tech / Dual Degree · IIT Madras</span>
+                        <h3>B Thanish Vardhan</h3>
+                        <span class="member-dept">3rd Year · Engineering Design · IIT Madras</span>
                     </div>
                     <div class="member-links">
                         <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="link-pill">Contact Head ↗</a>
-                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="link-pill linkedin">LinkedIn Profile ↗</a>
+                        <a href="https://www.linkedin.com/in/b-thanish-vardhan-b3b88733a/" target="_blank" rel="noopener noreferrer" class="link-pill linkedin">LinkedIn Profile ↗</a>
                     </div>
+                </div>
+                <div class="head-card tilt-card">
+                    <div class="card-glare"></div>
+                    <div class="member-avatar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <!-- Drop the photo at public/assets/heads/shambhuraj-s.jpg; the icon shows until then -->
+                        <img src="assets/heads/shambhuraj-s.jpg" alt="Shambhuraj S" loading="lazy" onerror="this.remove()">
+                    </div>
+                    <div class="member-info">
+                        <span class="member-role-tag">PDC Head · Executive Lead</span>
+                        <h3>Shambhuraj S</h3>
+                        <span class="member-dept">3rd Year · Civil Engineering · IIT Madras</span>
+                    </div>
+                    <div class="member-links">
+                        <a href="mailto:pdc_cfi@smail.iitm.ac.in" class="link-pill">Contact Head ↗</a>
+                        <a href="https://www.linkedin.com/in/shambhuraj-s/" target="_blank" rel="noopener noreferrer" class="link-pill linkedin">LinkedIn Profile ↗</a>
+                    </div>
+                </div>
                 </div>
             </div>
 
@@ -3468,6 +3523,25 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- 009 — MEET THE TEAM: team outing photo, right before the "join PDC" banner -->
+    <section id="meet-the-team">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <span class="section-meta"><b>009</b><span>Off the Workbench</span></span>
+                    <h2 class="section-title">Meet the Team</h2>
+                    <p class="section-lead">
+                        The crew behind the prototypes, away from the lab for a team outing.
+                    </p>
+                </div>
+            </div>
+
+            <figure class="team-photo">
+                <img src="assets/team-outing.jpg" alt="PDC team members smiling around a board game table during a team outing" loading="lazy" width="1280" height="720">
+            </figure>
 
             <div class="cta-banner">
                 <div class="cta-text">
