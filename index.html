@@ -87,6 +87,7 @@
             line-height: 1.65;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            overflow-x: clip; /* clip, not hidden: hidden breaks position: sticky (the 003 pin) on mobile */
             position: relative;
         }
 
@@ -740,6 +741,23 @@
 
         .about-main-pane p:last-child {
             margin-bottom: 0;
+        }
+
+        .about-main-pane.about-photo {
+            padding: 0;
+            min-height: 320px;
+        }
+
+        .about-photo img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media (max-width: 1024px) {
+            .about-main-pane.about-photo { min-height: 0; }
+            .about-photo img { height: auto; aspect-ratio: 16 / 9; }
         }
 
         .about-side-pane {
@@ -2585,7 +2603,8 @@
 
             <div class="about-grid tilt-card">
                 <div class="card-glare"></div>
-                <div class="about-main-pane">
+                <div class="about-main-pane about-photo">
+                    <img src="assets/about-club.jpg" alt="PDC club members gathered around a conference table in the club room" loading="lazy" width="1280" height="720">
                 </div>
 
                 <div class="about-side-pane">
@@ -3855,6 +3874,7 @@
         (() => {
             const section = document.getElementById('process');
             if (!section) return;
+            const pin = section.querySelector('.dt-pin');
             const track = section.querySelector('.dt-track');
             const timeline = section.querySelector('.dt-timeline');
             const axisFill = section.querySelector('.dt-axis-fill');
@@ -3904,7 +3924,8 @@
                 }
                 axisHead.style.display = '';
                 distance = Math.max(0, track.offsetWidth - window.innerWidth);
-                section.style.height = `${distance + window.innerHeight}px`;
+                // Use the pin's own (svh) height so the mobile URL bar can't desync the scroll length
+                section.style.height = `${distance + pin.offsetHeight}px`;
                 update();
             }
 
@@ -3914,7 +3935,13 @@
                     requestAnimationFrame(update);
                 }
             }, { passive: true });
-            window.addEventListener('resize', measure);
+            // Mobile fires resize whenever the URL bar shows/hides; only re-measure on real width changes
+            let lastW = window.innerWidth;
+            window.addEventListener('resize', () => {
+                if (window.innerWidth === lastW) return update();
+                lastW = window.innerWidth;
+                measure();
+            });
             reduced.addEventListener('change', measure);
             if (document.fonts) document.fonts.ready.then(measure);
             measure();
