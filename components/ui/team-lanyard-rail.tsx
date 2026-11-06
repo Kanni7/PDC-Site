@@ -22,6 +22,8 @@ export interface LanyardMember {
   tags?: string[];
   /** Contact links on the back. */
   links?: LanyardLink[];
+  /** Labelled lines on the back, e.g. { label: "Known bugs", value: "…" }. Replaces the tags and QR when set. */
+  facts?: { label: string; value: string }[];
   /** Team colour: chart token 1–5 for the ribbon and the badge band. */
   tone?: 1 | 2 | 3 | 4 | 5;
   /** Extra lanyard length in pixels at a 124 px badge; it scales with the badge. */
@@ -324,6 +326,7 @@ const BadgeFaces = React.memo(function BadgeFaces({ item, tone }: { item: Lanyar
   const [failed, setFailed] = React.useState(false);
   const tags = (item.tags ?? []).slice(0, 3);
   const links = (item.links ?? []).slice(0, 3);
+  const facts = (item.facts ?? []).slice(0, 3);
   return (
     <>
       <span data-face="front" className="absolute inset-0 flex flex-col items-center overflow-hidden rounded-[0.85em] border border-border bg-card px-[0.8em] pb-[0.7em] text-card-foreground [backface-visibility:hidden]" style={{ transform: "translateZ(1px)" }}>
@@ -353,12 +356,22 @@ const BadgeFaces = React.memo(function BadgeFaces({ item, tone }: { item: Lanyar
           <span className="block truncate text-[0.95em] font-semibold leading-tight">{item.name}</span>
           <span className="block truncate text-[0.72em] leading-snug text-muted-foreground">{item.role}</span>
         </span>
-        {item.bio && (
+        {facts.length > 0 ? (
+          <span className="absolute inset-x-[0.85em] bottom-[2.4em] top-[5em] flex flex-col gap-[0.3em] overflow-hidden">
+            {item.bio && <span data-bio className="line-clamp-3 block text-[0.66em] font-medium leading-[1.3]">{item.bio}</span>}
+            {facts.map((fact) => (
+              <span key={fact.label} className="block">
+                <span className="block text-[0.46em] font-semibold uppercase leading-[1.2] tracking-[0.16em] text-muted-foreground">{fact.label}</span>
+                <span className="line-clamp-2 block text-[0.58em] leading-[1.28]">{fact.value}</span>
+              </span>
+            ))}
+          </span>
+        ) : item.bio && (
           <span className="absolute inset-x-[0.85em] top-[5.1em] block">
             <span data-bio className="line-clamp-4 block text-[0.74em] leading-[1.4]">{item.bio}</span>
           </span>
         )}
-        {tags.length > 0 && (
+        {facts.length === 0 && tags.length > 0 && (
           <span className="absolute inset-x-[0.85em] top-[9.8em] flex flex-wrap gap-[0.28em]">
             {tags.map((tag) => <span key={tag} className="block rounded-full border border-border bg-muted/60 px-[0.6em] py-[0.16em] text-[0.6em] leading-tight text-muted-foreground">{tag}</span>)}
           </span>
@@ -368,9 +381,11 @@ const BadgeFaces = React.memo(function BadgeFaces({ item, tone }: { item: Lanyar
             {links.map((link) => <span key={link.label} className={LINK_ROW}><LinkIcon label={link.label} />{link.label}</span>)}
           </span>
         )}
-        <svg aria-hidden="true" viewBox="-1 -1 23 23" className="absolute bottom-[0.8em] right-[0.8em] size-[3.9em] text-foreground">
-          <path d={qr} fill="currentColor" />
-        </svg>
+        {facts.length === 0 && (
+          <svg aria-hidden="true" viewBox="-1 -1 23 23" className="absolute bottom-[0.8em] right-[0.8em] size-[3.9em] text-foreground">
+            <path d={qr} fill="currentColor" />
+          </svg>
+        )}
         <Finish />
       </span>
       {[0, 1].map((side) => (
@@ -948,7 +963,7 @@ export function TeamLanyardRail({
   const person = current === null ? null : items[current] ?? null;
   const showingBack = current !== null && current === flipped;
   const centerIndex = size.carousel ? (active ?? live.current.carouselIndex) : null;
-  const line1 = person ? `${person.name} — ${person.role}` : caption;
+  const line1 = person ? `${person.name} · ${person.role}` : caption;
   const line2 = person ? (showingBack ? labels.back : labels.flip) : "";
 
   return (
@@ -1126,7 +1141,19 @@ export function TeamLanyardRail({
         <div id={`${uid}-caption`} aria-live="polite" className="min-h-[2.6rem]">
           <p className="text-sm font-medium">{line1}</p>
           <p className="mt-0.5 text-[13px] text-muted-foreground">{line2}</p>
-          {showingBack && person?.bio && <span className="sr-only">{person.bio}</span>}
+          {showingBack && person?.facts?.length ? (
+            <div className="mx-auto mt-3 max-w-xl text-left text-[13px] leading-snug">
+              {person.bio && <p className="mb-2 text-center font-medium">{person.bio}</p>}
+              <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5">
+                {person.facts.map((fact) => (
+                  <React.Fragment key={fact.label}>
+                    <dt className="pt-px text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">{fact.label}</dt>
+                    <dd>{fact.value}</dd>
+                  </React.Fragment>
+                ))}
+              </dl>
+            </div>
+          ) : showingBack && person?.bio && <span className="sr-only">{person.bio}</span>}
         </div>
         {action}
       </div>
