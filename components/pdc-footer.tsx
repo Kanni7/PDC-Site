@@ -15,15 +15,16 @@ const COLUMNS: FooterColumn[] = [
       { label: "Hardware", href: "#projects" },
       { label: "Methodology", href: "#process" },
       { label: "Competitions", href: "#competitions" },
+      { label: "Team", href: "#team" },
     ],
   },
   {
     title: "Resources",
     links: [
+      // These open Explore More panels (index.html script section 12)
       { label: "DT Vault", href: "#vault" },
+      { label: "Handbook & Brochure", href: "#publications" },
       { label: "Coord Archive", href: "#archive" },
-      { label: "People", href: "#team" },
-      { label: "Handbook", href: "#publications" },
     ],
   },
   {

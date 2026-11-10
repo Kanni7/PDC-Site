@@ -2,7 +2,7 @@ import TiltedGridHero, { type TiltedGridItem } from "@/components/ui/tilted-grid
 
 const unsplash = (id: string) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1200&q=70`
 
-// Same six resources as the vault cards in index.html.
+// Rendered inside the Explore More "Resource Vault" panel (#panel-vault in index.html).
 const RESOURCES: TiltedGridItem[] = [
   {
     src: unsplash("1552664730-d307ca884978"),
@@ -54,7 +54,7 @@ export default function VaultHero() {
       items={RESOURCES}
       eyebrow={
         <>
-          <span className="bg-pdc-green px-2 py-1 text-canvas">004</span>
+          <span className="bg-pdc-green px-2 py-1 text-canvas">006.A</span>
           <span className="px-2 py-1">Resource Vault</span>
         </>
       }

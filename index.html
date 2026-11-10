@@ -1270,13 +1270,86 @@
         }
 
         /* ------------------------------------------------------------
-           005 — PRESTIGIOUS PRODUCT DESIGN & HARDWARE COMPETITIONS
+           004 — PRESTIGIOUS PRODUCT DESIGN & HARDWARE COMPETITIONS
+           One snapping row (script section 11). The padding gives the tilt/hover
+           scale room inside the scroller; the negative margin cancels it in layout.
            ------------------------------------------------------------ */
         .comp-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            display: flex;
             gap: 24px;
+            overflow-x: auto;
+            overscroll-behavior-x: contain;
+            scroll-snap-type: x mandatory;
+            scroll-padding-inline: 4px;
+            scrollbar-width: none;
+            padding: 24px 4px 64px;
+            margin: -24px -4px -64px;
+            /* Fade the edge that still has cards behind it */
+            -webkit-mask-image: linear-gradient(90deg, #000 0, #000 88%, transparent);
+            mask-image: linear-gradient(90deg, #000 0, #000 88%, transparent);
         }
+
+        .comp-grid::-webkit-scrollbar { display: none; }
+        .comp-grid.at-end:not(.at-start) {
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 100%);
+            mask-image: linear-gradient(90deg, transparent, #000 12%, #000 100%);
+        }
+        .comp-grid:not(.at-start):not(.at-end) {
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+        }
+        .rail-static .comp-grid { -webkit-mask-image: none; mask-image: none; }
+
+        .comp-grid > .comp-card {
+            flex: 0 0 min(340px, 82vw);
+            scroll-snap-align: start;
+        }
+
+        .rail-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .rail-btn {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-strong);
+            border-radius: 999px;
+            color: var(--text-primary);
+            font-family: var(--font-small);
+            font-size: 1.1rem;
+            line-height: 1;
+            transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
+        }
+
+        .rail-btn:hover:not([aria-disabled="true"]), .rail-btn:focus-visible {
+            background: var(--pdc-green);
+            border-color: var(--pdc-green);
+            color: var(--bg-canvas);
+        }
+
+        .rail-btn:focus-visible { outline: 2px solid var(--pdc-green); outline-offset: 3px; }
+        .rail-btn[aria-disabled="true"] { opacity: 0.35; }
+
+        .rail-progress {
+            position: relative;
+            height: 2px;
+            margin-top: 28px;
+            background: var(--border-subtle);
+            overflow: hidden;
+        }
+
+        .rail-progress span {
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 50%;
+            background: var(--pdc-green);
+        }
+
+        .rail-static .rail-controls, .rail-static .rail-progress { display: none; }
 
         .comp-card {
             padding: 30px;
@@ -1330,8 +1403,10 @@
 
         .comp-header {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
+            gap: 8px 12px;
             margin-bottom: 16px;
         }
 
@@ -1362,6 +1437,7 @@
         }
 
         .comp-deadline {
+            white-space: nowrap;
             font-family: var(--font-small);
             font-variation-settings: 'opsz' 32;
             font-size: 0.68rem;
@@ -1414,7 +1490,7 @@
         }
 
         /* ------------------------------------------------------------
-           006 — COORDINATOR & DC KNOWLEDGE ARCHIVE
+           006.C — COORDINATOR & DC KNOWLEDGE ARCHIVE PANEL
            ------------------------------------------------------------ */
         .archive-container {
             background: var(--bg-surface);
@@ -1593,41 +1669,10 @@
         }
 
         /* ------------------------------------------------------------
-           007 — PEOPLE & LEADERSHIP (HIERARCHY & ALUMNI)
+           005 — MEET THE TEAM (HEADS, COORDINATORS, ALUMNI)
            ------------------------------------------------------------ */
-        .people-filter-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 36px;
-            border-bottom: 1px solid var(--border-subtle);
-            padding-bottom: 16px;
-        }
-
-        .tier-chip {
-            padding: 8px 18px;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            font-family: var(--font-small);
-            font-variation-settings: 'opsz' 32;
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            border-radius: 999px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .tier-chip:hover, .tier-chip.active {
-            color: var(--pdc-green);
-            border-color: var(--pdc-green-border);
-            background: var(--pdc-green-tint);
-        }
-
         .tier-group {
             margin-bottom: 48px;
-            transition: opacity 0.3s ease;
         }
 
         .tier-heading {
@@ -1917,95 +1962,35 @@
             text-decoration: underline;
         }
 
-        /* Notable Alumni & Founder Spotlight */
-        .alumni-spotlight-section {
-            background: linear-gradient(180deg, rgba(17, 19, 25, 0.85) 0%, rgba(9, 10, 13, 0.98) 100%);
-            border: 1px solid rgba(141, 198, 63, 0.22);
-            border-radius: 14px;
-            padding: 40px 36px;
-            margin-top: 48px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .alumni-spotlight-section::before {
-            content: '';
-            position: absolute;
-            top: 0; right: 0;
-            width: 360px; height: 360px;
-            background: radial-gradient(circle, rgba(141, 198, 63, 0.1) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .alumni-spotlight-header {
-            margin-bottom: 30px;
-        }
-
-        .spotlight-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 5px 14px;
-            background: rgba(141, 198, 63, 0.12);
-            border: 1px solid var(--pdc-green-border);
-            border-radius: 999px;
-            font-family: var(--font-small);
-            font-variation-settings: 'opsz' 32;
-            font-size: 0.7rem;
-            color: var(--pdc-green);
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-        }
-
-        .alumni-spotlight-header h3 {
-            font-family: var(--font-display);
-            font-size: 1.85rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            letter-spacing: -0.02em;
-            margin-bottom: 8px;
-        }
-
-        .alumni-spotlight-header p {
-            font-size: 0.92rem;
-            color: var(--text-secondary);
-            max-width: 760px;
-            line-height: 1.6;
-        }
-
-        .alumni-grid {
+        /* Notable Alumni: one compact strip under the coordinators */
+        .alumni-strip {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-        }
-
-        .alumni-card {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+            align-items: center;
+            gap: 28px;
+            padding: 24px 28px;
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
-            border-radius: 12px;
-            padding: 28px 24px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            transition: all 0.3s ease;
+            border-left: 3px solid #fb923c;
+            border-radius: var(--radius-md);
         }
 
-        .alumni-card:hover {
-            border-color: rgba(56, 189, 248, 0.45);
-            transform: translateY(-4px);
-            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45), 0 0 24px rgba(56, 189, 248, 0.12);
+        .alumni-strip-lead p {
+            margin-top: 10px;
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
+            font-size: 0.86rem;
+            line-height: 1.55;
+            color: var(--text-secondary);
         }
 
-        .alumni-card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 14px;
+        .alumni-strip-lead b {
+            color: var(--text-primary);
+            font-weight: 600;
         }
 
         .alumni-badge {
+            display: inline-block;
             font-family: var(--font-small);
             font-variation-settings: 'opsz' 32;
             font-size: 0.65rem;
@@ -2019,77 +2004,60 @@
             font-weight: 600;
         }
 
-        .alumni-card h4 {
+        .alumni-strip-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .alumni-strip-list a {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            height: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: inherit;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .alumni-strip-list a:hover, .alumni-strip-list a:focus-visible {
+            border-color: rgba(251, 146, 60, 0.45);
+            background: rgba(251, 146, 60, 0.06);
+        }
+
+        .alumni-name {
             font-family: var(--font-display);
-            font-size: 1.35rem;
+            font-size: 1rem;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 4px;
         }
 
-        .alumni-venture {
-            font-family: var(--font-small);
-            font-variation-settings: 'opsz' 32;
-            font-size: 0.78rem;
-            color: #38bdf8;
-            font-weight: 600;
-            margin-bottom: 6px;
-            display: block;
+        .alumni-name span {
+            color: var(--text-tertiary);
+            transition: color 0.2s;
         }
 
-        .alumni-pdc-role {
+        .alumni-strip-list a:hover .alumni-name span { color: #fb923c; }
+
+        .alumni-role {
             font-family: var(--font-small);
             font-variation-settings: 'opsz' 32;
             font-size: 0.7rem;
+            line-height: 1.4;
             color: var(--text-tertiary);
-            margin-bottom: 14px;
-            display: block;
-        }
-
-        .alumni-card p {
-            font-family: var(--font-small);
-            font-variation-settings: 'opsz' 32;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 24px;
-            flex-grow: 1;
-        }
-
-        .alumni-btn-linkedin {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            padding: 11px 16px;
-            background: rgba(56, 189, 248, 0.08);
-            border: 1px solid rgba(56, 189, 248, 0.28);
-            color: #38bdf8;
-            border-radius: 6px;
-            font-family: var(--font-small);
-            font-variation-settings: 'opsz' 32;
-            font-size: 0.76rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .alumni-btn-linkedin:hover {
-            background: #38bdf8;
-            color: #0c0d10;
-            border-color: #38bdf8;
-            transform: translateY(-2px);
         }
 
         /* ------------------------------------------------------------
-           008 — PUBLICATIONS (PRODUCT HANDBOOK & PDC BROCHURE)
+           006.B — PUBLICATIONS PANEL (PRODUCT HANDBOOK & PDC BROCHURE)
            ------------------------------------------------------------ */
         .pub-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 28px;
-            margin-bottom: 48px;
         }
 
         .pub-card {
@@ -2286,20 +2254,47 @@
         }
 
         /* ------------------------------------------------------------
-           MEET THE TEAM PHOTO
+           MEET THE TEAM PHOTO (closes the team section)
            ------------------------------------------------------------ */
         .team-photo {
+            position: relative;
             margin: 0;
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-md);
             overflow: hidden;
             background: var(--bg-surface);
+            scroll-margin-top: 96px;
         }
 
         .team-photo img {
             display: block;
             width: 100%;
             height: auto;
+        }
+
+        .team-photo figcaption {
+            position: absolute;
+            inset: auto 0 0 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            padding: 56px 28px 24px;
+            background: linear-gradient(to top, rgba(9, 10, 13, 0.88), transparent);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
+            font-size: 0.86rem;
+            color: var(--text-primary);
+        }
+
+        .team-photo-tag {
+            padding: 4px 8px;
+            background: var(--pdc-green);
+            color: var(--bg-canvas);
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
 
         /* ------------------------------------------------------------
@@ -2337,6 +2332,340 @@
         }
 
         /* ------------------------------------------------------------
+           006 — EXPLORE MORE TILES
+           ------------------------------------------------------------ */
+        .explore-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .explore-tile {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: inherit;
+            border-top: 2px solid var(--border-subtle);
+        }
+
+        .explore-tile:hover, .explore-tile:focus-visible {
+            border-top-color: var(--pdc-green);
+        }
+
+        .explore-tile:focus-visible { outline: 2px solid var(--pdc-green); outline-offset: 3px; }
+
+        .explore-visual {
+            position: relative;
+            aspect-ratio: 16 / 10;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-subtle);
+            background:
+                radial-gradient(circle, rgba(141, 198, 63, 0.18) 1px, transparent 1.5px) 0 0 / 10px 10px,
+                linear-gradient(135deg, #161922 0%, #0d0e12 100%);
+        }
+
+        .ev-photo img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(0.4) brightness(0.8);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
+        }
+
+        .explore-tile:hover .ev-photo img {
+            transform: scale(1.06);
+            filter: none;
+        }
+
+        /* Two stacked publication covers */
+        .ev-cover {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 34%;
+            aspect-ratio: 3 / 4;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+            border: 1px solid var(--border-strong);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5);
+            font-family: var(--font-brutal);
+            font-size: clamp(0.62rem, 1vw, 0.78rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 1;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .ev-cover b {
+            font-family: var(--font-small);
+            font-size: 0.6rem;
+            letter-spacing: 0.1em;
+        }
+
+        .ev-cover-back {
+            background: #1c202c;
+            color: var(--text-secondary);
+            transform: translate(-6%, -54%) rotate(8deg);
+        }
+
+        .ev-cover-front {
+            background: var(--pdc-green);
+            color: var(--bg-canvas);
+            transform: translate(-94%, -46%) rotate(-5deg);
+        }
+
+        .explore-tile:hover .ev-cover-back { transform: translate(4%, -56%) rotate(12deg); }
+        .explore-tile:hover .ev-cover-front { transform: translate(-104%, -44%) rotate(-8deg); }
+
+        /* Stacked archive file rows */
+        .ev-files {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 9%;
+        }
+
+        .ev-file {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s;
+        }
+
+        .ev-file .file-badge { flex: none; }
+        .ev-file-name {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .ev-file:nth-child(2) { margin-left: 8%; }
+        .ev-file:nth-child(3) { margin-left: 16%; }
+        .explore-tile:hover .ev-file { border-color: var(--border-strong); }
+        .explore-tile:hover .ev-file:nth-child(2) { transform: translateX(-4%); }
+        .explore-tile:hover .ev-file:nth-child(3) { transform: translateX(-8%); }
+
+        .explore-body {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 24px 26px 22px;
+        }
+
+        .explore-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
+            font-size: 0.68rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+        }
+
+        .explore-kicker b {
+            padding: 2px 6px;
+            background: var(--pdc-green-tint);
+            border: 1px solid var(--pdc-green-border);
+            color: var(--pdc-green);
+            font-weight: 700;
+        }
+
+        .explore-body h3 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .explore-body p {
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
+            font-size: 0.86rem;
+            line-height: 1.55;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .explore-foot {
+            margin-top: auto;
+            padding-top: 14px;
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
+            font-size: 0.72rem;
+            color: var(--text-tertiary);
+        }
+
+        .explore-open {
+            color: var(--text-secondary);
+            font-weight: 600;
+            transition: color 0.2s, translate 0.3s;
+        }
+
+        .explore-tile:hover .explore-open {
+            color: var(--pdc-green);
+            translate: 4px 0;
+        }
+
+        /* ------------------------------------------------------------
+           EXPLORE MORE PANELS (full-screen overlays, script section 12)
+           ------------------------------------------------------------ */
+        /* --sbw is the scrollbar width the lock removes (set by the script), so nothing behind shifts */
+        html.panel-open {
+            overflow: hidden;
+        }
+
+        html.panel-open body,
+        html.panel-open body > nav {
+            padding-right: var(--sbw, 0px);
+        }
+
+        html.panel-open #scrollProgressBar { opacity: 0; }
+
+        .explore-panel {
+            position: fixed;
+            inset: 0;
+            z-index: 1500;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            background:
+                radial-gradient(ellipse 70% 45% at 50% 0%, rgba(141, 198, 63, 0.08), transparent 70%),
+                var(--bg-canvas);
+            opacity: 0;
+            translate: 0 28px;
+            transition: opacity 0.3s ease, translate 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .explore-panel[hidden] { display: none; }
+
+        .explore-panel.is-open {
+            opacity: 1;
+            translate: 0 0;
+        }
+
+        .panel-bar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(9, 10, 13, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .panel-bar-inner {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .panel-crumb {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-tertiary);
+            white-space: nowrap;
+        }
+
+        .panel-crumb b {
+            padding: 3px 7px;
+            background: var(--pdc-green);
+            color: var(--bg-canvas);
+            font-weight: 700;
+        }
+
+        .panel-crumb strong {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .panel-close {
+            flex: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 16px;
+            background: transparent;
+            border: 1px solid var(--border-strong);
+            border-radius: 999px;
+            color: var(--text-primary);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: border-color 0.2s, color 0.2s, background 0.2s;
+        }
+
+        .panel-close:hover, .panel-close:focus-visible {
+            border-color: var(--pdc-green);
+            color: var(--pdc-green);
+            background: var(--pdc-green-tint);
+        }
+
+        .panel-close:focus-visible { outline: 2px solid var(--pdc-green); outline-offset: 3px; }
+
+        .panel-close kbd {
+            padding: 2px 5px;
+            border: 1px solid var(--border-subtle);
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: var(--text-tertiary);
+        }
+
+        /* Own stacking context so nothing inside (e.g. the vault hero's z-10 header) rises over the bar */
+        .panel-body {
+            position: relative;
+            isolation: isolate;
+            padding: clamp(48px, 7vw, 96px) 0;
+        }
+
+        .panel-body.is-centered {
+            min-height: calc(100vh - 64px);
+            min-height: calc(100svh - 64px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .explore-panel { transition: none; translate: none; }
+        }
+
+        /* ------------------------------------------------------------
            UPLOAD MODAL
            ------------------------------------------------------------ */
         .modal-overlay {
@@ -2345,7 +2674,7 @@
             inset: 0;
             background: rgba(8, 9, 12, 0.85);
             backdrop-filter: blur(8px);
-            z-index: 1000;
+            z-index: 1600; /* above the Explore More panels */
             align-items: center;
             justify-content: center;
         }
@@ -2489,12 +2818,12 @@
             .about-grid { grid-template-columns: 1fr; }
             .about-main-pane { border-right: none; border-bottom: 1px solid var(--border-subtle); }
             .project-grid { grid-template-columns: 1fr 1fr; }
-            .comp-grid { grid-template-columns: 1fr 1fr; }
+            .explore-grid { grid-template-columns: 1fr 1fr; }
+            .alumni-strip { grid-template-columns: 1fr; gap: 20px; }
             .team-grid { grid-template-columns: 1fr 1fr; }
             .pub-grid { grid-template-columns: 1fr; }
             .tier-grid { grid-template-columns: 1fr 1fr; }
             .tier-grid.cols-4 { grid-template-columns: 1fr 1fr; }
-            .alumni-grid { grid-template-columns: 1fr 1fr; }
             .head-card { grid-template-columns: 100px 1fr; }
             .archive-row { grid-template-columns: 80px 1.2fr 1fr auto; }
             .dragon-full-backdrop { opacity: 0.16; width: 500px; }
@@ -2517,7 +2846,16 @@
             .stat-cell:nth-child(2) { border-right: none; }
             .stat-cell:nth-child(1), .stat-cell:nth-child(2) { border-bottom: 1px solid var(--border-subtle); }
             .project-grid { grid-template-columns: 1fr; }
-            .comp-grid { grid-template-columns: 1fr; }
+            .explore-grid { grid-template-columns: 1fr; }
+            .explore-visual { aspect-ratio: 2 / 1; }
+            .alumni-strip { padding: 20px; }
+            .alumni-strip-list { grid-template-columns: 1fr; }
+            .rail-btn { width: 42px; height: 42px; }
+            /* Bleed the row to the screen edge so the next card peeks in */
+            .comp-grid { margin-right: -24px; padding-right: 24px; }
+            .comp-grid > .comp-card { flex-basis: 78vw; }
+            .team-photo figcaption { position: static; padding: 14px 16px; background: var(--bg-surface); }
+            .crumb-root, .panel-close kbd { display: none; }
             .team-grid { grid-template-columns: 1fr; }
             .archive-row { grid-template-columns: 1fr; gap: 8px; }
             .archive-controls { flex-direction: column; align-items: stretch; }
@@ -2585,12 +2923,9 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#projects">Hardware</a></li>
                 <li><a href="#process">Methodology</a></li>
-                <li><a href="#vault">DT Vault</a></li>
                 <li><a href="#competitions">Competitions</a></li>
-                <li><a href="#archive" class="nav-cta">Coord Archive</a></li>
-                <li><a href="#team">People</a></li>
-                <li><a href="#publications">Handbook & Brochure</a></li>
-                <li><a href="#meet-the-team">Meet the Team</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#explore" class="nav-cta">Explore More</a></li>
             </ul>
         </div>
     </nav>
@@ -2912,36 +3247,24 @@
         </div>
     </section>
 
-    <!-- 004 — DT VAULT -->
-    <section id="vault">
-        <!-- Tilted grid hero (React: components/vault-hero.tsx); the header below is the no-JS fallback -->
-        <div id="vault-hero">
-            <div class="container">
-                <div class="section-header">
-                    <div>
-                        <span class="section-meta"><b>004</b><span>Resource Vault</span></span>
-                        <h2 class="section-title">Curated Design Resources</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </section>
-
-    <!-- 005 — PRESTIGIOUS PRODUCT DESIGN & HARDWARE COMPETITIONS -->
+    <!-- 004 — PRESTIGIOUS PRODUCT DESIGN & HARDWARE COMPETITIONS (one-row carousel) -->
     <section id="competitions">
         <div class="container">
             <div class="section-header">
                 <div>
-                    <span class="section-meta"><b>005</b><span>Global Stages</span></span>
+                    <span class="section-meta"><b>004</b><span>Global Stages</span></span>
                     <h2 class="section-title">Prestigious Product Competitions</h2>
                     <p class="section-lead">
                         International hardware and industrial design stages to aim for throughout the academic year.
                     </p>
                 </div>
+                <div class="rail-controls">
+                    <button type="button" class="rail-btn" data-rail-dir="-1" aria-controls="compRail" aria-label="Previous competitions" aria-disabled="true">←</button>
+                    <button type="button" class="rail-btn" data-rail-dir="1" aria-controls="compRail" aria-label="Next competitions">→</button>
+                </div>
             </div>
 
-            <div class="comp-grid">
+            <div class="comp-grid" id="compRail">
                 <!-- James Dyson Award -->
                 <a href="https://www.jamesdysonaward.org/" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card">
                     <div class="card-glare"></div>
@@ -3044,136 +3367,25 @@
                     </div>
                 </a>
             </div>
+            <div class="rail-progress" aria-hidden="true"><span></span></div>
         </div>
     </section>
 
-    <!-- 006 — COORDINATOR & DC KNOWLEDGE ARCHIVE -->
-    <section id="archive">
-        <div class="container">
-            <div class="section-header">
-                <div>
-                    <span class="section-meta"><b>006</b><span>Knowledge Handover</span></span>
-                    <h2 class="section-title">PDC Coordinator & DC Archive</h2>
-                </div>
-            </div>
-
-            <div class="archive-container">
-                <div class="archive-controls">
-                    <div class="tab-group">
-                        <button class="tab-btn active" onclick="filterArchive('all', this)">All Documents (6)</button>
-                        <button class="tab-btn" onclick="filterArchive('handover', this)">Coord Handovers</button>
-                        <button class="tab-btn" onclick="filterArchive('dc', this)">DC Kits</button>
-                        <button class="tab-btn" onclick="filterArchive('cad', this)">CAD Tolerances</button>
-                        <button class="tab-btn" onclick="filterArchive('procurement', this)">Vendors</button>
-                    </div>
-
-                    <div class="archive-actions">
-                        <input type="text" id="archiveSearch" class="search-bar" placeholder="Search archive..." onkeyup="searchArchiveDocs()">
-                        <button class="btn-upload" onclick="openUploadModal()">
-                            <span>+</span> Upload Resource
-                        </button>
-                    </div>
-                </div>
-
-                <div class="archive-table" id="archiveRows">
-
-                    <div class="archive-row" data-category="handover" data-title="PDC Coordinator Handover Bible">
-                        <span class="file-badge pdf">SOP · PDF</span>
-                        <div class="row-title">
-                            <h4>PDC Coordinator Handover Bible</h4>
-                            <span>REVISION 2025 · COORDINATOR DESK</span>
-                        </div>
-                        <div class="row-desc"></div>
-                        <div class="row-action">
-                            <a class="btn-dl" onclick="notifyDownload('PDC_Coordinator_Handover_Bible.pdf')">Download ↗</a>
-                        </div>
-                    </div>
-
-                    <div class="archive-row" data-category="dc" data-title="Freshie Design Challenge Problem Bank">
-                        <span class="file-badge">DC KIT · ZIP</span>
-                        <div class="row-title">
-                            <h4>Freshie Design Challenge Problem Bank</h4>
-                            <span>FALL 2025 · DC SPRINT TEAM</span>
-                        </div>
-                        <div class="row-desc"></div>
-                        <div class="row-action">
-                            <a class="btn-dl" onclick="notifyDownload('FDC_2025_DC_Problem_Bank.zip')">Download ↗</a>
-                        </div>
-                    </div>
-
-                    <div class="archive-row" data-category="cad" data-title="CFI 3D Printing Tolerance Presets">
-                        <span class="file-badge cad">CONFIG · 3MF</span>
-                        <div class="row-title">
-                            <h4>CFI Rapid Prototyping Slicer Presets</h4>
-                            <span>UPDATED 2026 · FAB LAB</span>
-                        </div>
-                        <div class="row-desc"></div>
-                        <div class="row-action">
-                            <a class="btn-dl" onclick="notifyDownload('CFI_3DPrint_Tolerances.3mf')">Download ↗</a>
-                        </div>
-                    </div>
-
-                    <div class="archive-row" data-category="cad" data-title="Standard Metric Fastener CAD Library">
-                        <span class="file-badge cad">CAD · .STEP</span>
-                        <div class="row-title">
-                            <h4>Standard Metric Fastener Library</h4>
-                            <span>REV 3.2 · LAB ASSETS</span>
-                        </div>
-                        <div class="row-desc"></div>
-                        <div class="row-action">
-                            <a class="btn-dl" onclick="notifyDownload('Standard_Fasteners_Library.step')">Download ↗</a>
-                        </div>
-                    </div>
-
-                    <div class="archive-row" data-category="procurement" data-title="Chennai Guindy Machining Vendor Directory">
-                        <span class="file-badge pdf">SHEET · XLS</span>
-                        <div class="row-title">
-                            <h4>Chennai Machining Vendor Directory</h4>
-                            <span>VERIFIED 2026 · LOGISTICS</span>
-                        </div>
-                        <div class="row-desc"></div>
-                        <div class="row-action">
-                            <a class="btn-dl" onclick="notifyDownload('Guindy_Machining_Directory.xlsx')">Download ↗</a>
-                        </div>
-                    </div>
-
-                    <div class="archive-row" data-category="handover" data-title="CFI Milestone Pitch Deck Master">
-                        <span class="file-badge">DECK · PPTX</span>
-                        <div class="row-title">
-                            <h4>CFI Milestone Pitch Deck Master</h4>
-                            <span>2025-26 · REVIEW TEMPLATE</span>
-                        </div>
-                        <div class="row-desc"></div>
-                        <div class="row-action">
-                            <a class="btn-dl" onclick="notifyDownload('PDC_CFI_Pitch_Master.pptx')">Download ↗</a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 007 — PEOPLE & LEADERSHIP -->
+    <!-- 005 — MEET THE TEAM: heads, coordinators, alumni strip, then the team outing photo -->
     <section id="team">
         <div class="container">
             <div class="section-header">
                 <div>
-                    <span class="section-meta"><b>007</b><span>Core Leadership & Community</span></span>
-                    <h2 class="section-title">The People Running PDC</h2>
+                    <span class="section-meta"><b>005</b><span>Core Leadership & Community</span></span>
+                    <h2 class="section-title">Meet the Team</h2>
+                    <p class="section-lead">
+                        The heads and coordinators running PDC, and the alumni who came before them.
+                    </p>
                 </div>
             </div>
 
-            <!-- Role Filter Chips -->
-            <div class="people-filter-bar">
-                <button class="tier-chip active" onclick="filterPeople('all')">All Roles</button>
-                <button class="tier-chip" onclick="filterPeople('head')">Club Heads</button>
-                <button class="tier-chip" onclick="filterPeople('coordinators')">Coordinators</button>
-                <button class="tier-chip" onclick="filterPeople('alumni')">Notable Alumni</button>
-            </div>
-
             <!-- TIER 1: CLUB HEADS -->
-            <div class="tier-group" data-tier="head">
+            <div class="tier-group">
                 <div class="tier-heading">01 · Club Heads</div>
                 <div class="head-stack">
                 <div class="head-card tilt-card">
@@ -3220,219 +3432,111 @@
             </div>
 
             <!-- TIER 2: COORDINATORS -->
-            <div class="tier-group" data-tier="coordinators">
+            <div class="tier-group">
                 <div class="tier-heading">02 · Coordinators</div>
                 <!-- Lanyard rail (React: components/coordinators-lanyard.tsx) -->
                 <div id="coordinators-lanyard"></div>
             </div>
 
-            <!-- NOTABLE ALUMNI & FOUNDER SPOTLIGHT -->
-            <div class="alumni-spotlight-section tier-group" data-tier="alumni">
-                <div class="alumni-spotlight-header">
-                    <span class="spotlight-pill">PDC Alumni Network · Startups & Ventures</span>
-                    <h3>Notable Alumni in Industry & Entrepreneurship</h3>
-                    <p>
-                        Alumni from the Product Design Club at CFI IIT Madras have built venture-backed startups, participated in elite accelerators like Y Combinator, and led hardware engineering globally.
-                    </p>
-                </div>
-
-                <div class="alumni-grid">
-                    <!-- Akash Anand -->
-                    <div class="alumni-card tilt-card">
-                        <div class="card-glare"></div>
-                        <div>
-                            <div class="alumni-card-top">
-                                <span class="alumni-badge yc">Y Combinator W23</span>
-                                <span class="file-badge">FOUNDING HEAD</span>
-                            </div>
-                            <h4>Akash Anand</h4>
-                            <span class="alumni-venture">Co-Founder & CEO · Clueso (YC W23)</span>
-                            <span class="alumni-pdc-role">Former Head, Product Design Club (PDC) · CFI IITM</span>
-                            <p>
-                                Engineering Design graduate from IIT Madras. Inaugural Head of PDC at CFI who led the club's formative projects, subsequently founding Desklamp and scaling it into Clueso, an AI-powered documentation platform backed by Y Combinator.
-                            </p>
-                        </div>
-                        <a href="https://www.linkedin.com/in/akash-anand-iitm/" target="_blank" rel="noopener noreferrer" class="alumni-btn-linkedin">
-                            View Akash Anand on LinkedIn ↗
-                        </a>
+            <!-- TIER 3: NOTABLE ALUMNI (compact strip) -->
+            <div class="tier-group">
+                <div class="tier-heading">03 · Alumni Network</div>
+                <div class="alumni-strip">
+                    <div class="alumni-strip-lead">
+                        <span class="alumni-badge">Y Combinator W23</span>
+                        <p>PDC alumni, led by the club's founding head, built <b>Desklamp</b> into <b>Clueso</b>, an AI documentation platform backed by Y Combinator.</p>
                     </div>
-
-                    <!-- Neel Balar -->
-                    <div class="alumni-card tilt-card">
-                        <div class="card-glare"></div>
-                        <div>
-                            <div class="alumni-card-top">
-                                <span class="alumni-badge yc">Y Combinator W23</span>
-                                <span class="file-badge">CO-FOUNDER</span>
-                            </div>
-                            <h4>Neel Balar</h4>
-                            <span class="alumni-venture">Co-Founder & CBO · Clueso (YC W23)</span>
-                            <span class="alumni-pdc-role">Engineering Design & Data Science · IIT Madras</span>
-                            <p>
-                                IIT Madras alumnus with roots in CFI's product innovation community. Co-founded Desklamp during college and scaled business operations into Clueso, raising venture capital and joining Y Combinator's Winter 2023 cohort.
-                            </p>
-                        </div>
-                        <a href="https://www.linkedin.com/in/neelbalar7/" target="_blank" rel="noopener noreferrer" class="alumni-btn-linkedin">
-                            View Neel Balar on LinkedIn ↗
-                        </a>
-                    </div>
-
-                    <!-- Prajwal Prakash -->
-                    <div class="alumni-card tilt-card">
-                        <div class="card-glare"></div>
-                        <div>
-                            <div class="alumni-card-top">
-                                <span class="alumni-badge yc">Y Combinator W23</span>
-                                <span class="file-badge">CTO & TECH CO-FOUNDER</span>
-                            </div>
-                            <h4>Prajwal Prakash</h4>
-                            <span class="alumni-venture">Co-Founder & CTO · Clueso (YC W23)</span>
-                            <span class="alumni-pdc-role">Computer Science & Engg · IIT Madras</span>
-                            <p>
-                                IIT Madras alumnus who engineered the core intelligent document processing and video creation technology powering Desklamp and Clueso, bridging student-led lab R&D into a global enterprise SaaS platform.
-                            </p>
-                        </div>
-                        <a href="https://www.linkedin.com/in/prajwal-prakash/" target="_blank" rel="noopener noreferrer" class="alumni-btn-linkedin">
-                            View Prajwal Prakash on LinkedIn ↗
-                        </a>
-                    </div>
+                    <ul class="alumni-strip-list">
+                        <li>
+                            <a href="https://www.linkedin.com/in/akash-anand-iitm/" target="_blank" rel="noopener noreferrer" aria-label="Akash Anand on LinkedIn">
+                                <span class="alumni-name">Akash Anand <span aria-hidden="true">↗</span></span>
+                                <span class="alumni-role">Co-Founder &amp; CEO · Founding Head of PDC</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.linkedin.com/in/neelbalar7/" target="_blank" rel="noopener noreferrer" aria-label="Neel Balar on LinkedIn">
+                                <span class="alumni-name">Neel Balar <span aria-hidden="true">↗</span></span>
+                                <span class="alumni-role">Co-Founder &amp; CBO</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.linkedin.com/in/prajwal-prakash/" target="_blank" rel="noopener noreferrer" aria-label="Prajwal Prakash on LinkedIn">
+                                <span class="alumni-name">Prajwal Prakash <span aria-hidden="true">↗</span></span>
+                                <span class="alumni-role">Co-Founder &amp; CTO</span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
-        </div>
-    </section>
-
-    <!-- 008 — PUBLICATIONS: PRODUCT HANDBOOK & PDC BROCHURE -->
-    <section id="publications">
-        <div class="container">
-            <div class="section-header">
-                <div>
-                    <span class="section-meta"><b>008</b><span>Publications & Documentation</span></span>
-                    <h2 class="section-title">Product Handbook & Club Brochure</h2>
-                    <p class="section-lead">
-                        Essential resources created and maintained by the Product Design Club for students, coordinators, and collaborators at IIT Madras.
-                    </p>
-                </div>
-            </div>
-
-            <div class="pub-grid">
-                <!-- CARD 1: PRODUCT DESIGN HANDBOOK -->
-                <div class="pub-card tilt-card">
-                    <div class="card-glare"></div>
-                    <div>
-                        <div class="pub-status-badge in-prod">
-                            <span class="dot-pulse"></span>
-                            In Active Production · 2025-26 Edition
-                        </div>
-                        <div class="pub-card-header">
-                            <h3>The Product Handbook</h3>
-                            <span class="pub-subtitle">The Definitive Engineering & Product Development Field Manual by PDC</span>
-                        </div>
-
-                        <!-- Chapters Outline -->
-                        <ul class="pub-outline">
-                            <li><span class="mod-num">CH.01</span> Problem Formulation, Needfinding & User Research Frameworks</li>
-                            <li><span class="mod-num">CH.02</span> CAD Modeling Protocols: SolidWorks & Fusion 360 Parametric Hygiene</li>
-                            <li><span class="mod-num">CH.03</span> DFM / DFA: Design for CNC Machining, Injection Molding & Sheet Metal</li>
-                            <li><span class="mod-num">CH.04</span> Rapid Prototyping: 3D Printing Tolerances & Material Selection</li>
-                            <li><span class="mod-num">CH.05</span> Physical Validation, Testing Matrix & Milestone Pitch Decks</li>
-                        </ul>
-
-                        <!-- Meta Specifications -->
-                        <div class="pub-meta-row">
-                            <div class="pub-meta-item">
-                                <span class="meta-k">Estimated Extent</span>
-                                <span class="meta-v">120+ Pages</span>
-                            </div>
-                            <div class="pub-meta-item">
-                                <span class="meta-k">Target Release</span>
-                                <span class="meta-v">CFI Open House '25</span>
-                            </div>
-                            <div class="pub-meta-item">
-                                <span class="meta-k">Format</span>
-                                <span class="meta-v">Interactive PDF & Print</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pub-actions">
-                        <button class="btn-pub-primary" onclick="notifyDownload('PDC_Product_Handbook_Sample_Chapter.pdf')">
-                            Download Sample Chapter ↗
-                        </button>
-                        <button class="btn-pub-secondary" onclick="showToastNotice('✓ You will be notified when the Product Handbook launches')">
-                            Notify on Release →
-                        </button>
-                    </div>
-                </div>
-
-                <!-- CARD 2: PDC CLUB BROCHURE -->
-                <div class="pub-card tilt-card">
-                    <div class="card-glare"></div>
-                    <div>
-                        <div class="pub-status-badge official">
-                            <span class="dot-pulse"></span>
-                            Official Release · CFI IIT Madras
-                        </div>
-                        <div class="pub-card-header">
-                            <h3>PDC Official Brochure</h3>
-                            <span class="pub-subtitle">Comprehensive Overview of Club Capabilities, Labs, & Initiatives</span>
-                        </div>
-
-                        <!-- Highlights Outline -->
-                        <ul class="pub-outline">
-                            <li><span class="mod-num">SEC.01</span> Club Mandate, 5-Year Vision & Sudha & Shankar Hub Lab Infrastructure</li>
-                            <li><span class="mod-num">SEC.02</span> Machine Catalog: 3D Print Farm, Laser Cutters, CNC & Test Benches</li>
-                            <li><span class="mod-num">SEC.03</span> Portfolio Showcase: Award-Winning Hardware & Global Competitions</li>
-                            <li><span class="mod-num">SEC.04</span> Student Roadmap: Freshie Design Challenge, DC Roles & Recruits</li>
-                            <li><span class="mod-num">SEC.05</span> Industry Collaboration, Sponsorship & Grant Support Channels</li>
-                        </ul>
-
-                        <!-- Meta Specifications -->
-                        <div class="pub-meta-row">
-                            <div class="pub-meta-item">
-                                <span class="meta-k">Publication Size</span>
-                                <span class="meta-v">16 Pages (Full Color)</span>
-                            </div>
-                            <div class="pub-meta-item">
-                                <span class="meta-k">File Format</span>
-                                <span class="meta-v">Vector PDF (8.4 MB)</span>
-                            </div>
-                            <div class="pub-meta-item">
-                                <span class="meta-k">Cycle</span>
-                                <span class="meta-v">Annual 2025-26</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pub-actions">
-                        <button class="btn-pub-primary" onclick="notifyDownload('PDC_Official_Brochure_2025-26.pdf')">
-                            Download Brochure (PDF) ↗
-                        </button>
-                        <button class="btn-pub-secondary" onclick="showToastNotice('Opening PDC Official Brochure online preview...')">
-                            Preview in Browser ↗
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 009 — MEET THE TEAM: team outing photo, right before the "join PDC" banner -->
-    <section id="meet-the-team">
-        <div class="container">
-            <div class="section-header">
-                <div>
-                    <span class="section-meta"><b>009</b><span>Off the Workbench</span></span>
-                    <h2 class="section-title">Meet the Team</h2>
-                    <p class="section-lead">
-                        The crew behind the prototypes, away from the lab for a team outing.
-                    </p>
-                </div>
-            </div>
-
-            <figure class="team-photo">
+            <!-- Closer: team outing photo (old #meet-the-team links land here) -->
+            <figure class="team-photo" id="meet-the-team">
                 <img src="assets/team-outing.jpg" alt="PDC team members smiling around a board game table during a team outing" loading="lazy" width="1280" height="720">
+                <figcaption>
+                    <span class="team-photo-tag">Off the Workbench</span>
+                    <span>The crew behind the prototypes, away from the lab.</span>
+                </figcaption>
             </figure>
+
+        </div>
+    </section>
+
+    <!-- 006 — EXPLORE MORE: each tile opens a full-screen panel (markup after the footer, script section 12) -->
+    <section id="explore">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <span class="section-meta"><b>006</b><span>Explore More</span></span>
+                    <h2 class="section-title">Resources &amp; Archive</h2>
+                    <p class="section-lead">
+                        Design reading, the club's own publications and the coordinator knowledge base, one click away.
+                    </p>
+                </div>
+            </div>
+
+            <div class="explore-grid">
+                <a href="#vault" class="explore-tile tilt-card" aria-haspopup="dialog" aria-controls="panel-vault">
+                    <div class="card-glare"></div>
+                    <div class="explore-visual ev-photo">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&amp;fit=crop&amp;w=900&amp;q=70" alt="" loading="lazy" onerror="this.remove()">
+                    </div>
+                    <div class="explore-body">
+                        <span class="explore-kicker"><b>006.A</b>Resource Vault</span>
+                        <h3>Curated Design Resources</h3>
+                        <p>Field guides, principles and courses, from the d.school bootleg to MIT 2.007.</p>
+                        <div class="explore-foot"><span>6 Resources</span><span class="explore-open">Open →</span></div>
+                    </div>
+                </a>
+
+                <a href="#publications" class="explore-tile tilt-card" aria-haspopup="dialog" aria-controls="panel-publications">
+                    <div class="card-glare"></div>
+                    <div class="explore-visual ev-covers" aria-hidden="true">
+                        <span class="ev-cover ev-cover-back"><b>PDC</b>Official Brochure</span>
+                        <span class="ev-cover ev-cover-front"><b>PDC</b>The Product Handbook</span>
+                    </div>
+                    <div class="explore-body">
+                        <span class="explore-kicker"><b>006.B</b>Publications</span>
+                        <h3>Product Handbook &amp; Brochure</h3>
+                        <p>The club's field manual for building hardware, plus the official brochure.</p>
+                        <div class="explore-foot"><span>2 Publications</span><span class="explore-open">Open →</span></div>
+                    </div>
+                </a>
+
+                <a href="#archive" class="explore-tile tilt-card" aria-haspopup="dialog" aria-controls="panel-archive">
+                    <div class="card-glare"></div>
+                    <div class="explore-visual ev-files" aria-hidden="true">
+                        <span class="ev-file"><span class="file-badge pdf">SOP · PDF</span><span class="ev-file-name">Coordinator Handover Bible</span></span>
+                        <span class="ev-file"><span class="file-badge">DC KIT · ZIP</span><span class="ev-file-name">FDC Problem Bank</span></span>
+                        <span class="ev-file"><span class="file-badge cad">CAD · .STEP</span><span class="ev-file-name">Metric Fastener Library</span></span>
+                    </div>
+                    <div class="explore-body">
+                        <span class="explore-kicker"><b>006.C</b>Knowledge Handover</span>
+                        <h3>Coordinator &amp; DC Archive</h3>
+                        <p>Handover SOPs, Design Challenge kits, CAD presets and vendor lists.</p>
+                        <div class="explore-foot"><span>6 Documents</span><span class="explore-open">Open →</span></div>
+                    </div>
+                </a>
+            </div>
 
             <div class="cta-banner">
                 <div class="cta-text">
@@ -3455,10 +3559,269 @@
     <!-- FOOTER (React: main.tsx) -->
     <div id="pdc-footer"></div>
 
+    <!-- EXPLORE MORE PANELS: full-screen overlays opened by #vault, #publications and #archive (script section 12) -->
+    <div class="explore-panel" id="panel-vault" data-panel="vault" role="dialog" aria-modal="true" aria-label="Resource Vault" hidden>
+        <div class="panel-bar">
+            <div class="container panel-bar-inner">
+                <span class="panel-crumb"><b>006.A</b><span class="crumb-root">Explore More /</span><strong>Resource Vault</strong></span>
+                <button type="button" class="panel-close" aria-label="Close Resource Vault">Close <kbd>Esc</kbd></button>
+            </div>
+        </div>
+        <div class="panel-body is-centered">
+            <!-- Tilted grid hero (React: components/vault-hero.tsx); the header below is the no-JS fallback -->
+            <div id="vault-hero">
+                <div class="container">
+                    <div class="section-header">
+                        <div>
+                            <span class="section-meta"><b>006.A</b><span>Resource Vault</span></span>
+                            <h2 class="section-title">Curated Design Resources</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="explore-panel" id="panel-publications" data-panel="publications" role="dialog" aria-modal="true" aria-label="Handbook &amp; Brochure" hidden>
+        <div class="panel-bar">
+            <div class="container panel-bar-inner">
+                <span class="panel-crumb"><b>006.B</b><span class="crumb-root">Explore More /</span><strong>Handbook &amp; Brochure</strong></span>
+                <button type="button" class="panel-close" aria-label="Close Handbook &amp; Brochure">Close <kbd>Esc</kbd></button>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="container">
+                <div class="section-header">
+                    <div>
+                        <span class="section-meta"><b>006.B</b><span>Publications &amp; Documentation</span></span>
+                        <h2 class="section-title">Product Handbook &amp; Club Brochure</h2>
+                        <p class="section-lead">
+                            Essential resources created and maintained by the Product Design Club for students, coordinators, and collaborators at IIT Madras.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pub-grid">
+                    <!-- CARD 1: PRODUCT DESIGN HANDBOOK -->
+                    <div class="pub-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div>
+                            <div class="pub-status-badge in-prod">
+                                <span class="dot-pulse"></span>
+                                In Active Production · 2025-26 Edition
+                            </div>
+                            <div class="pub-card-header">
+                                <h3>The Product Handbook</h3>
+                                <span class="pub-subtitle">The Definitive Engineering & Product Development Field Manual by PDC</span>
+                            </div>
+
+                            <!-- Chapters Outline -->
+                            <ul class="pub-outline">
+                                <li><span class="mod-num">CH.01</span> Problem Formulation, Needfinding & User Research Frameworks</li>
+                                <li><span class="mod-num">CH.02</span> CAD Modeling Protocols: SolidWorks & Fusion 360 Parametric Hygiene</li>
+                                <li><span class="mod-num">CH.03</span> DFM / DFA: Design for CNC Machining, Injection Molding & Sheet Metal</li>
+                                <li><span class="mod-num">CH.04</span> Rapid Prototyping: 3D Printing Tolerances & Material Selection</li>
+                                <li><span class="mod-num">CH.05</span> Physical Validation, Testing Matrix & Milestone Pitch Decks</li>
+                            </ul>
+
+                            <!-- Meta Specifications -->
+                            <div class="pub-meta-row">
+                                <div class="pub-meta-item">
+                                    <span class="meta-k">Estimated Extent</span>
+                                    <span class="meta-v">120+ Pages</span>
+                                </div>
+                                <div class="pub-meta-item">
+                                    <span class="meta-k">Target Release</span>
+                                    <span class="meta-v">CFI Open House '25</span>
+                                </div>
+                                <div class="pub-meta-item">
+                                    <span class="meta-k">Format</span>
+                                    <span class="meta-v">Interactive PDF & Print</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pub-actions">
+                            <button class="btn-pub-primary" onclick="notifyDownload('PDC_Product_Handbook_Sample_Chapter.pdf')">
+                                Download Sample Chapter ↗
+                            </button>
+                            <button class="btn-pub-secondary" onclick="showToastNotice('✓ You will be notified when the Product Handbook launches')">
+                                Notify on Release →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CARD 2: PDC CLUB BROCHURE -->
+                    <div class="pub-card tilt-card">
+                        <div class="card-glare"></div>
+                        <div>
+                            <div class="pub-status-badge official">
+                                <span class="dot-pulse"></span>
+                                Official Release · CFI IIT Madras
+                            </div>
+                            <div class="pub-card-header">
+                                <h3>PDC Official Brochure</h3>
+                                <span class="pub-subtitle">Comprehensive Overview of Club Capabilities, Labs, & Initiatives</span>
+                            </div>
+
+                            <!-- Highlights Outline -->
+                            <ul class="pub-outline">
+                                <li><span class="mod-num">SEC.01</span> Club Mandate, 5-Year Vision & Sudha & Shankar Hub Lab Infrastructure</li>
+                                <li><span class="mod-num">SEC.02</span> Machine Catalog: 3D Print Farm, Laser Cutters, CNC & Test Benches</li>
+                                <li><span class="mod-num">SEC.03</span> Portfolio Showcase: Award-Winning Hardware & Global Competitions</li>
+                                <li><span class="mod-num">SEC.04</span> Student Roadmap: Freshie Design Challenge, DC Roles & Recruits</li>
+                                <li><span class="mod-num">SEC.05</span> Industry Collaboration, Sponsorship & Grant Support Channels</li>
+                            </ul>
+
+                            <!-- Meta Specifications -->
+                            <div class="pub-meta-row">
+                                <div class="pub-meta-item">
+                                    <span class="meta-k">Publication Size</span>
+                                    <span class="meta-v">16 Pages (Full Color)</span>
+                                </div>
+                                <div class="pub-meta-item">
+                                    <span class="meta-k">File Format</span>
+                                    <span class="meta-v">Vector PDF (8.4 MB)</span>
+                                </div>
+                                <div class="pub-meta-item">
+                                    <span class="meta-k">Cycle</span>
+                                    <span class="meta-v">Annual 2025-26</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pub-actions">
+                            <button class="btn-pub-primary" onclick="notifyDownload('PDC_Official_Brochure_2025-26.pdf')">
+                                Download Brochure (PDF) ↗
+                            </button>
+                            <button class="btn-pub-secondary" onclick="showToastNotice('Opening PDC Official Brochure online preview...')">
+                                Preview in Browser ↗
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="explore-panel" id="panel-archive" data-panel="archive" role="dialog" aria-modal="true" aria-label="Coordinator Archive" hidden>
+        <div class="panel-bar">
+            <div class="container panel-bar-inner">
+                <span class="panel-crumb"><b>006.C</b><span class="crumb-root">Explore More /</span><strong>Coordinator Archive</strong></span>
+                <button type="button" class="panel-close" aria-label="Close Coordinator Archive">Close <kbd>Esc</kbd></button>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="container">
+                <div class="section-header">
+                    <div>
+                        <span class="section-meta"><b>006.C</b><span>Knowledge Handover</span></span>
+                        <h2 class="section-title">PDC Coordinator &amp; DC Archive</h2>
+                    </div>
+                </div>
+
+                <div class="archive-container">
+                    <div class="archive-controls">
+                        <div class="tab-group">
+                            <button class="tab-btn active" onclick="filterArchive('all', this)">All Documents (6)</button>
+                            <button class="tab-btn" onclick="filterArchive('handover', this)">Coord Handovers</button>
+                            <button class="tab-btn" onclick="filterArchive('dc', this)">DC Kits</button>
+                            <button class="tab-btn" onclick="filterArchive('cad', this)">CAD Tolerances</button>
+                            <button class="tab-btn" onclick="filterArchive('procurement', this)">Vendors</button>
+                        </div>
+
+                        <div class="archive-actions">
+                            <input type="text" id="archiveSearch" class="search-bar" placeholder="Search archive..." onkeyup="searchArchiveDocs()">
+                            <button class="btn-upload" onclick="openUploadModal()">
+                                <span>+</span> Upload Resource
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="archive-table" id="archiveRows">
+
+                        <div class="archive-row" data-category="handover" data-title="PDC Coordinator Handover Bible">
+                            <span class="file-badge pdf">SOP · PDF</span>
+                            <div class="row-title">
+                                <h4>PDC Coordinator Handover Bible</h4>
+                                <span>REVISION 2025 · COORDINATOR DESK</span>
+                            </div>
+                            <div class="row-desc"></div>
+                            <div class="row-action">
+                                <a class="btn-dl" onclick="notifyDownload('PDC_Coordinator_Handover_Bible.pdf')">Download ↗</a>
+                            </div>
+                        </div>
+
+                        <div class="archive-row" data-category="dc" data-title="Freshie Design Challenge Problem Bank">
+                            <span class="file-badge">DC KIT · ZIP</span>
+                            <div class="row-title">
+                                <h4>Freshie Design Challenge Problem Bank</h4>
+                                <span>FALL 2025 · DC SPRINT TEAM</span>
+                            </div>
+                            <div class="row-desc"></div>
+                            <div class="row-action">
+                                <a class="btn-dl" onclick="notifyDownload('FDC_2025_DC_Problem_Bank.zip')">Download ↗</a>
+                            </div>
+                        </div>
+
+                        <div class="archive-row" data-category="cad" data-title="CFI 3D Printing Tolerance Presets">
+                            <span class="file-badge cad">CONFIG · 3MF</span>
+                            <div class="row-title">
+                                <h4>CFI Rapid Prototyping Slicer Presets</h4>
+                                <span>UPDATED 2026 · FAB LAB</span>
+                            </div>
+                            <div class="row-desc"></div>
+                            <div class="row-action">
+                                <a class="btn-dl" onclick="notifyDownload('CFI_3DPrint_Tolerances.3mf')">Download ↗</a>
+                            </div>
+                        </div>
+
+                        <div class="archive-row" data-category="cad" data-title="Standard Metric Fastener CAD Library">
+                            <span class="file-badge cad">CAD · .STEP</span>
+                            <div class="row-title">
+                                <h4>Standard Metric Fastener Library</h4>
+                                <span>REV 3.2 · LAB ASSETS</span>
+                            </div>
+                            <div class="row-desc"></div>
+                            <div class="row-action">
+                                <a class="btn-dl" onclick="notifyDownload('Standard_Fasteners_Library.step')">Download ↗</a>
+                            </div>
+                        </div>
+
+                        <div class="archive-row" data-category="procurement" data-title="Chennai Guindy Machining Vendor Directory">
+                            <span class="file-badge pdf">SHEET · XLS</span>
+                            <div class="row-title">
+                                <h4>Chennai Machining Vendor Directory</h4>
+                                <span>VERIFIED 2026 · LOGISTICS</span>
+                            </div>
+                            <div class="row-desc"></div>
+                            <div class="row-action">
+                                <a class="btn-dl" onclick="notifyDownload('Guindy_Machining_Directory.xlsx')">Download ↗</a>
+                            </div>
+                        </div>
+
+                        <div class="archive-row" data-category="handover" data-title="CFI Milestone Pitch Deck Master">
+                            <span class="file-badge">DECK · PPTX</span>
+                            <div class="row-title">
+                                <h4>CFI Milestone Pitch Deck Master</h4>
+                                <span>2025-26 · REVIEW TEMPLATE</span>
+                            </div>
+                            <div class="row-desc"></div>
+                            <div class="row-action">
+                                <a class="btn-dl" onclick="notifyDownload('PDC_CFI_Pitch_Master.pptx')">Download ↗</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- WIREFRAME UPLOAD MODAL -->
-    <div class="modal-overlay" id="uploadModal" onclick="closeModalBackdrop(event)">
+    <div class="modal-overlay" id="uploadModal" role="dialog" aria-modal="true" aria-labelledby="uploadModalTitle" onclick="closeModalBackdrop(event)">
         <div class="modal-box">
-            <h3>Upload Resource to Archive</h3>
+            <h3 id="uploadModalTitle">Upload Resource to Archive</h3>
 
             <form id="uploadForm" onsubmit="handleArchiveUpload(event)">
                 <div class="form-group">
@@ -3652,12 +4015,28 @@
         }
 
         // 7. Modal Logic
+        // The modal opens over the archive panel: the panel goes inert while the form is up,
+        // and focus moves into the form and back to whatever opened it.
+        let uploadReturnFocus = null;
+
         function openUploadModal() {
-            document.getElementById('uploadModal').classList.add('open');
+            const modal = document.getElementById('uploadModal');
+            if (modal.classList.contains('open')) return;
+            uploadReturnFocus = document.activeElement;
+            modal.classList.add('open');
+            const panel = document.getElementById('panel-archive');
+            if (panel) panel.inert = true;
+            document.getElementById('upTitle').focus();
         }
 
         function closeUploadModal() {
-            document.getElementById('uploadModal').classList.remove('open');
+            const modal = document.getElementById('uploadModal');
+            if (!modal.classList.contains('open')) return;
+            modal.classList.remove('open');
+            const panel = document.getElementById('panel-archive');
+            if (panel) panel.inert = false;
+            if (uploadReturnFocus && uploadReturnFocus.isConnected) uploadReturnFocus.focus({ preventScroll: true });
+            uploadReturnFocus = null;
         }
 
         function closeModalBackdrop(e) {
@@ -3724,24 +4103,6 @@
                 toast.classList.remove('show');
             }, 3000);
         }
-    
-        // 7. People Hierarchy Filter
-        function filterPeople(tier) {
-            const chips = document.querySelectorAll('.tier-chip');
-            chips.forEach(c => c.classList.remove('active'));
-            if (event && event.target) {
-                event.target.classList.add('active');
-            }
-
-            const groups = document.querySelectorAll('.tier-group');
-            groups.forEach(group => {
-                if (tier === 'all' || group.dataset.tier === tier) {
-                    group.style.display = 'block';
-                } else {
-                    group.style.display = 'none';
-                }
-            });
-        }
         // 9. Design Thinking Horizontal Scroll (pins #process, vertical scroll drives the track)
         (() => {
             const section = document.getElementById('process');
@@ -3757,11 +4118,12 @@
             const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
             let distance = 0;
             let ticking = false;
+            const SLOW = 1.5; // vertical px scrolled per horizontal px moved (1.5 = 50% slower)
 
             function update() {
                 ticking = false;
                 if (reduced.matches) return;
-                const progress = distance ? Math.min(1, Math.max(0, -section.getBoundingClientRect().top / distance)) : 0;
+                const progress = distance ? Math.min(1, Math.max(0, -section.getBoundingClientRect().top / (distance * SLOW))) : 0;
                 const x = progress * distance;
                 track.style.transform = `translate3d(${-x}px, 0, 0)`;
 
@@ -3797,7 +4159,7 @@
                 axisHead.style.display = '';
                 distance = Math.max(0, track.offsetWidth - window.innerWidth);
                 // Use the pin's own (svh) height so the mobile URL bar can't desync the scroll length
-                section.style.height = `${distance + pin.offsetHeight}px`;
+                section.style.height = `${distance * SLOW + pin.offsetHeight}px`;
                 update();
             }
 
@@ -3823,8 +4185,8 @@
         //     The classes are only added here, so without this script nothing is ever hidden.
         (() => {
             const targets = document.querySelectorAll(
-                'section:not(#vault) .section-header, .about-grid, .project-card, .comp-card, .archive-container, ' +
-                '.people-filter-bar, .head-card, .person-card, .alumni-card, .pub-card, .cta-banner'
+                'section .section-header, .about-grid, .project-card, .comp-card, .head-card, .person-card, ' +
+                '.alumni-strip, .team-photo, .explore-tile, .cta-banner'
             );
             // Elements arriving in the same batch (a grid row) stagger by DOM order
             const observer = new IntersectionObserver(entries => {
@@ -3844,6 +4206,164 @@
             });
             reducedMotion.addEventListener('change', sync);
             sync();
+        })();
+
+        // 11. Competitions Carousel: one snapping row; arrows page by the visible width,
+        //     the bar under the row tracks how far along it is.
+        (() => {
+            const rail = document.getElementById('compRail');
+            if (!rail) return;
+            const section = rail.closest('section');
+            const [prev, next] = section.querySelectorAll('.rail-btn');
+            const bar = section.querySelector('.rail-progress span');
+            let ticking = false;
+
+            function sync() {
+                ticking = false;
+                const max = rail.scrollWidth - rail.clientWidth;
+                const x = rail.scrollLeft;
+                section.classList.toggle('rail-static', max <= 2); // everything fits: no arrows, no bar
+                // aria-disabled, not disabled: a disabled button drops keyboard focus at the end of the row
+                prev.setAttribute('aria-disabled', String(x <= 2));
+                next.setAttribute('aria-disabled', String(x >= max - 2));
+                rail.classList.toggle('at-start', x <= 2);
+                rail.classList.toggle('at-end', x >= max - 2);
+                // Bar width = share of the row in view; it slides across as the row scrolls
+                const share = rail.scrollWidth ? rail.clientWidth / rail.scrollWidth : 1;
+                bar.style.width = `${share * 100}%`;
+                bar.style.translate = `${max > 0 ? (x / max) * (1 / share - 1) * 100 : 0}% 0`;
+            }
+
+            const request = () => {
+                if (!ticking) {
+                    ticking = true;
+                    requestAnimationFrame(sync);
+                }
+            };
+
+            [prev, next].forEach(btn => btn.addEventListener('click', () => {
+                if (btn.getAttribute('aria-disabled') === 'true') return;
+                const card = rail.querySelector('.comp-card');
+                const gap = parseFloat(getComputedStyle(rail).columnGap) || 0;
+                const stepW = card ? card.offsetWidth + gap : rail.clientWidth;
+                const perPage = Math.max(1, Math.floor((rail.clientWidth + gap) / stepW));
+                rail.scrollBy({
+                    left: Number(btn.dataset.railDir) * perPage * stepW,
+                    behavior: reducedMotion.matches ? 'auto' : 'smooth'
+                });
+            }));
+            rail.addEventListener('scroll', request, { passive: true });
+            window.addEventListener('resize', request);
+            sync();
+        })();
+
+        // 12. Explore More Panels: #vault, #publications and #archive open full-screen panels over the
+        //     page, so old deep links and the footer keep working. The page behind is made inert and
+        //     stops scrolling. Closing steps back through history when the open pushed an entry (a tile,
+        //     nav or footer click), and otherwise clears the hash in place (a deep link on page load).
+        (() => {
+            const panels = new Map([...document.querySelectorAll('.explore-panel')].map(p => [p.dataset.panel, p]));
+            if (!panels.size) return;
+            const uploadModal = document.getElementById('uploadModal');
+            const keepLive = new Set([uploadModal, document.getElementById('toastNotice')]);
+            let current = null;
+            let returnFocus = null;
+            let pushed = false; // the open came from a hashchange, so there is an entry to go back from
+
+            // The PDC Runner intro (main.tsx) covers the whole page on load
+            const introUp = () => {
+                const intro = document.getElementById('pdc-runner-root');
+                return !!(intro && intro.childElementCount);
+            };
+
+            function setInert(on) {
+                [...document.body.children].forEach(el => {
+                    if (el.tagName === 'SCRIPT' || keepLive.has(el)) return;
+                    el.inert = on && el !== current;
+                });
+            }
+
+            function open(name) {
+                const panel = panels.get(name);
+                if (!panel || panel === current) return;
+                if (current) {
+                    current.classList.remove('is-open');
+                    current.hidden = true;
+                } else {
+                    returnFocus = document.activeElement;
+                    root.style.setProperty('--sbw', `${Math.max(0, window.innerWidth - root.clientWidth)}px`);
+                }
+                current = panel;
+                panel.hidden = false;
+                panel.scrollTop = 0;
+                root.classList.add('panel-open');
+                setInert(true);
+                panel.getBoundingClientRect(); // commit the start state so the entrance transition runs
+                panel.classList.add('is-open');
+                panel.querySelector('.panel-close').focus({ preventScroll: true });
+            }
+
+            function close() {
+                if (!current) return;
+                const panel = current;
+                current = null;
+                pushed = false;
+                closeUploadModal();
+                setInert(false);
+                root.classList.remove('panel-open');
+                panel.classList.remove('is-open');
+                setTimeout(() => {
+                    if (panel !== current) panel.hidden = true;
+                }, reducedMotion.matches ? 0 : 320);
+                if (location.hash.slice(1) === panel.dataset.panel) {
+                    history.replaceState(null, '', location.pathname + location.search);
+                }
+                if (returnFocus && returnFocus.isConnected) returnFocus.focus({ preventScroll: true });
+                returnFocus = null;
+            }
+
+            // Close button and Escape: undo the pushed entry so Back is never a dead press
+            function dismiss() {
+                if (!current) return;
+                if (pushed && location.hash.slice(1) === current.dataset.panel) history.back(); // hashchange closes
+                else close();
+            }
+
+            function route(e) {
+                const name = location.hash.slice(1);
+                if (!panels.has(name)) return close();
+                open(name);
+                if (e) pushed = true;
+            }
+
+            panels.forEach(panel => panel.querySelector('.panel-close').addEventListener('click', dismiss));
+            document.addEventListener('keydown', e => {
+                if (e.key !== 'Escape' || !current || introUp()) return;
+                uploadModal.classList.contains('open') ? closeUploadModal() : dismiss();
+            });
+            window.addEventListener('hashchange', route);
+
+            // A deep link (/#archive) opens once the intro is dismissed, so the intro's own keys
+            // (Space, Escape) can't reach a panel hidden underneath it
+            function routeAfterIntro() {
+                const intro = document.getElementById('pdc-runner-root');
+                if (!panels.has(location.hash.slice(1)) || !intro) return route();
+                let seen = intro.childElementCount > 0;
+                const check = () => {
+                    if (intro.childElementCount) { seen = true; return; }
+                    if (!seen) return;
+                    watch.disconnect();
+                    route();
+                };
+                const watch = new MutationObserver(check);
+                watch.observe(intro, { childList: true });
+                // Fallback if the intro never renders (e.g. a script error in it)
+                setTimeout(() => { if (!seen) { watch.disconnect(); route(); } }, 2500);
+            }
+            // main.tsx is a module script: it has run, and mounted the intro root, by DOMContentLoaded
+            document.readyState === 'loading'
+                ? document.addEventListener('DOMContentLoaded', routeAfterIntro, { once: true })
+                : routeAfterIntro();
         })();
     </script>
     <script type="module" src="/main.tsx"></script>
