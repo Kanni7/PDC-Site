@@ -1075,7 +1075,7 @@ export default function PdcRunner() {
       data-mode={mode}
       role="dialog"
       aria-modal="true"
-      aria-label="PDC Runner: Build Mode. An optional game; use Enter website to skip it."
+      aria-label="PDC Runner. An optional game; use Enter website to skip it."
     >
       <div className="pr-bg" aria-hidden="true">
         <img className="pr-watermark" src={LOGO_SRC} alt="" />
@@ -1134,9 +1134,7 @@ export default function PdcRunner() {
       {mode === "menu" && (
         <section className="pr-center">
           <div className="pr-intro">
-            <p className="pr-eyebrow">// PDC Runner: Build mode</p>
             <h1 className="pr-title">PDC <span>Runner</span></h1>
-            <p className="pr-tagline">Build. Break. Innovate. Repeat.</p>
             <p className="pr-copy">A little innovation before the real innovation.</p>
             <div className="pr-actions">
               <button type="button" className="pr-btn pr-btn--play" onClick={play}>
@@ -1144,10 +1142,6 @@ export default function PdcRunner() {
               </button>
               {enterBtn("pr-btn--lg")}
             </div>
-            <p className="pr-hint">
-              <span className="pr-hint-key">Press SPACE to jump</span>
-              <span className="pr-hint-touch">Tap to jump</span> | Avoid obstacles | Collect code
-            </p>
             {best > 0 && <p className="pr-best">Best build: {pad(best)}</p>}
           </div>
         </section>
@@ -1203,7 +1197,6 @@ export default function PdcRunner() {
         </button>
       )}
 
-      <footer className="pr-footer">Built different. Designed to innovate.</footer>
     </div>
   )
 }

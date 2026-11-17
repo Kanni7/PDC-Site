@@ -133,63 +133,6 @@
             z-index: 0;
         }
 
-        /* FULL TRANSPARENT DRAGON BACKGROUND WATERMARK */
-        .dragon-full-backdrop {
-            position: absolute;
-            top: 50%;
-            right: 0%;
-            transform: translateY(-50%);
-            width: clamp(420px, 52vw, 840px);
-            height: auto;
-            opacity: 0.22;
-            pointer-events: none;
-            z-index: 0;
-            filter: drop-shadow(0 0 70px rgba(141, 198, 63, 0.35));
-            animation: dragonBreath 10s ease-in-out infinite alternate;
-            will-change: transform, opacity;
-        }
-
-        @keyframes dragonBreath {
-            0% { transform: translateY(-50%) rotate(0deg) scale(1); opacity: 0.20; }
-            50% { transform: translateY(-53%) rotate(1.2deg) scale(1.03); opacity: 0.28; filter: drop-shadow(0 0 90px rgba(141, 198, 63, 0.45)); }
-            100% { transform: translateY(-47%) rotate(-1deg) scale(0.98); opacity: 0.20; }
-        }
-
-        /* Radial Fire Aura behind the Dragon */
-        .dragon-fire-glow {
-            position: absolute;
-            top: 48%;
-            right: 18%;
-            transform: translateY(-50%);
-            width: 500px;
-            height: 500px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(232, 80, 56, 0.16) 0%, rgba(141, 198, 63, 0.08) 45%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-            animation: fireFlicker 6s ease-in-out infinite alternate;
-        }
-
-        @keyframes fireFlicker {
-            0% { transform: translateY(-50%) scale(0.95); opacity: 0.6; }
-            50% { transform: translateY(-52%) scale(1.1); opacity: 0.9; }
-            100% { transform: translateY(-48%) scale(1.0); opacity: 0.7; }
-        }
-
-        /* SHINY TEXT SHEEN (REACTBITS.DEV STYLE) */
-        .shiny-text {
-            background: linear-gradient(110deg, #f8fafc 30%, var(--pdc-green-bright) 50%, #f8fafc 70%);
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shinyTextSweep 7s linear infinite;
-        }
-
-        @keyframes shinyTextSweep {
-            0% { background-position: 150% 0; }
-            100% { background-position: -50% 0; }
-        }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -320,72 +263,89 @@
         }
 
         /* ------------------------------------------------------------
-           STATUS BAR
-           ------------------------------------------------------------ */
-        .status-strip {
-            background: #0c0e12;
-            border-bottom: 1px solid var(--border-subtle);
-            padding: 8px 0;
-            font-family: var(--font-small);
-            font-variation-settings: 'opsz' 32;
-            font-size: 0.72rem;
-            color: var(--text-tertiary);
-            margin-top: 64px;
-        }
-
-        .status-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .live-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: var(--pdc-green);
-            box-shadow: 0 0 10px var(--pdc-green);
-        }
-
-        /* ------------------------------------------------------------
            HERO SECTION
            ------------------------------------------------------------ */
         .hero {
-            padding: 104px 0 112px;
             position: relative;
+            min-height: 100svh;
+            display: flex;
+            padding: calc(64px + clamp(28px, 5.5vh, 96px)) 0 0; /* 64px clears the fixed nav */
             border-bottom: 1px solid var(--border-subtle);
             overflow: hidden;
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* FULL TRANSPARENT DRAGON BACKGROUND WATERMARK */
+        .dragon-full-backdrop {
+            position: absolute;
+            top: 50%;
+            right: 0%;
+            transform: translateY(-50%);
+            width: clamp(420px, 52vw, 840px);
+            height: auto;
+            opacity: 0.22;
+            pointer-events: none;
+            user-select: none;
+            z-index: 0;
+            filter: drop-shadow(0 0 70px rgba(141, 198, 63, 0.35));
+            animation: dragonBreath 10s ease-in-out infinite alternate;
+            will-change: transform, opacity;
+        }
+
+        @keyframes dragonBreath {
+            0% { transform: translateY(-50%) rotate(0deg) scale(1); opacity: 0.20; }
+            50% { transform: translateY(-53%) rotate(1.2deg) scale(1.03); opacity: 0.28; filter: drop-shadow(0 0 90px rgba(141, 198, 63, 0.45)); }
+            100% { transform: translateY(-47%) rotate(-1deg) scale(0.98); opacity: 0.20; }
+        }
+
+        /* Radial Fire Aura behind the Dragon */
+        .dragon-fire-glow {
+            position: absolute;
+            top: 48%;
+            right: 18%;
+            transform: translateY(-50%);
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(232, 80, 56, 0.16) 0%, rgba(141, 198, 63, 0.08) 45%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: fireFlicker 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes fireFlicker {
+            0% { transform: translateY(-50%) scale(0.95); opacity: 0.6; }
+            50% { transform: translateY(-52%) scale(1.1); opacity: 0.9; }
+            100% { transform: translateY(-48%) scale(1.0); opacity: 0.7; }
         }
 
         .hero-content {
             max-width: 680px;
             position: relative;
-            z-index: 2;
+            margin-bottom: clamp(28px, 5vh, 80px);
         }
 
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+        .hero-affil {
             font-family: var(--font-small);
             font-variation-settings: 'opsz' 32;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.16em;
+            color: var(--text-secondary);
+            margin-bottom: 18px;
+        }
+
+        .hero-affil span {
             color: var(--pdc-green);
-            background: var(--pdc-green-tint);
-            border: 1px solid var(--pdc-green-border);
-            border-radius: var(--radius-sm);
-            padding: 5px 12px;
-            margin-bottom: 24px;
+            margin: 0 0.5em;
         }
 
         /* BLUR-TO-CLEAR TEXT REVEAL (REACTBITS.DEV) */
@@ -400,62 +360,98 @@
 
         .hero h1 {
             font-family: var(--font-display);
-            font-size: clamp(3.2rem, 7.5vw, 6rem);
+            font-size: clamp(3.4rem, min(8.6vw, 12.5vh), 7.25rem);
             font-weight: 800;
             letter-spacing: -0.04em;
             line-height: 0.98;
-            margin-bottom: 22px;
+            margin-bottom: 28px;
             text-transform: uppercase;
         }
 
         .hero h1 span.green {
             color: var(--pdc-green);
-            text-shadow: 0 0 35px rgba(141, 198, 63, 0.4);
-        }
-
-        .hero-motto-row {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 26px;
-            flex-wrap: wrap;
-        }
-
-        .motto-tag {
-            font-family: var(--font-small);
-            font-variation-settings: 'opsz' 32;
-            font-size: 0.88rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            color: #ffffff;
-            background: var(--cfi-red);
-            padding: 6px 14px;
-            border-radius: var(--radius-sm);
-            display: inline-block;
-            box-shadow: 0 4px 15px rgba(232, 80, 56, 0.35);
-        }
-
-        .motto-sub {
-            font-family: var(--font-small);
-            font-variation-settings: 'opsz' 32;
-            font-size: 0.78rem;
-            color: var(--text-tertiary);
         }
 
         .hero-lead {
-            font-size: 1.05rem;
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
+            font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+            line-height: 1.35;
+            margin-bottom: 10px;
+        }
+
+        .hero-desc {
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
+            font-size: 1rem;
             color: var(--text-secondary);
-            line-height: 1.75;
-            margin-bottom: 36px;
+            line-height: 1.65;
+            max-width: 46ch;
+            margin-bottom: 34px;
         }
 
         .hero-actions {
             display: flex;
-            gap: 14px;
+            gap: 28px;
             flex-wrap: wrap;
             align-items: center;
-            margin-bottom: 48px;
         }
+
+        .hero-link {
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: underline;
+            text-decoration-color: var(--border-strong);
+            text-decoration-thickness: 1px;
+            text-underline-offset: 6px;
+            transition: text-decoration-color 0.2s;
+        }
+
+        .hero-link span {
+            display: inline-block;
+            margin-left: 4px;
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hero-link:hover { text-decoration-color: var(--pdc-green); }
+        .hero-link:hover span { transform: translateX(4px); }
+
+        /* Foot of the first viewport: the club's process, linking to the Methodology section */
+        .hero-foot {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            padding: 22px 0 26px;
+            border-top: 1px solid var(--border-subtle);
+            font-family: var(--font-small);
+            font-variation-settings: 'opsz' 32;
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+        }
+
+        .hero-process {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 28px;
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .hero-process:hover { color: var(--text-primary); }
+        .hero-process i { font-style: normal; color: var(--pdc-green); margin-right: 8px; }
+        .hero-process-label { color: var(--text-tertiary); }
+        .hero-tagline { color: var(--text-tertiary); white-space: nowrap; }
 
         /* MAGNETIC BUTTON WITH SPRING (REACTBITS.DEV) */
         .btn-magnetic {
@@ -471,14 +467,12 @@
             font-size: 0.88rem;
             text-decoration: none;
             border-radius: var(--radius-sm);
-            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 20px rgba(141, 198, 63, 0.25);
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s;
             position: relative;
         }
 
         .btn-magnetic:hover {
             background: var(--pdc-green-bright);
-            box-shadow: 0 6px 30px rgba(141, 198, 63, 0.45);
         }
 
         .btn-outline {
@@ -590,48 +584,6 @@
             .btn-pill-label, .btn-pill-icon, .btn-pill-icon svg { transition: none; }
         }
 
-        /* Hero Stats Row */
-        .hero-stats-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            background: var(--bg-surface);
-            position: relative;
-            z-index: 2;
-        }
-
-        .stat-cell {
-            padding: 22px 24px;
-            border-right: 1px solid var(--border-subtle);
-        }
-
-        .stat-cell:last-child {
-            border-right: none;
-        }
-
-        .stat-num {
-            font-family: var(--font-display);
-            font-size: 2.1rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            line-height: 1;
-            margin-bottom: 4px;
-        }
-
-        .stat-num span {
-            color: var(--pdc-green);
-        }
-
-        .stat-desc {
-            font-family: var(--font-small);
-            font-variation-settings: 'opsz' 32;
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
-
         /* ------------------------------------------------------------
            SECTIONS GENERAL
            ------------------------------------------------------------ */
@@ -733,99 +685,82 @@
         /* ------------------------------------------------------------
            001 — ABOUT SECTION
            ------------------------------------------------------------ */
-        .about-grid {
+        /* A statement in the club's own voice, the photo, then the facts in one row */
+        .ab-lead {
             display: grid;
-            grid-template-columns: 1.25fr 0.75fr;
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            background: var(--bg-surface);
-            overflow: hidden;
+            grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+            gap: 56px;
+            align-items: end;
+            margin-bottom: clamp(36px, 5vw, 56px);
         }
-
-        .about-main-pane {
-            padding: 40px;
-            border-right: 1px solid var(--border-subtle);
+        .ab-statement {
+            margin: 0;
+            font-family: var(--font-brutal);
+            font-weight: 800;
+            font-size: clamp(2rem, 4.2vw, 3.5rem);
+            line-height: 1.04;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
         }
-
-        .about-main-pane p {
-            font-size: 0.98rem;
-            color: var(--text-secondary);
-            line-height: 1.75;
-            margin-bottom: 18px;
-        }
-
-        .about-main-pane p:last-child {
-            margin-bottom: 0;
-        }
-
-        .about-main-pane.about-photo {
-            padding: 0;
-            min-height: 320px;
-        }
-
-        .about-photo img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        @media (max-width: 1024px) {
-            .about-main-pane.about-photo { min-height: 0; }
-            .about-photo img { height: auto; aspect-ratio: 16 / 9; }
-        }
-
-        .about-side-pane {
-            padding: 36px;
-            background: var(--bg-surface-elevated);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .spec-list-title {
-            font-family: var(--font-small);
-            font-variation-settings: 'opsz' 32;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-tertiary);
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-subtle);
-            margin-bottom: 16px;
-        }
-
-        .spec-list {
-            list-style: none;
-        }
-
-        .spec-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-subtle);
-            display: flex;
-            justify-content: space-between;
-            font-family: var(--font-small);
-            font-variation-settings: 'opsz' 32;
-            font-size: 0.86rem;
-            color: var(--text-secondary);
-        }
-
-        .spec-list li span.val {
-            font-family: var(--font-small);
-            font-variation-settings: 'opsz' 32;
-            font-size: 0.8rem;
+        .ab-statement em {
+            font-family: 'Redaction 35', Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+            letter-spacing: -0.01em;
             color: var(--pdc-green);
         }
-
-        .wireframe-box {
-            margin-top: 24px;
-            padding: 16px;
-            border: 1px dashed var(--border-strong);
-            border-radius: var(--radius-sm);
+        .ab-note {
+            margin: 0;
+            font-family: var(--font-small);
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+        .ab-photo {
+            position: relative;
+            margin: 0;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+        .ab-photo img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .ab-photo figcaption {
+            position: absolute;
+            left: 24px;
+            bottom: 20px;
             font-family: 'Redaction 35', Georgia, serif;
-            font-size: 0.75rem;
+            font-style: italic;
+            font-size: 1.2rem;
+            color: #fff;
+            text-shadow: 0 2px 18px rgba(0, 0, 0, 0.7);
+        }
+        .ab-facts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 40px;
+            margin: 24px 0 0;
+            padding: 0;
+            list-style: none;
+            font-family: var(--font-small);
+            font-size: 0.92rem;
+            color: var(--text-primary);
+        }
+        .ab-facts span {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.68rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
             color: var(--text-tertiary);
-            text-align: center;
+        }
+        .ab-facts a { color: var(--pdc-green); text-decoration: none; }
+        .ab-facts a:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .ab-lead { grid-template-columns: 1fr; gap: 20px; }
         }
 
         /* ------------------------------------------------------------
@@ -1408,32 +1343,6 @@
             align-items: center;
             gap: 8px 12px;
             margin-bottom: 16px;
-        }
-
-        .comp-tier {
-            font-family: var(--font-small);
-            font-variation-settings: 'opsz' 32;
-            font-size: 0.68rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--pdc-green);
-            background: var(--pdc-green-tint);
-            border: 1px solid var(--pdc-green-border);
-            padding: 3px 8px;
-            border-radius: var(--radius-sm);
-        }
-
-        .comp-tier.dyson {
-            color: #38bdf8;
-            background: rgba(56, 189, 248, 0.1);
-            border-color: rgba(56, 189, 248, 0.3);
-        }
-
-        .comp-tier.reddot {
-            color: var(--cfi-red);
-            background: var(--cfi-red-tint);
-            border-color: rgba(232, 80, 56, 0.3);
         }
 
         .comp-deadline {
@@ -2812,11 +2721,49 @@
         }
 
         /* ------------------------------------------------------------
+           SPOTLIGHT GLOW CARDS (adapted from GlowCard)
+           The pointer lights up the edge of every .glow-card near it.
+           --x / --y are the pointer in each card's own pixels, set by the
+           script at the end of the page.
+           ------------------------------------------------------------ */
+        .glow-card {
+            --base: 85;
+            --spread: 30;
+            --glow-border: 2px;
+            --glow-size: 220px;
+            --hue: calc(var(--base) + var(--xp, 0) * var(--spread));
+            position: relative;
+            background-image: radial-gradient(var(--glow-size) var(--glow-size) at calc(var(--x, -9999) * 1px) calc(var(--y, -9999) * 1px), hsl(var(--hue) 100% 70% / 0.06), transparent);
+        }
+        .alumni-strip.glow-card { --base: 25; --spread: 20; }
+
+        .glow-card::before,
+        .glow-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+            border: var(--glow-border) solid transparent;
+            border-radius: inherit;
+            background-origin: border-box;
+            background-repeat: no-repeat;
+            -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#000 0 0) padding-box exclude, linear-gradient(#000 0 0);
+        }
+        .glow-card::before {
+            background-image: radial-gradient(calc(var(--glow-size) * 0.75) calc(var(--glow-size) * 0.75) at calc(var(--x, -9999) * 1px) calc(var(--y, -9999) * 1px), hsl(var(--hue) 100% 50%), transparent);
+            filter: brightness(2);
+        }
+        .glow-card::after {
+            background-image: radial-gradient(calc(var(--glow-size) * 0.5) calc(var(--glow-size) * 0.5) at calc(var(--x, -9999) * 1px) calc(var(--y, -9999) * 1px), hsl(0 0% 100% / 0.75), transparent);
+        }
+
+        /* ------------------------------------------------------------
            RESPONSIVE
            ------------------------------------------------------------ */
         @media (max-width: 1024px) {
-            .about-grid { grid-template-columns: 1fr; }
-            .about-main-pane { border-right: none; border-bottom: 1px solid var(--border-subtle); }
             .project-grid { grid-template-columns: 1fr 1fr; }
             .explore-grid { grid-template-columns: 1fr 1fr; }
             .alumni-strip { grid-template-columns: 1fr; gap: 20px; }
@@ -2827,6 +2774,7 @@
             .head-card { grid-template-columns: 100px 1fr; }
             .archive-row { grid-template-columns: 80px 1.2fr 1fr auto; }
             .dragon-full-backdrop { opacity: 0.16; width: 500px; }
+            .hero-foot { flex-direction: column; align-items: flex-start; gap: 14px; }
         }
 
         @media (max-width: 768px) {
@@ -2842,9 +2790,6 @@
                 padding: 20px 24px;
                 gap: 14px;
             }
-            .hero-stats-row { grid-template-columns: 1fr 1fr; }
-            .stat-cell:nth-child(2) { border-right: none; }
-            .stat-cell:nth-child(1), .stat-cell:nth-child(2) { border-bottom: 1px solid var(--border-subtle); }
             .project-grid { grid-template-columns: 1fr; }
             .explore-grid { grid-template-columns: 1fr; }
             .explore-visual { aspect-ratio: 2 / 1; }
@@ -2861,7 +2806,10 @@
             .archive-controls { flex-direction: column; align-items: stretch; }
             .search-bar { width: 100%; }
             .cta-banner { padding: 32px 24px; }
+            .hero { padding-top: calc(64px + 36px); }
             .dragon-full-backdrop { opacity: 0.12; width: 360px; right: -50px; }
+            .hero-process { gap: 8px 18px; }
+            .hero-process-label { flex-basis: 100%; }
         }
 
         /* ------------------------------------------------------------
@@ -2880,8 +2828,7 @@
         }
         .dragon-fire-glow { translate: 0 calc(var(--hero-y, 0px) * 0.45); }
         .hero .container { opacity: calc(1 - var(--hero-p, 0) * 0.85); }
-        .hero-content { translate: 0 calc(var(--hero-y, 0px) * -0.12); }
-        .hero-stats-row { translate: 0 calc(var(--hero-y, 0px) * -0.05); }
+        .hero-content { translate: 0 calc(var(--hero-y, 0px) * -0.08); }
 
         /* Reveal targets only hide once the script has tagged them and motion is allowed */
         .motion .reveal { opacity: 0; }
@@ -2930,72 +2877,40 @@
         </div>
     </nav>
 
-    <!-- STATUS TELEMETRY -->
-    <div class="status-strip" aria-hidden="true">
-        <div class="container status-inner">
-            <div class="status-item">
-                <span class="live-dot"></span>
-                <span>CENTRE FOR INNOVATION · SUDHA & SHANKAR HUB · LAB 204</span>
-            </div>
-            <div class="status-item">
-                <span>ACTIVE MEMBERS: 65+</span>
-                <span>·</span>
-                <span>ANNUAL FOCUS: NOVEL HARDWARE</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- HERO SECTION (WITH FULL TRANSPARENT DRAGON WATERMARK & SHINY TEXT SHEEN) -->
+    <!-- HERO -->
     <section class="hero">
-        <!-- Full Transparent Dragon Background Watermark (Directly from User Asset) -->
-        <img src="assets/pdc_dragon_watermark.png" alt="PDC Dragon Watermark" class="dragon-full-backdrop" id="heroDragonBackdrop">
+        <img src="assets/pdc_dragon_watermark.png" alt="" aria-hidden="true" class="dragon-full-backdrop" id="heroDragonBackdrop">
         <div class="dragon-fire-glow" aria-hidden="true"></div>
 
-        <div class="container">
+        <div class="container hero-inner">
             <div class="hero-content blur-reveal">
-                <div class="hero-badge">
-                    Centre For Innovation · IIT Madras
-                </div>
+                <p class="hero-affil">Centre for Innovation <span aria-hidden="true">/</span> IIT Madras</p>
 
                 <h1 id="hero-wordmark"><!-- React: main.tsx (TechText), this markup is the no-JS fallback -->
                     Product<br>
-                    <span class="shiny-text">Design</span> <span class="green">Club</span>
+                    Design<br>
+                    <span class="green">Club</span>
                 </h1>
 
-                <div class="hero-motto-row">
-                    <span class="motto-tag">DISRUPTION.STARTS.HERE</span>
-                    <span class="motto-sub">Walk in with an idea, walk out with a product.</span>
-                </div>
-
+                <p class="hero-lead">Walk in with an idea, walk out with a product.</p>
+                <p class="hero-desc">A student-run club at IIT Madras where we find real problems, sketch, prototype and build physical products.</p>
 
                 <div class="hero-actions">
-                    <a href="#projects" class="btn-magnetic" id="heroPrimaryBtn">
-                        Explore Hardware Projects →
-                    </a>
-                    <a href="#competitions" class="btn-outline">
-                        Global Competitions
-                    </a>
+                    <a href="#projects" class="btn-magnetic" id="heroPrimaryBtn">See what we've built</a>
+                    <a href="#explore" class="hero-link">Get involved <span aria-hidden="true">→</span></a>
                 </div>
             </div>
 
-            <!-- Wireframe Stats Row -->
-            <div class="hero-stats-row">
-                <div class="stat-cell">
-                    <div class="stat-num">2020<span>.</span></div>
-                    <div class="stat-desc">Chartered at CFI</div>
-                </div>
-                <div class="stat-cell">
-                    <div class="stat-num">65<span>+</span></div>
-                    <div class="stat-desc">Active Members</div>
-                </div>
-                <div class="stat-cell">
-                    <div class="stat-num">16<span>+</span></div>
-                    <div class="stat-desc">Hardware Projects</div>
-                </div>
-                <div class="stat-cell">
-                    <div class="stat-num">100<span>%</span></div>
-                    <div class="stat-desc">Student Led</div>
-                </div>
+            <div class="hero-foot">
+                <a href="#process" class="hero-process" aria-label="How we work: Empathize, Define, Ideate, Prototype, Test">
+                    <span class="hero-process-label">How we work</span>
+                    <span><i>01</i>Empathize</span>
+                    <span><i>02</i>Define</span>
+                    <span><i>03</i>Ideate</span>
+                    <span><i>04</i>Prototype</span>
+                    <span><i>05</i>Test</span>
+                </a>
+                <span class="hero-tagline">Disruption.Starts.Here</span>
             </div>
         </div>
     </section>
@@ -3010,29 +2925,21 @@
                 </div>
             </div>
 
-            <div class="about-grid tilt-card">
-                <div class="card-glare"></div>
-                <div class="about-main-pane about-photo">
-                    <img src="assets/about-club.jpg" alt="PDC club members gathered around a conference table in the club room" loading="lazy" width="1280" height="720">
-                </div>
-
-                <div class="about-side-pane">
-                    <div>
-                        <div class="spec-list-title">Quick Specifications</div>
-                        <ul class="spec-list">
-                            <li><span>Parent Body</span> <span class="val">CFI, IIT Madras</span></li>
-                            <li><span>Location</span> <span class="val">SSH Room 204</span></li>
-                            <li><span>Primary Tools</span> <span class="val">Fusion 360, SolidWorks</span></li>
-                            <li><span>Annual Sprint</span> <span class="val">Freshie Design Challenge</span></li>
-                            <li><span>Contact</span> <span class="val">pdc_cfi@smail.iitm.ac.in</span></li>
-                        </ul>
-                    </div>
-
-                    <div class="wireframe-box">
-                        [ Quick Facts Sidebar Slot ]
-                    </div>
-                </div>
+            <div class="ab-lead">
+                <p class="ab-statement">We're 65+ students who'd rather <em>build the thing</em> than talk about it.</p>
+                <p class="ab-note">Every year starts with the Freshie Design Challenge. After that it's real problems, quick sketches, CAD and prototypes that end up at national and global competitions.</p>
             </div>
+            <figure class="ab-photo">
+                <img src="assets/about-club.jpg" alt="PDC club members gathered around a conference table in the club room" loading="lazy" width="1280" height="720">
+                <figcaption>The club room, SSH 204</figcaption>
+            </figure>
+            <ul class="ab-facts">
+                <li><span>Parent body</span>CFI, IIT Madras</li>
+                <li><span>Room</span>SSH 204</li>
+                <li><span>Tools</span>Fusion 360 · SolidWorks</li>
+                <li><span>Annual sprint</span>Freshie Design Challenge</li>
+                <li><span>Contact</span><a href="mailto:pdc_cfi@smail.iitm.ac.in">pdc_cfi@smail.iitm.ac.in</a></li>
+            </ul>
         </div>
     </section>
 
@@ -3045,126 +2952,9 @@
                     <h2 class="section-title">Projects under PDC</h2>
                 </div>
             </div>
-
-            <div class="project-grid">
-
-                <!-- Project 1 -->
-                <div class="project-card tilt-card">
-                    <div class="card-glare"></div>
-                    <div>
-                        <div class="project-card-header">
-                            <span class="badge-pill">Featured Project</span>
-                            <span class="card-meta-text">Status: Prototyping</span>
-                        </div>
-                        <h3>Quantum Dots Diagnostic Tooling</h3>
-                        <div class="img-wireframe-slot">
-                            [ CAD Assembly Model Render Placeholder ]
-                        </div>
-                    </div>
-                    <div class="tag-row">
-                        <span class="tag-item">Fusion 360</span>
-                        <span class="tag-item">Microfluidics</span>
-                        <span class="tag-item">Optomechanics</span>
-                    </div>
-                </div>
-
-                <!-- Project 2 -->
-                <div class="project-card tilt-card">
-                    <div class="card-glare"></div>
-                    <div>
-                        <div class="project-card-header">
-                            <span class="badge-pill red">Assistive Engineering</span>
-                            <span class="card-meta-text">Status: Active</span>
-                        </div>
-                        <h3>Accessible Mobility Solutions</h3>
-                        <div class="img-wireframe-slot">
-                            [ FEA Stress Simulation Placeholder ]
-                        </div>
-                    </div>
-                    <div class="tag-row">
-                        <span class="tag-item">Ansys FEA</span>
-                        <span class="tag-item">6061-T6 Aluminum</span>
-                    </div>
-                </div>
-
-                <!-- Project 3 -->
-                <div class="project-card tilt-card">
-                    <div class="card-glare"></div>
-                    <div>
-                        <div class="project-card-header">
-                            <span class="badge-pill">AgroTech Enclosure</span>
-                            <span class="card-meta-text">Status: Completed</span>
-                        </div>
-                        <h3>Smart Agri-Spraying Payload Housing</h3>
-                        <div class="img-wireframe-slot">
-                            [ IP67 Weatherproof Enclosure Render ]
-                        </div>
-                    </div>
-                    <div class="tag-row">
-                        <span class="tag-item">SolidWorks</span>
-                        <span class="tag-item">IP67 Enclosure</span>
-                    </div>
-                </div>
-
-                <!-- Project 4 -->
-                <div class="project-card tilt-card">
-                    <div class="card-glare"></div>
-                    <div>
-                        <div class="project-card-header">
-                            <span class="badge-pill red">Alumni Venture</span>
-                            <span class="card-meta-text">Status: Seed Funded</span>
-                        </div>
-                        <h3>Desklamp.io Hardware Ergonomics</h3>
-                        <div class="img-wireframe-slot">
-                            [ Consumer Hardware Prototype Slot ]
-                        </div>
-                    </div>
-                    <div class="tag-row">
-                        <span class="tag-item">Thermal Heatsinks</span>
-                        <span class="tag-item">DFM</span>
-                    </div>
-                </div>
-
-                <!-- Project 5 -->
-                <div class="project-card tilt-card">
-                    <div class="card-glare"></div>
-                    <div>
-                        <div class="project-card-header">
-                            <span class="badge-pill">Safety Systems</span>
-                            <span class="card-meta-text">Status: Testing</span>
-                        </div>
-                        <h3>Navigation-Assisted Helmet</h3>
-                        <div class="img-wireframe-slot">
-                            [ Impact Structure & Optics Slot ]
-                        </div>
-                    </div>
-                    <div class="tag-row">
-                        <span class="tag-item">Ergonomics</span>
-                        <span class="tag-item">Drop Testing</span>
-                    </div>
-                </div>
-
-                <!-- Project 6 -->
-                <div class="project-card tilt-card">
-                    <div class="card-glare"></div>
-                    <div>
-                        <div class="project-card-header">
-                            <span class="badge-pill">Annual Event</span>
-                            <span class="card-meta-text">Status: Annual</span>
-                        </div>
-                        <h3>Freshie Design Challenge Output</h3>
-                        <div class="img-wireframe-slot">
-                            [ Freshman CAD Sprint Showcase ]
-                        </div>
-                    </div>
-                    <div class="tag-row">
-                        <span class="tag-item">Fusion 360</span>
-                        <span class="tag-item">Rapid Prototyping</span>
-                    </div>
-                </div>
-
-            </div>
         </div>
+
+        <div id="project-scan"><!-- React: components/project-scan.tsx --></div>
     </section>
 
     <!-- 003 — DESIGN THINKING PROTOCOL -->
@@ -3266,12 +3056,11 @@
 
             <div class="comp-grid" id="compRail">
                 <!-- James Dyson Award -->
-                <a href="https://www.jamesdysonaward.org/" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card">
+                <a href="https://www.jamesdysonaward.org/" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card glow-card">
                     <div class="card-glare"></div>
                     <div>
-                        <div class="comp-photo"><img src="assets/awards/dyson.jpg" alt="James Dyson Award ceremony" loading="lazy" onerror="this.remove()"></div>
+                        <div class="comp-photo"><img src="assets/awards/dyson.jpg" alt="James Dyson with a James Dyson Award winning team" loading="lazy" onerror="this.remove()"></div>
                         <div class="comp-header">
-                            <span class="comp-tier dyson">Global Gold Standard</span>
                             <span class="comp-deadline">Annual: March – July</span>
                         </div>
                         <h3>The James Dyson Award</h3>
@@ -3283,12 +3072,11 @@
                 </a>
 
                 <!-- iF Design Student Award -->
-                <a href="https://ifdesign.com/en/if-design-student-award" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card">
+                <a href="https://ifdesign.com/en/if-design-student-award" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card glow-card">
                     <div class="card-glare"></div>
                     <div>
-                        <div class="comp-photo"><img src="assets/awards/if-design.jpg" alt="iF Design Student Award ceremony" loading="lazy" onerror="this.remove()"></div>
+                        <div class="comp-photo"><img src="assets/awards/if-design.jpg" alt="Participants of the iF Design Student Award" loading="lazy" onerror="this.remove()"></div>
                         <div class="comp-header">
-                            <span class="comp-tier">Free to Enter · Germany</span>
                             <span class="comp-deadline">Annual: Oct – Feb</span>
                         </div>
                         <h3>iF Design Student Award</h3>
@@ -3300,12 +3088,11 @@
                 </a>
 
                 <!-- Red Dot Award: Design Concept -->
-                <a href="https://www.red-dot.org/design-concept" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card">
+                <a href="https://www.red-dot.org/design-concept" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card glow-card">
                     <div class="card-glare"></div>
                     <div>
-                        <div class="comp-photo"><img src="assets/awards/red-dot.jpg" alt="Red Dot Award ceremony" loading="lazy" onerror="this.remove()"></div>
+                        <div class="comp-photo"><img src="assets/awards/red-dot.jpg" alt="Red Dot award winners on stage at the ceremony" loading="lazy" onerror="this.remove()"></div>
                         <div class="comp-header">
-                            <span class="comp-tier reddot">Industry Benchmark</span>
                             <span class="comp-deadline">Annual: Jan – April</span>
                         </div>
                         <h3>Red Dot Award: Design Concept</h3>
@@ -3317,12 +3104,11 @@
                 </a>
 
                 <!-- Core77 Design Awards -->
-                <a href="https://designawards.core77.com/" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card">
+                <a href="https://designawards.core77.com/" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card glow-card">
                     <div class="card-glare"></div>
                     <div>
-                        <div class="comp-photo"><img src="assets/awards/core77.jpg" alt="Core77 Design Awards ceremony" loading="lazy" onerror="this.remove()"></div>
+                        <div class="comp-photo"><img src="assets/awards/core77.jpg" alt="An electric bike from the Core77 Design Awards" loading="lazy" onerror="this.remove()"></div>
                         <div class="comp-header">
-                            <span class="comp-tier">Student Category</span>
                             <span class="comp-deadline">Annual: Jan – April</span>
                         </div>
                         <h3>Core77 Design Awards</h3>
@@ -3334,12 +3120,11 @@
                 </a>
 
                 <!-- BraunPrize International -->
-                <a href="https://www.braunprize.org/" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card">
+                <a href="https://www.braunprize.org/" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card glow-card">
                     <div class="card-glare"></div>
                     <div>
-                        <div class="comp-photo"><img src="assets/awards/braun.jpg" alt="BraunPrize International ceremony" loading="lazy" onerror="this.remove()"></div>
+                        <div class="comp-photo"><img src="assets/awards/braun.jpg" alt="A designer working at a drawing board" loading="lazy" onerror="this.remove()"></div>
                         <div class="comp-header">
-                            <span class="comp-tier">Canonical Industrial Design</span>
                             <span class="comp-deadline">Biennial Cycle</span>
                         </div>
                         <h3>BraunPrize International</h3>
@@ -3351,12 +3136,11 @@
                 </a>
 
                 <!-- IDEA Awards -->
-                <a href="https://www.idsa.org/awards-recognitions/idea/" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card">
+                <a href="https://www.idsa.org/awards-recognitions/idea/" target="_blank" rel="noopener noreferrer" class="comp-card tilt-card glow-card">
                     <div class="card-glare"></div>
                     <div>
-                        <div class="comp-photo"><img src="assets/awards/idea.jpg" alt="IDEA Awards ceremony" loading="lazy" onerror="this.remove()"></div>
+                        <div class="comp-photo"><img src="assets/awards/idea.jpg" alt="A Student Design Gold entry from the IDEA awards" loading="lazy" onerror="this.remove()"></div>
                         <div class="comp-header">
-                            <span class="comp-tier">IDSA North America</span>
                             <span class="comp-deadline">Annual: Dec – March</span>
                         </div>
                         <h3>IDEA (International Design Excellence)</h3>
@@ -3388,7 +3172,7 @@
             <div class="tier-group">
                 <div class="tier-heading">01 · Club Heads</div>
                 <div class="head-stack">
-                <div class="head-card tilt-card">
+                <div class="head-card tilt-card glow-card">
                     <div class="card-glare"></div>
                     <div class="member-avatar">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -3408,7 +3192,7 @@
                         <a href="https://www.linkedin.com/in/b-thanish-vardhan-b3b88733a/" target="_blank" rel="noopener noreferrer" class="link-pill linkedin">LinkedIn Profile ↗</a>
                     </div>
                 </div>
-                <div class="head-card tilt-card">
+                <div class="head-card tilt-card glow-card">
                     <div class="card-glare"></div>
                     <div class="member-avatar">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -3441,7 +3225,7 @@
             <!-- TIER 3: NOTABLE ALUMNI (compact strip) -->
             <div class="tier-group">
                 <div class="tier-heading">03 · Alumni Network</div>
-                <div class="alumni-strip">
+                <div class="alumni-strip glow-card">
                     <div class="alumni-strip-lead">
                         <span class="alumni-badge">Y Combinator W23</span>
                         <p>PDC alumni, led by the club's founding head, built <b>Desklamp</b> into <b>Clueso</b>, an AI documentation platform backed by Y Combinator.</p>
@@ -3495,34 +3279,34 @@
             </div>
 
             <div class="explore-grid">
-                <a href="#vault" class="explore-tile tilt-card" aria-haspopup="dialog" aria-controls="panel-vault">
+                <a href="#vault" class="explore-tile tilt-card glow-card" aria-haspopup="dialog" aria-controls="panel-vault">
                     <div class="card-glare"></div>
                     <div class="explore-visual ev-photo">
                         <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&amp;fit=crop&amp;w=900&amp;q=70" alt="" loading="lazy" onerror="this.remove()">
                     </div>
                     <div class="explore-body">
-                        <span class="explore-kicker"><b>006.A</b>Resource Vault</span>
+                        <span class="explore-kicker">Resource Vault</span>
                         <h3>Curated Design Resources</h3>
                         <p>Field guides, principles and courses, from the d.school bootleg to MIT 2.007.</p>
                         <div class="explore-foot"><span>6 Resources</span><span class="explore-open">Open →</span></div>
                     </div>
                 </a>
 
-                <a href="#publications" class="explore-tile tilt-card" aria-haspopup="dialog" aria-controls="panel-publications">
+                <a href="#publications" class="explore-tile tilt-card glow-card" aria-haspopup="dialog" aria-controls="panel-publications">
                     <div class="card-glare"></div>
                     <div class="explore-visual ev-covers" aria-hidden="true">
                         <span class="ev-cover ev-cover-back"><b>PDC</b>Official Brochure</span>
                         <span class="ev-cover ev-cover-front"><b>PDC</b>The Product Handbook</span>
                     </div>
                     <div class="explore-body">
-                        <span class="explore-kicker"><b>006.B</b>Publications</span>
+                        <span class="explore-kicker">Publications</span>
                         <h3>Product Handbook &amp; Brochure</h3>
                         <p>The club's field manual for building hardware, plus the official brochure.</p>
                         <div class="explore-foot"><span>2 Publications</span><span class="explore-open">Open →</span></div>
                     </div>
                 </a>
 
-                <a href="#archive" class="explore-tile tilt-card" aria-haspopup="dialog" aria-controls="panel-archive">
+                <a href="#archive" class="explore-tile tilt-card glow-card" aria-haspopup="dialog" aria-controls="panel-archive">
                     <div class="card-glare"></div>
                     <div class="explore-visual ev-files" aria-hidden="true">
                         <span class="ev-file"><span class="file-badge pdf">SOP · PDF</span><span class="ev-file-name">Coordinator Handover Bible</span></span>
@@ -3530,7 +3314,7 @@
                         <span class="ev-file"><span class="file-badge cad">CAD · .STEP</span><span class="ev-file-name">Metric Fastener Library</span></span>
                     </div>
                     <div class="explore-body">
-                        <span class="explore-kicker"><b>006.C</b>Knowledge Handover</span>
+                        <span class="explore-kicker">Knowledge Handover</span>
                         <h3>Coordinator &amp; DC Archive</h3>
                         <p>Handover SOPs, Design Challenge kits, CAD presets and vendor lists.</p>
                         <div class="explore-foot"><span>6 Documents</span><span class="explore-open">Open →</span></div>
@@ -3563,7 +3347,7 @@
     <div class="explore-panel" id="panel-vault" data-panel="vault" role="dialog" aria-modal="true" aria-label="Resource Vault" hidden>
         <div class="panel-bar">
             <div class="container panel-bar-inner">
-                <span class="panel-crumb"><b>006.A</b><span class="crumb-root">Explore More /</span><strong>Resource Vault</strong></span>
+                <span class="panel-crumb"><span class="crumb-root">Explore More /</span><strong>Resource Vault</strong></span>
                 <button type="button" class="panel-close" aria-label="Close Resource Vault">Close <kbd>Esc</kbd></button>
             </div>
         </div>
@@ -3573,7 +3357,7 @@
                 <div class="container">
                     <div class="section-header">
                         <div>
-                            <span class="section-meta"><b>006.A</b><span>Resource Vault</span></span>
+                            <span class="section-meta"><span>Resource Vault</span></span>
                             <h2 class="section-title">Curated Design Resources</h2>
                         </div>
                     </div>
@@ -3585,7 +3369,7 @@
     <div class="explore-panel" id="panel-publications" data-panel="publications" role="dialog" aria-modal="true" aria-label="Handbook &amp; Brochure" hidden>
         <div class="panel-bar">
             <div class="container panel-bar-inner">
-                <span class="panel-crumb"><b>006.B</b><span class="crumb-root">Explore More /</span><strong>Handbook &amp; Brochure</strong></span>
+                <span class="panel-crumb"><span class="crumb-root">Explore More /</span><strong>Handbook &amp; Brochure</strong></span>
                 <button type="button" class="panel-close" aria-label="Close Handbook &amp; Brochure">Close <kbd>Esc</kbd></button>
             </div>
         </div>
@@ -3593,7 +3377,7 @@
             <div class="container">
                 <div class="section-header">
                     <div>
-                        <span class="section-meta"><b>006.B</b><span>Publications &amp; Documentation</span></span>
+                        <span class="section-meta"><span>Publications &amp; Documentation</span></span>
                         <h2 class="section-title">Product Handbook &amp; Club Brochure</h2>
                         <p class="section-lead">
                             Essential resources created and maintained by the Product Design Club for students, coordinators, and collaborators at IIT Madras.
@@ -3707,7 +3491,7 @@
     <div class="explore-panel" id="panel-archive" data-panel="archive" role="dialog" aria-modal="true" aria-label="Coordinator Archive" hidden>
         <div class="panel-bar">
             <div class="container panel-bar-inner">
-                <span class="panel-crumb"><b>006.C</b><span class="crumb-root">Explore More /</span><strong>Coordinator Archive</strong></span>
+                <span class="panel-crumb"><span class="crumb-root">Explore More /</span><strong>Coordinator Archive</strong></span>
                 <button type="button" class="panel-close" aria-label="Close Coordinator Archive">Close <kbd>Esc</kbd></button>
             </div>
         </div>
@@ -3715,7 +3499,7 @@
             <div class="container">
                 <div class="section-header">
                     <div>
-                        <span class="section-meta"><b>006.C</b><span>Knowledge Handover</span></span>
+                        <span class="section-meta"><span>Knowledge Handover</span></span>
                         <h2 class="section-title">PDC Coordinator &amp; DC Archive</h2>
                     </div>
                 </div>
@@ -3971,6 +3755,26 @@
             });
         });
 
+        // 3b. Spotlight glow cards: hand each .glow-card the pointer in its own pixels
+        (() => {
+            const cards = document.querySelectorAll('.glow-card');
+            if (!cards.length || !window.matchMedia('(hover: hover)').matches) return;
+            let px = -9999, py = -9999, raf = 0;
+            const paint = () => {
+                raf = 0;
+                const xp = (px / window.innerWidth).toFixed(3);
+                cards.forEach(card => {
+                    const r = card.getBoundingClientRect();
+                    card.style.setProperty('--x', (px - r.left).toFixed(1));
+                    card.style.setProperty('--y', (py - r.top).toFixed(1));
+                    card.style.setProperty('--xp', xp);
+                });
+            };
+            const queue = () => { if (!raf) raf = requestAnimationFrame(paint); };
+            document.addEventListener('pointermove', e => { px = e.clientX; py = e.clientY; queue(); }, { passive: true });
+            window.addEventListener('scroll', queue, { passive: true });
+        })();
+
         // 4. Magnetic Button Spring Effect (reactbits.dev Magnetic)
         document.querySelectorAll('.btn-magnetic').forEach(btn => {
             btn.addEventListener('mousemove', e => {
@@ -4185,7 +3989,7 @@
         //     The classes are only added here, so without this script nothing is ever hidden.
         (() => {
             const targets = document.querySelectorAll(
-                'section .section-header, .about-grid, .project-card, .comp-card, .head-card, .person-card, ' +
+                'section .section-header, .ab-photo, .project-card, .comp-card, .head-card, .person-card, ' +
                 '.alumni-strip, .team-photo, .explore-tile, .cta-banner'
             );
             // Elements arriving in the same batch (a grid row) stagger by DOM order

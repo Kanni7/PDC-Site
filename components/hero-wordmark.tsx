@@ -6,7 +6,7 @@ const ACCENT = "#9ee63e"
 
 // Lines run the width of .container, not the narrower .hero-content, and shift
 // left by the 5% inset TechText keeps on left-aligned text so the letters stay
-// flush with the badge above. 1.2em leaves room for the frame labels and specks;
+// flush with the affiliation line above. 1.2em leaves room for the frame labels and specks;
 // the -0.1em overlap pulls the lines back towards the old 0.98 line-height.
 const SPAN = "min(1152px, calc(100vw - 48px))"
 const LINE: React.CSSProperties = {
@@ -19,7 +19,7 @@ const LINE: React.CSSProperties = {
 const LINES = [
   { text: "PRODUCT", className: "text-ink" },
   { text: "DESIGN", className: "text-ink" },
-  { text: "CLUB", className: "text-pdc-green drop-shadow-[0_0_18px_rgba(141,198,63,0.45)]" },
+  { text: "CLUB", className: "text-pdc-green" },
 ]
 
 // Renders into the hero <h1>, whose clamp() font-size sets each line's size.
