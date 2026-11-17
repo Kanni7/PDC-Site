@@ -54,7 +54,6 @@ export default function VaultHero() {
       items={RESOURCES}
       eyebrow={
         <>
-          <span className="bg-pdc-green px-2 py-1 text-canvas">006.A</span>
           <span className="px-2 py-1">Resource Vault</span>
         </>
       }

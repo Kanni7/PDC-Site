@@ -368,15 +368,6 @@
   text-shadow: 0 0 40px rgba(145, 204, 63, 0.35);
 }
 
-.pr-tagline {
-  margin: 14px 0 0;
-  font-family: var(--font-mono);
-  font-size: clamp(0.72rem, 1.6vw, 0.86rem);
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--pr-muted);
-  padding-left: 0.24em;
-}
 
 .pr-copy {
   margin: 14px 0 0;
@@ -402,7 +393,6 @@
   padding-left: 0.12em;
 }
 
-.pr-hint-touch { display: none; }
 
 .pr-best {
   margin: 10px 0 0;
@@ -522,25 +512,9 @@
 
 @media (hover: none) and (pointer: coarse) {
   .pr-hint-key { display: none; }
-  .pr-hint-touch { display: inline; }
   .pr-duck { display: block; }
 }
 
-.pr-footer {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 18px;
-  z-index: 2;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--pr-muted);
-  pointer-events: none;
-  padding-left: 0.3em;
-}
 
 @keyframes pr-pulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(145, 204, 63, 0.45), 0 0 24px rgba(145, 204, 63, 0.35); }
@@ -565,7 +539,6 @@
   .pr-btn--top { min-height: 40px; padding: 0 14px; font-size: 0.7rem; letter-spacing: 0.08em; }
   .pr-actions { flex-direction: column; align-items: stretch; width: min(320px, 100%); margin-left: auto; margin-right: auto; }
   .pr-hud { left: 16px; right: 16px; justify-content: space-between; }
-  .pr-footer { font-size: 0.58rem; letter-spacing: 0.2em; padding-left: 0.2em; bottom: 14px; }
 }
 
 /* Shorter desktop windows: keep panels above the ground line */
@@ -582,13 +555,12 @@
   .pdc-runner { --pr-header-h: 54px; }
   .pr-center { height: calc(100% - var(--pr-header-h) - 30px); }
   .pr-title { font-size: clamp(2rem, 7vh, 3rem); }
-  .pr-tagline, .pr-best { display: none; }
+  .pr-best { display: none; }
   .pr-copy { margin-top: 6px; font-size: 0.85rem; }
   .pr-actions { margin-top: 12px; flex-direction: row; width: auto; }
   .pr-hint { margin-top: 8px; }
   .pr-panel { padding: 16px 20px; }
   .pr-stats { margin-top: 10px; }
-  .pr-footer { display: none; }
   .pr-duck { bottom: 16px; }
 }
 
